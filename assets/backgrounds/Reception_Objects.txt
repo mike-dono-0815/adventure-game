@@ -1,0 +1,13 @@
+[
+  {"box_2d": [510, 0, 852, 53], "label": "This is a potted plant, typically used for decorative purposes, with green leaves and a brown pot, located on the far left of the image."},
+  {"box_2d": [510, 953, 847, 1000], "label": "This is another potted plant, similar to the one on the left, also serving as decoration, with green foliage and a brown pot, positioned on the far right."},
+  {"box_2d": [187, 814, 420, 936], "label": "This is an 'EMERGENCY PROCEDURES' sign, detailing steps like 'EVACUATE', 'ASSEMBLY POINT', and 'DON'T PANIC', providing instructions for emergency situations."},
+  {"box_2d": [94, 521, 289, 769], "label": "These are two wall-mounted monitors displaying 'LOBBY' and 'IT DEPT EXT.' views, likely for security surveillance or internal information."},
+  {"box_2d": [140, 36, 812, 255], "label": "This is a grey door with a sign that reads 'AUTHORIZED PERSONNEL ONLY', indicating restricted access, and it has a handle and a card reader."},
+  {"box_2d": [339, 275, 599, 363], "label": "This is a coffee machine, a common office appliance used to brew coffee, placed on a counter to the left of the reception desk."},
+  {"box_2d": [400, 377, 590, 474], "label": "This is a visitor pass dispenser, with a slot labeled 'OUT PAPER' and a screen that says 'VISITOR', used for issuing temporary access passes."},
+  {"box_2d": [240, 392, 376, 469], "label": "This is a red fire alarm pull station, a safety device for manually alerting occupants in case of a fire emergency."},
+  {"box_2d": [421, 604, 617, 706], "label": "This is a receptionist, a person with a headset, sitting at a desk and smiling, likely greeting visitors with 'WELCOME TO AMAZON!'"},
+  {"box_2d": [529, 488, 626, 539], "label": "This is a document or a stack of papers, possibly containing information or forms, sitting on the reception desk."},
+  {"box_2d": [555, 777, 617, 882], "label": "This is a computer monitor, an electronic display screen typically used with a computer, positioned on the reception desk."}
+]

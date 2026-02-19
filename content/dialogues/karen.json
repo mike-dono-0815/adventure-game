@@ -1,0 +1,105 @@
+{
+  "id": "karen",
+  "character": "Receptionist",
+  "start": "greeting",
+  "nodes": {
+    "greeting": {
+      "npc_text": "Good morning. I'm afraid all visitors require a valid badge to enter the building.",
+      "choices": [
+        {
+          "id": "meeting",
+          "text": "I have a meeting inside. Surely I can just pop through?",
+          "next": "no_badge"
+        },
+        {
+          "id": "tired",
+          "text": "You look exhausted. Long morning?",
+          "next": "tired_response",
+          "show_once": true
+        },
+        {
+          "id": "badge_printer",
+          "text": "What's wrong with the badge printer?",
+          "next": "badge_printer_response",
+          "show_once": true
+        },
+        {
+          "id": "emergency",
+          "text": "What happens if there's a fire?",
+          "next": "emergency_response",
+          "show_once": true
+        },
+        {
+          "id": "exit",
+          "text": "Never mind.",
+          "next": null
+        }
+      ]
+    },
+    "no_badge": {
+      "npc_text": "No badge, no entry. Our printer is out of paper and IT hasn't responded in three days, so I cannot issue a temporary pass. I'm sorry.",
+      "choices": [
+        {
+          "id": "back_1",
+          "text": "There has to be another way in...",
+          "next": "greeting"
+        }
+      ]
+    },
+    "tired_response": {
+      "npc_text": "Absolutely shattered, honestly. I haven't left this desk in four hours. I'm running on empty. Coffee would help, but I can't abandon my post.",
+      "choices": [
+        {
+          "id": "coffee_hint",
+          "text": "There's a coffee machine right over there.",
+          "next": "coffee_machine_response"
+        },
+        {
+          "id": "sympathise",
+          "text": "That sounds rough. Sorry.",
+          "next": "greeting"
+        }
+      ]
+    },
+    "coffee_machine_response": {
+      "npc_text": "Don't I know it. I'd kill for a cappuccino right now. There's just something about that frothy milk balance that hits differently. But I simply cannot leave the desk unattended.",
+      "choices": [
+        {
+          "id": "understood",
+          "text": "Understood. I'll leave you to it.",
+          "next": null
+        }
+      ]
+    },
+    "badge_printer_response": {
+      "npc_text": "Out of paper. I logged a ticket with IT on Monday. It's Thursday. I've had better luck communicating with the ficus in the corner.",
+      "choices": [
+        {
+          "id": "back_2",
+          "text": "Classic.",
+          "next": "greeting"
+        }
+      ]
+    },
+    "emergency_response": {
+      "npc_text": "Fire protocol is very clear. All staff must escort visitors through to the designated assembly area — which happens to be inside the building, past this door. Why do you ask?",
+      "choices": [
+        {
+          "id": "just_curious",
+          "text": "Just curious about safety procedures.",
+          "next": "suspicious"
+        }
+      ]
+    },
+    "suspicious": {
+      "npc_text": "Right. Well. Let's hope it doesn't come to that. Is there anything else I can help you with?",
+      "choices": [
+        {
+          "id": "back_3",
+          "text": "No, I'm good. Thanks.",
+          "next": "greeting"
+        }
+      ]
+    }
+  }
+}

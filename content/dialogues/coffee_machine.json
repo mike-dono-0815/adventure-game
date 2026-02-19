@@ -1,0 +1,112 @@
+{
+  "id": "coffee_machine",
+  "character": "Barista Pro",
+  "start": "menu",
+  "nodes": {
+    "menu": {
+      "npc_text": "The machine's display blinks: SELECT YOUR DRINK. A sticky note on the side reads: 'likes it frothy! cap'",
+      "choices": [
+        {
+          "id": "americano",
+          "text": "Americano",
+          "next": "wrong_americano"
+        },
+        {
+          "id": "cappuccino",
+          "text": "Cappuccino",
+          "next": "correct_cappuccino",
+          "condition": { "not_has_item": "cappuccino_cup" },
+          "effects": [
+            { "type": "add_item", "item": "cappuccino_cup" }
+          ]
+        },
+        {
+          "id": "cappuccino_have",
+          "text": "Cappuccino (already have one)",
+          "next": "already_have",
+          "condition": { "has_item": "cappuccino_cup" }
+        },
+        {
+          "id": "latte",
+          "text": "Latte",
+          "next": "wrong_latte"
+        },
+        {
+          "id": "espresso",
+          "text": "Espresso",
+          "next": "wrong_espresso"
+        },
+        {
+          "id": "cancel",
+          "text": "Never mind.",
+          "next": null
+        }
+      ]
+    },
+    "correct_cappuccino": {
+      "npc_text": "The machine hisses, steams, and gurgles. A perfect cappuccino materialises — frothy milk, dusted with cinnamon. It smells incredible.",
+      "choices": [
+        {
+          "id": "take_it",
+          "text": "Take the cappuccino.",
+          "next": null
+        }
+      ]
+    },
+    "already_have": {
+      "npc_text": "You already have a cappuccino. Maybe go give it to someone who needs it.",
+      "choices": [
+        {
+          "id": "right",
+          "text": "Right. Good point.",
+          "next": null
+        }
+      ]
+    },
+    "wrong_americano": {
+      "npc_text": "The machine clunks and dispenses a very black, very bitter americano. You hold it up towards the receptionist. She sniffs the air and her nose wrinkles. 'I appreciate the gesture, but that's not quite right... still too tired.' The cup slips from your hand. Coffee everywhere.",
+      "choices": [
+        {
+          "id": "try_again_1",
+          "text": "Try a different drink.",
+          "next": "menu"
+        },
+        {
+          "id": "give_up_1",
+          "text": "Maybe I should think harder about this.",
+          "next": null
+        }
+      ]
+    },
+    "wrong_latte": {
+      "npc_text": "The machine whirs and produces a milky latte. You wave it hopefully in the receptionist's direction. She glances over. 'Hmm. A latte. It's fine, I suppose, but... something's missing. Still too tired.' You spill it on the counter. Typical.",
+      "choices": [
+        {
+          "id": "try_again_2",
+          "text": "Try a different drink.",
+          "next": "menu"
+        },
+        {
+          "id": "give_up_2",
+          "text": "I need to think about this more.",
+          "next": null
+        }
+      ]
+    },
+    "wrong_espresso": {
+      "npc_text": "The machine vibrates violently and spits out a tiny, intense espresso. You hold it towards the receptionist. She squints at it. 'That's... a lot of intensity for one cup. I need something with more balance. Nice try though.' The espresso cup tips over. It was only two sips anyway.",
+      "choices": [
+        {
+          "id": "try_again_3",
+          "text": "Try a different drink.",
+          "next": "menu"
+        },
+        {
+          "id": "give_up_3",
+          "text": "I should think about what she actually wants.",
+          "next": null
+        }
+      ]
+    }
+  }
+}

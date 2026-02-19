@@ -1,0 +1,30 @@
+{
+  "title": "The Separation Agreement",
+  "start_room": "lobby",
+  "start_x": 672,
+  "start_y": 711,
+  "starting_flags": {
+    "intro_seen": false,
+    "receptionist_has_coffee": false,
+    "alarm_cover_lifted": false,
+    "alarm_triggered": false,
+    "talked_to_bob": false,
+    "bob_wants_coffee": false,
+    "coffee_given": false,
+    "bob_gave_agreement": false,
+    "filing_cabinet_open": false,
+    "found_pen": false,
+    "agreement_signed": false
+  },
+  "default_responses": {
+    "look_at": "I see {name}. Nothing remarkable.",
+    "pick_up": "I can't pick up {name}.",
+    "open": "I can't open {name}.",
+    "close": "It doesn't need closing.",
+    "push": "Pushing {name} won't help.",
+    "pull": "I can't pull {name}.",
+    "talk_to": "I don't think {name} wants to chat.",
+    "give": "I have no reason to give that away.",
+    "use": "I can't figure out how to use {name}."
+  }
+}

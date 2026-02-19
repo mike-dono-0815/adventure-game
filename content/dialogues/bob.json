@@ -1,0 +1,112 @@
+{
+  "id": "bob",
+  "character": "Bob",
+  "start": "greeting",
+  "nodes": {
+    "greeting": {
+      "npc_text": "Alex! Come in, come in. Have a seat. I know this isn't easy, but we'll get through it.",
+      "choices": [
+        {
+          "id": "get_agreement",
+          "text": "Thanks Bob. I just want to get the separation agreement and get this over with.",
+          "next": "agreement_talk"
+        },
+        {
+          "id": "how_are_you",
+          "text": "How are you, Bob? You look tired.",
+          "next": "tired_talk",
+          "show_once": true
+        },
+        {
+          "id": "exit",
+          "text": "I need a moment. I'll be right back.",
+          "next": null
+        }
+      ]
+    },
+    "agreement_talk": {
+      "npc_text": "Right, the agreement. I have it all drawn up. But... I could really use a coffee first. The machine's right there but I've been swamped all day. Would you mind?",
+      "choices": [
+        {
+          "id": "sure_coffee",
+          "text": "Sure, I'll make you a coffee.",
+          "next": "coffee_thanks",
+          "effects": [
+            { "type": "set_flag", "flag": "bob_wants_coffee", "value": true },
+            { "type": "set_flag", "flag": "talked_to_bob", "value": true }
+          ]
+        },
+        {
+          "id": "no_coffee",
+          "text": "Can't you just give me the agreement now?",
+          "next": "insist_coffee"
+        },
+        {
+          "id": "exit2",
+          "text": "Let me think about it.",
+          "next": null,
+          "effects": [
+            { "type": "set_flag", "flag": "talked_to_bob", "value": true }
+          ]
+        }
+      ]
+    },
+    "coffee_thanks": {
+      "npc_text": "You're a saint. The coffee machine is on the small table over there. I take mine black, no sugar.",
+      "choices": [
+        {
+          "id": "on_it",
+          "text": "One black coffee, coming right up.",
+          "next": null
+        }
+      ]
+    },
+    "insist_coffee": {
+      "npc_text": "Look, I've been here since 6 AM reviewing your case. A little caffeine would really help me focus on making sure everything's in order. You want this done right, don't you?",
+      "choices": [
+        {
+          "id": "fine_coffee",
+          "text": "Fine, I'll get you a coffee.",
+          "next": "coffee_thanks",
+          "effects": [
+            { "type": "set_flag", "flag": "bob_wants_coffee", "value": true },
+            { "type": "set_flag", "flag": "talked_to_bob", "value": true }
+          ]
+        },
+        {
+          "id": "leave_for_now",
+          "text": "I'll think about it.",
+          "next": null,
+          "effects": [
+            { "type": "set_flag", "flag": "talked_to_bob", "value": true }
+          ]
+        }
+      ]
+    },
+    "tired_talk": {
+      "npc_text": "Ha, you can tell? I've been pulling long hours. Divorce season, you know — if there is such a thing. But enough about me. You're here about the agreement.",
+      "choices": [
+        {
+          "id": "agreement_now",
+          "text": "Yes. Let's get to it.",
+          "next": "agreement_talk"
+        },
+        {
+          "id": "sorry",
+          "text": "Sorry to add to your workload.",
+          "next": "no_worries"
+        }
+      ]
+    },
+    "no_worries": {
+      "npc_text": "Don't be. This is what I do, and honestly, your case is one of the more amicable ones. Let's get you sorted.",
+      "choices": [
+        {
+          "id": "ready",
+          "text": "I'm ready. What do I need to do?",
+          "next": "agreement_talk"
+        }
+      ]
+    }
+  }
+}

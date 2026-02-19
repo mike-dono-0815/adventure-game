@@ -1,0 +1,137 @@
+{
+  "items": [
+    {
+      "id": "cappuccino_cup",
+      "name": "cappuccino",
+      "description": "A perfect cappuccino from the Barista Pro machine. Frothy, cinnamon-dusted, exactly right.",
+      "color": "#c8a060",
+      "icon": "\u2615",
+      "interactions": {
+        "look_at": {
+          "text": "A perfect cappuccino. Frothy milk, dusted with cinnamon. It smells amazing. This is for the receptionist, not me."
+        },
+        "use": {
+          "text": "I should give this to the receptionist. She said she needed coffee."
+        },
+        "pick_up": {
+          "text": "I'm already holding it."
+        },
+        "give": {
+          "text": "I should give this to the receptionist specifically."
+        }
+      }
+    },
+    {
+      "id": "visitor_badge",
+      "name": "visitor badge",
+      "description": "A clip-on visitor badge that reads 'VISITOR - Alex'. It grants access through secured doors.",
+      "color": "#4a90d9",
+      "icon": "\ud83c\udfab",
+      "interactions": {
+        "look_at": {
+          "text": "A plastic visitor badge with my name on it. 'VISITOR - Alex'. At least they spelled it right."
+        },
+        "use": {
+          "text": "I need to use this with something, like a door."
+        }
+      }
+    },
+    {
+      "id": "coffee_cup",
+      "name": "cup of coffee",
+      "description": "A fresh cup of black coffee, no sugar. Just how Bob likes it.",
+      "color": "#6f4e37",
+      "icon": "\u2615",
+      "interactions": {
+        "look_at": {
+          "text": "A steaming cup of black coffee. It smells amazing. But this is for Bob, not me."
+        },
+        "use": {
+          "text": "I should give this to Bob. He asked for it."
+        },
+        "pick_up": {
+          "text": "I'm already holding it."
+        }
+      }
+    },
+    {
+      "id": "separation_agreement",
+      "name": "separation agreement",
+      "description": "The separation agreement document. It just needs a signature.",
+      "color": "#f0e6d2",
+      "icon": "\ud83d\udcc4",
+      "interactions": {
+        "look_at": [
+          {
+            "condition": { "agreement_signed": true },
+            "text": "The signed separation agreement. It's done. A whole chapter of my life, condensed into legalese."
+          },
+          {
+            "text": "A thick legal document titled 'SEPARATION AGREEMENT'. Everything looks in order. I just need to find a pen and sign it."
+          }
+        ],
+        "use": [
+          {
+            "condition": { "agreement_signed": true },
+            "text": "It's already signed. I should show it to Bob."
+          },
+          {
+            "text": "I need a pen to sign this."
+          }
+        ]
+      }
+    },
+    {
+      "id": "pen",
+      "name": "pen",
+      "description": "A fancy ballpoint pen found in the filing cabinet.",
+      "color": "#333333",
+      "icon": "\ud83d\udd8a\ufe0f",
+      "interactions": {
+        "look_at": {
+          "text": "A nice ballpoint pen. Feels expensive. Perfect for signing important legal documents."
+        },
+        "use": {
+          "text": "I should use this WITH something — like the separation agreement."
+        }
+      }
+    },
+    {
+      "id": "signed_agreement",
+      "name": "signed agreement",
+      "description": "The separation agreement, now signed. Time to show Bob.",
+      "color": "#d4af37",
+      "icon": "\u2714\ufe0f",
+      "interactions": {
+        "look_at": {
+          "text": "The signed separation agreement. My signature sits at the bottom. It feels final. It feels right."
+        },
+        "use": {
+          "text": "I should give this to Bob to make it official."
+        }
+      }
+    }
+  ],
+  "combinations": [
+    {
+      "item1": "pen",
+      "item2": "separation_agreement",
+      "text": "I take a deep breath and sign the separation agreement. It's done.",
+      "effects": [
+        { "type": "remove_item", "item": "pen" },
+        { "type": "replace_item", "old_item": "separation_agreement", "new_item": "signed_agreement" },
+        { "type": "set_flag", "flag": "agreement_signed", "value": true }
+      ]
+    },
+    {
+      "item1": "visitor_badge",
+      "item2": "coffee_cup",
+      "text": "I don't think mixing a badge with hot coffee is a good idea."
+    },
+    {
+      "item1": "pen",
+      "item2": "visitor_badge",
+      "text": "I doodle on the visitor badge. That was pointless."
+    }
+  ]
+}

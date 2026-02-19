@@ -1,0 +1,325 @@
+{
+  "id": "office",
+  "name": "Bob's Office",
+  "background": "office",
+  "walk_area": [
+    [35, 474], [1295, 474], [1295, 749], [35, 749]
+  ],
+  "characters": [
+    {
+      "name": "Bob",
+      "x": 630,
+      "y": 521,
+      "color": "#2c3e50",
+      "hair_color": "#888",
+      "shirt_color": "#8b0000",
+      "pants_color": "#2c3e50",
+      "visible_if": null
+    }
+  ],
+  "hotspots": [
+    {
+      "id": "bob",
+      "name": "Bob Johnson",
+      "rect": [609, 415, 42, 106],
+      "walk_to": [546, 569],
+      "face_dir": "right",
+      "dialogue": "bob",
+      "interactions": {
+        "look_at": {
+          "text": "Bob Johnson, senior partner. He's in his 50s, grey hair, wearing a dark suit with a burgundy tie. He looks tired but not unkind."
+        },
+        "talk_to": [
+          {
+            "condition": { "bob_gave_agreement": true },
+            "text": "Bob nods. 'Just sign it and you're all set. There should be a pen around here somewhere.'"
+          },
+          {
+            "condition": { "coffee_given": true },
+            "text": "Bob sips his coffee contentedly. 'Alright, alright. Let me get that agreement for you.'",
+            "effects": [
+              { "type": "set_flag", "flag": "bob_gave_agreement", "value": true },
+              { "type": "add_item", "item": "separation_agreement" },
+              { "type": "say", "text": "Bob hands you a thick document: THE SEPARATION AGREEMENT.", "color": "#ffdd57" }
+            ]
+          }
+        ],
+        "pick_up": {
+          "text": "I can't just pick up a lawyer. There are laws against that."
+        },
+        "use": {
+          "text": "I should TALK TO Bob."
+        },
+        "push": {
+          "text": "Assaulting my lawyer seems counterproductive."
+        }
+      },
+      "combinations": [
+        {
+          "item": "coffee_cup",
+          "verb": "give",
+          "text": "Bob's eyes light up. 'Oh, bless you! I've been running on fumes all day.'",
+          "effects": [
+            { "type": "remove_item", "item": "coffee_cup" },
+            { "type": "set_flag", "flag": "coffee_given", "value": true },
+            { "type": "say", "text": "Bob takes a long sip and sighs contentedly.", "color": "#7ec8e3" }
+          ]
+        },
+        {
+          "item": "coffee_cup",
+          "verb": "use",
+          "text": "Bob takes the coffee gratefully. 'You're a lifesaver!'",
+          "effects": [
+            { "type": "remove_item", "item": "coffee_cup" },
+            { "type": "set_flag", "flag": "coffee_given", "value": true }
+          ]
+        },
+        {
+          "item": "visitor_badge",
+          "verb": "give",
+          "text": "Bob glances at it. 'You can keep the badge. I need the separation agreement, not your visitor pass.'"
+        },
+        {
+          "item": "pen",
+          "verb": "give",
+          "text": "'I have my own pens, thanks. But you might need that to sign the agreement.'"
+        },
+        {
+          "item": "signed_agreement",
+          "verb": "give",
+          "text": "Bob takes the signed agreement and looks it over. 'Everything looks perfect. Congratulations, Alex. You're officially separated. I hope this is the start of something better for you.'",
+          "effects": [
+            { "type": "remove_item", "item": "signed_agreement" },
+            { "type": "set_flag", "flag": "agreement_complete", "value": true },
+            { "type": "victory" }
+          ]
+        },
+        {
+          "item": "signed_agreement",
+          "verb": "use",
+          "text": "Bob reviews the signed agreement. 'All in order. You're free to go, Alex. Take care of yourself.'",
+          "effects": [
+            { "type": "remove_item", "item": "signed_agreement" },
+            { "type": "set_flag", "flag": "agreement_complete", "value": true },
+            { "type": "victory" }
+          ]
+        },
+        {
+          "item": "separation_agreement",
+          "verb": "give",
+          "text": "'You haven't signed it yet! Find a pen and put your John Hancock on it first.'"
+        }
+      ]
+    },
+    {
+      "id": "desk",
+      "name": "Bob's desk",
+      "rect": [420, 379, 420, 95],
+      "walk_to": [490, 550],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": {
+          "text": "A large oak desk covered in legal papers, a computer monitor, and a nameplate reading 'Bob Johnson, Esq.' There's also a half-empty coffee mug."
+        },
+        "use": {
+          "text": "I shouldn't rummage through Bob's desk while he's sitting right there."
+        },
+        "open": {
+          "text": "I can't open someone else's desk. That's rude. And possibly illegal."
+        }
+      }
+    },
+    {
+      "id": "computer",
+      "name": "computer",
+      "rect": [595, 322, 84, 57],
+      "walk_to": [560, 550],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": {
+          "text": "Bob's computer. The screen shows what looks like a legal document. I can't read it from here."
+        },
+        "use": {
+          "text": "I can't use Bob's computer. He's right there watching me."
+        }
+      }
+    },
+    {
+      "id": "filing_cabinet",
+      "name": "filing cabinet",
+      "rect": [70, 332, 84, 237],
+      "walk_to": [182, 569],
+      "face_dir": "left",
+      "interactions": {
+        "look_at": {
+          "text": "A tall grey metal filing cabinet with four drawers. It looks like it holds decades of legal files."
+        },
+        "open": [
+          {
+            "condition": { "filing_cabinet_open": true },
+            "text": "The cabinet is already open."
+          },
+          {
+            "text": "I pull open the second drawer. It's full of files... and there's a nice pen rolling around in the back!",
+            "effects": [
+              { "type": "set_flag", "flag": "filing_cabinet_open", "value": true },
+              { "type": "show_hotspot", "id": "pen_in_cabinet" }
+            ]
+          }
+        ],
+        "close": [
+          {
+            "condition": { "filing_cabinet_open": true },
+            "text": "I push the drawer shut.",
+            "effects": [
+              { "type": "set_flag", "flag": "filing_cabinet_open", "value": false },
+              { "type": "remove_hotspot", "id": "pen_in_cabinet" }
+            ]
+          },
+          {
+            "text": "It's already closed."
+          }
+        ],
+        "use": {
+          "text": "I should try to OPEN it."
+        }
+      }
+    },
+    {
+      "id": "pen_in_cabinet",
+      "name": "pen",
+      "rect": [84, 417, 56, 19],
+      "walk_to": [182, 569],
+      "face_dir": "left",
+      "visible_if": { "filing_cabinet_open": true },
+      "hidden_if": { "found_pen": true },
+      "draw": {
+        "type": "rect",
+        "color": "#222",
+        "border": "#c0a060",
+        "label": "PEN",
+        "label_color": "#c0a060",
+        "font_size": 10
+      },
+      "interactions": {
+        "look_at": {
+          "text": "A fancy ballpoint pen. Just what I need to sign the agreement."
+        },
+        "pick_up": {
+          "text": "I grab the pen. This should do for signing the agreement.",
+          "effects": [
+            { "type": "add_item", "item": "pen" },
+            { "type": "set_flag", "flag": "found_pen", "value": true },
+            { "type": "remove_hotspot", "id": "pen_in_cabinet" }
+          ]
+        },
+        "use": {
+          "text": "I should PICK UP the pen first."
+        }
+      }
+    },
+    {
+      "id": "window",
+      "name": "window",
+      "rect": [560, 76, 224, 237],
+      "walk_to": [672, 531],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": {
+          "text": "A large window overlooking the city. The view is nice — tall buildings, a park in the distance. At least something pleasant in this whole ordeal."
+        },
+        "open": {
+          "text": "It's sealed shut. Probably for the best in a lawyer's office on the 15th floor."
+        },
+        "use": {
+          "text": "I admire the view for a moment. Then I remember why I'm here."
+        }
+      }
+    },
+    {
+      "id": "bookshelf",
+      "name": "bookshelf",
+      "rect": [210, 142, 140, 285],
+      "walk_to": [280, 531],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": {
+          "text": "Shelves lined with legal textbooks. 'Family Law in Practice', 'Divorce Proceedings 5th Edition', 'When Love Goes Wrong: A Legal Perspective'. Cheery stuff."
+        },
+        "use": {
+          "text": "I'm not here to study law. I'm here to sign a piece of paper."
+        },
+        "pull": {
+          "text": "This isn't a secret passage. It's a law office."
+        }
+      }
+    },
+    {
+      "id": "coffee_machine",
+      "name": "coffee machine",
+      "rect": [945, 360, 70, 95],
+      "walk_to": [945, 550],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": {
+          "text": "A fancy single-serve coffee machine sitting on a small table. It looks like it makes a decent cup."
+        },
+        "use": [
+          {
+            "condition": { "has_item": "coffee_cup" },
+            "text": "I already have coffee."
+          },
+          {
+            "condition": { "bob_wants_coffee": true },
+            "text": "I brew a fresh cup of coffee. The machine hums and gurgles. Perfect.",
+            "effects": [
+              { "type": "add_item", "item": "coffee_cup" }
+            ]
+          },
+          {
+            "text": "I could make some coffee, but I'm jittery enough as it is."
+          }
+        ],
+        "pick_up": {
+          "text": "The coffee machine is way too heavy and expensive to steal."
+        }
+      }
+    },
+    {
+      "id": "lobby_door",
+      "name": "door to lobby",
+      "rect": [1120, 237, 112, 332],
+      "walk_to": [1085, 569],
+      "face_dir": "right",
+      "interactions": {
+        "look_at": {
+          "text": "The door back to the lobby."
+        },
+        "open": {
+          "text": "I head back to the lobby.",
+          "effects": [
+            {
+              "type": "transition",
+              "room": "lobby",
+              "player_x": 1015,
+              "player_y": 588,
+              "player_dir": "left"
+            }
+          ]
+        },
+        "use": {
+          "text": "I go through the door to the lobby.",
+          "effects": [
+            {
+              "type": "transition",
+              "room": "lobby",
+              "player_x": 1015,
+              "player_y": 588,
+              "player_dir": "left"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

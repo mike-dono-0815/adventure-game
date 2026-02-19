@@ -1,0 +1,338 @@
+{
+  "id": "lobby",
+  "name": "Building Entrance",
+  "background": "lobby",
+  "no_walk": true,
+  "walk_area": [[660, 700], [680, 700], [680, 720], [660, 720]],
+  "hotspots": [
+    {
+      "id": "potted_plant_left",
+      "name": "potted plant",
+      "rect": [0, 392, 71, 263],
+      "interactions": {
+        "look_at": {
+          "text": "A large leafy plant in the corner. It's doing better than most things in this building."
+        },
+        "pick_up": {
+          "text": "I'm not stealing a plant. Even if no one would notice."
+        }
+      }
+    },
+    {
+      "id": "potted_plant_right",
+      "name": "potted plant",
+      "rect": [1281, 392, 63, 259],
+      "interactions": {
+        "look_at": {
+          "text": "Another decorative plant by the door. Probably the most carefree thing in this reception area."
+        },
+        "pick_up": {
+          "text": "I have enough to carry today without adding a plant."
+        }
+      }
+    },
+    {
+      "id": "emergency_poster",
+      "name": "emergency procedure poster",
+      "rect": [1094, 144, 164, 179],
+      "interactions": {
+        "look_at": {
+          "text": "An emergency procedure poster. Step 4 catches my eye: 'Staff must escort visitors inside in fire event.' Interesting policy."
+        },
+        "use": {
+          "text": "The poster is fixed to the wall. I can read it though."
+        },
+        "pick_up": {
+          "text": "Health and safety literature seems like something I should leave in place."
+        }
+      }
+    },
+    {
+      "id": "security_camera",
+      "name": "security camera monitor",
+      "rect": [700, 72, 333, 150],
+      "interactions": {
+        "look_at": {
+          "text": "A security monitor showing two feeds: the lobby entrance, and the IT department — extension 204. Looks quiet in there."
+        },
+        "use": {
+          "text": "I'm not a security guard. I just need to get inside."
+        }
+      }
+    },
+    {
+      "id": "reception_desk",
+      "name": "reception desk",
+      "rect": [507, 307, 678, 174],
+      "interactions": {
+        "look_at": {
+          "text": "A large reception desk. On it: a computer, some papers, and a small ceramic mug that reads 'cap \u2665'. Someone has opinions about coffee."
+        },
+        "use": {
+          "text": "I shouldn't mess with the desk. The receptionist seems like the type who'd notice."
+        },
+        "pick_up": {
+          "text": "The desk isn't going anywhere."
+        }
+      }
+    },
+    {
+      "id": "badge_printer",
+      "name": "visitor badge printer",
+      "rect": [507, 307, 130, 146],
+      "interactions": {
+        "look_at": {
+          "text": "A visitor badge printer blinking a red error light. The display reads: OUT OF PAPER. Typical IT response time: three days and counting."
+        },
+        "use": {
+          "text": "The printer just blinks its red light at me. OUT OF PAPER. Not helpful."
+        },
+        "pick_up": {
+          "text": "Stealing office equipment seems like a bad start to infiltrating this building."
+        }
+      }
+    },
+    {
+      "id": "desk_papers",
+      "name": "papers on the desk",
+      "rect": [656, 406, 69, 75],
+      "interactions": {
+        "look_at": {
+          "text": "A stack of visitor intake forms and daily logs. All meticulously filed. Nothing I'd be allowed to touch."
+        },
+        "pick_up": {
+          "text": "I don't need those. And it would definitely be noticed."
+        },
+        "use": {
+          "text": "There's nothing useful to do with those papers."
+        }
+      }
+    },
+    {
+      "id": "desk_computer",
+      "name": "reception computer",
+      "rect": [1044, 426, 141, 48],
+      "interactions": {
+        "look_at": {
+          "text": "The receptionist's computer. The screen shows a visitor log system. My name isn't in it — obviously."
+        },
+        "use": {
+          "text": "I can't just use someone else's workstation. Especially not right in front of them."
+        }
+      }
+    },
+    {
+      "id": "fire_alarm",
+      "name": "fire alarm",
+      "rect": [527, 184, 104, 104],
+      "interactions": {
+        "look_at": [
+          {
+            "condition": { "alarm_cover_lifted": true },
+            "text": "The fire alarm handle is exposed. One firm pull and the whole building goes into emergency protocol. The poster says staff must escort all visitors inside."
+          },
+          {
+            "text": "A wall-mounted fire alarm pull station behind a clear plastic cover. A label reads: 'Lift to Activate'. Another label reads: 'Do not tamper with safety equipment'."
+          }
+        ],
+        "use": [
+          {
+            "condition": { "alarm_triggered": true },
+            "text": "The alarm is already blaring. I'm already inside."
+          },
+          {
+            "condition": { "alarm_cover_lifted": true },
+            "text": "You grab the handle and pull hard.",
+            "effects": [
+              { "type": "say", "text": "RIIIIING! The fire alarm blares throughout the building. Emergency lights flash red.", "x": 672, "y": 427, "color": "#ff4444" },
+              { "type": "say", "text": "\"Oh for— EVERYONE OUT! I— ...ugh. Fire protocol: I have to escort all visitors inside immediately.\"", "x": 672, "y": 360 },
+              { "type": "say", "text": "\"Congratulations. You're officially a fire hazard. Come in.\"", "x": 672, "y": 360 },
+              { "type": "set_flag", "flag": "alarm_triggered", "value": true },
+              { "type": "transition", "room": "office", "player_x": 1155, "player_y": 616, "player_dir": "left" }
+            ]
+          },
+          {
+            "condition": { "receptionist_has_coffee": true },
+            "text": "While she's distracted, you carefully lift the plastic cover. The alarm handle clicks into view.",
+            "effects": [
+              { "type": "set_flag", "flag": "alarm_cover_lifted", "value": true }
+            ]
+          },
+          {
+            "text": "You reach toward the cover...",
+            "effects": [
+              { "type": "say", "text": "\"Hey! Hands off that! Tampering with safety equipment is grounds for immediate termination.\"", "x": 672, "y": 360 }
+            ]
+          }
+        ],
+        "pull": [
+          {
+            "condition": { "alarm_triggered": true },
+            "text": "The alarm is already going. No need."
+          },
+          {
+            "condition": { "alarm_cover_lifted": true },
+            "text": "You grab the handle and pull hard.",
+            "effects": [
+              { "type": "say", "text": "RIIIIING! The fire alarm blares throughout the building. Emergency lights flash red.", "x": 672, "y": 427, "color": "#ff4444" },
+              { "type": "say", "text": "\"Oh for— EVERYONE OUT! I— ...ugh. Fire protocol: I have to escort all visitors inside immediately.\"", "x": 672, "y": 360 },
+              { "type": "say", "text": "\"Congratulations. You're officially a fire hazard. Come in.\"", "x": 672, "y": 360 },
+              { "type": "set_flag", "flag": "alarm_triggered", "value": true },
+              { "type": "transition", "room": "office", "player_x": 1155, "player_y": 616, "player_dir": "left" }
+            ]
+          },
+          {
+            "condition": { "receptionist_has_coffee": true },
+            "text": "While she's distracted, you carefully lift the plastic cover. The alarm handle clicks into view.",
+            "effects": [
+              { "type": "set_flag", "flag": "alarm_cover_lifted", "value": true }
+            ]
+          },
+          {
+            "text": "You reach toward the cover...",
+            "effects": [
+              { "type": "say", "text": "\"Hey! Hands off that! Tampering with safety equipment is grounds for immediate termination.\"", "x": 672, "y": 360 }
+            ]
+          }
+        ],
+        "open": [
+          {
+            "condition": { "alarm_cover_lifted": true },
+            "text": "The cover is already open."
+          },
+          {
+            "condition": { "receptionist_has_coffee": true },
+            "text": "While she's distracted, you carefully lift the plastic cover. The alarm handle clicks into view.",
+            "effects": [
+              { "type": "set_flag", "flag": "alarm_cover_lifted", "value": true }
+            ]
+          },
+          {
+            "text": "You reach toward the cover...",
+            "effects": [
+              { "type": "say", "text": "\"Hey! Hands off that! Tampering with safety equipment is grounds for immediate termination.\"", "x": 672, "y": 360 }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "coffee_machine",
+      "name": "coffee machine",
+      "rect": [370, 260, 118, 200],
+      "dialogue": "coffee_machine",
+      "interactions": {
+        "look_at": {
+          "text": "A 'Barista Pro' coffee machine with a display panel. A sticky note on the side reads: 'likes it frothy! \u2615 cap'. Several drink options are available."
+        },
+        "use": {
+          "effects": [
+            { "type": "dialogue", "dialogue": "coffee_machine" }
+          ]
+        },
+        "talk_to": {
+          "text": "The machine hums indifferently. I should USE it to order a drink."
+        },
+        "pick_up": {
+          "text": "The machine is bolted to the counter."
+        }
+      }
+    },
+    {
+      "id": "entrance_door",
+      "name": "authorized personnel door",
+      "rect": [48, 108, 294, 516],
+      "interactions": {
+        "look_at": {
+          "text": "A heavy door marked 'AUTHORIZED PERSONNEL ONLY'. It has a card reader on the side. This is exactly where I need to get through."
+        },
+        "open": [
+          {
+            "condition": { "alarm_triggered": true },
+            "text": "The door swings open. I'm in.",
+            "effects": [
+              { "type": "transition", "room": "office", "player_x": 1155, "player_y": 616, "player_dir": "left" }
+            ]
+          },
+          {
+            "text": "Locked. The card reader blinks red. I need to find another way through."
+          }
+        ],
+        "use": [
+          {
+            "condition": { "alarm_triggered": true },
+            "text": "The door opens. I walk through.",
+            "effects": [
+              { "type": "transition", "room": "office", "player_x": 1155, "player_y": 616, "player_dir": "left" }
+            ]
+          },
+          {
+            "text": "The card reader blinks red. Access denied."
+          }
+        ],
+        "push": [
+          {
+            "text": "It doesn't budge. The lock holds firm."
+          }
+        ],
+        "talk_to": {
+          "text": "The door is unmoved by my conversation. Typical."
+        }
+      }
+    },
+    {
+      "id": "receptionist",
+      "name": "Receptionist",
+      "rect": [812, 323, 137, 151],
+      "dialogue": "karen",
+      "interactions": {
+        "look_at": [
+          {
+            "condition": { "receptionist_has_coffee": true },
+            "text": "She's sipping the cappuccino contentedly, eyes slightly glazed. Distracted. Good."
+          },
+          {
+            "text": "The receptionist sits behind the desk with the focused energy of someone running on zero sleep and sheer professionalism."
+          }
+        ],
+        "talk_to": [
+          {
+            "condition": { "receptionist_has_coffee": true },
+            "text": "She waves a hand. 'Mm. Busy sipping. Give me a moment.'",
+            "effects": []
+          }
+        ],
+        "give": {
+          "text": "I should use an item from my inventory on her."
+        },
+        "pick_up": {
+          "text": "Pretty sure that's illegal, Alex."
+        }
+      },
+      "combinations": [
+        {
+          "item": "cappuccino_cup",
+          "verb": "give",
+          "text": "You slide the cappuccino across the desk. Her eyes lock onto it instantly.",
+          "effects": [
+            { "type": "say", "text": "\"Ah... finally. The perfect caffeine balance.\"", "x": 672, "y": 360 },
+            { "type": "say", "text": "\"Okay. I can handle a small distraction now.\"", "x": 672, "y": 360 },
+            { "type": "set_flag", "flag": "receptionist_has_coffee", "value": true },
+            { "type": "remove_item", "item": "cappuccino_cup" }
+          ]
+        },
+        {
+          "item": "cappuccino_cup",
+          "verb": "use",
+          "text": "You place the cappuccino on the desk in front of her. She stares at it.",
+          "effects": [
+            { "type": "say", "text": "\"Ah... finally. The perfect caffeine balance.\"", "x": 672, "y": 360 },
+            { "type": "say", "text": "\"Okay. I can handle a small distraction now.\"", "x": 672, "y": 360 },
+            { "type": "set_flag", "flag": "receptionist_has_coffee", "value": true },
+            { "type": "remove_item", "item": "cappuccino_cup" }
+          ]
+        }
+      ]
+    }
+  ]
+}
