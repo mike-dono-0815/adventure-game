@@ -22,9 +22,9 @@ Game.Config = {
   INVENTORY_WIDTH: 896,
 
   // Inventory item size
-  ITEM_THUMB_SIZE: 72,
+  ITEM_THUMB_SIZE: 107,
   ITEM_PADDING: 8,
-  INVENTORY_COLS: 11,
+  INVENTORY_COLS: 7,
   INVENTORY_ROWS: 2,
 
   // Player
@@ -37,26 +37,28 @@ Game.Config = {
   FONT_SIZE: 22,
   DIALOGUE_FONT_SIZE: 24,
 
-  // Colors
+  // Colors — Amazon brand palette
+  // #131A22 Cool Black · #232F3E Ebony Clay · #37475A Space
+  // #FF9900 Amazon Orange · #FEBD69 Orange Hint
   COLORS: {
-    BG: '#1a1a2e',
-    VIEWPORT_BG: '#2a2a3e',
-    ACTION_LINE_BG: '#16213e',
-    ACTION_LINE_TEXT: '#e0e0e0',
-    BOTTOM_BAR_BG: '#0f3460',
-    VERB_NORMAL: '#e0e0e0',
-    VERB_HOVER: '#ffdd57',
-    VERB_ACTIVE: '#ff6b6b',
-    INVENTORY_BG: '#1a1a2e',
-    INVENTORY_BORDER: '#333366',
+    BG: '#131A22',
+    VIEWPORT_BG: '#232F3E',
+    ACTION_LINE_BG: '#0F1111',
+    ACTION_LINE_TEXT: '#ffffff',
+    BOTTOM_BAR_BG: '#232F3E',
+    VERB_NORMAL: '#cccccc',
+    VERB_HOVER: '#FF9900',
+    VERB_ACTIVE: '#FEBD69',
+    INVENTORY_BG: '#131A22',
+    INVENTORY_BORDER: '#37475A',
     HOTSPOT_DEBUG: 'rgba(0, 255, 0, 0.3)',
     WALKAREA_DEBUG: 'rgba(0, 0, 255, 0.2)',
-    PLAYER: '#e94560',
+    PLAYER: '#FF9900',
     TEXT_DEFAULT: '#ffffff',
-    TEXT_NPC: '#7ec8e3',
-    TEXT_PLAYER_CHOICE: '#ffdd57',
-    DIALOGUE_BG: 'rgba(0, 0, 0, 0.85)',
-    SAVE_MENU_BG: 'rgba(15, 52, 96, 0.95)',
+    TEXT_NPC: '#FEBD69',
+    TEXT_PLAYER_CHOICE: '#FF9900',
+    DIALOGUE_BG: 'rgba(19, 26, 34, 0.92)',
+    SAVE_MENU_BG: 'rgba(35, 47, 62, 0.97)',
     FADE: '#000000',
   },
 
