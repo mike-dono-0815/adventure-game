@@ -7,7 +7,6 @@ Game.Dialogue = (function () {
   var npcText = '';
   var choices = [];
   var hoverChoice = -1;
-  var npcTextTimer = 0;
   var showingNpcText = false;
 
   function start(dialogueName, callback) {
@@ -20,7 +19,16 @@ Game.Dialogue = (function () {
     dialogueId = dialogueName;
     endCallback = callback;
     active = true;
-    goToNode(dialogueData.start || 'start');
+
+    var seenFlag = 'dialogue_seen_' + dialogueName;
+    var startNode;
+    if (Game.State.check(seenFlag) && dialogueData.start_repeat) {
+      startNode = dialogueData.start_repeat;
+    } else {
+      startNode = dialogueData.start || 'start';
+      Game.State.set(seenFlag, true);
+    }
+    goToNode(startNode);
   }
 
   function goToNode(nodeId) {
@@ -40,7 +48,6 @@ Game.Dialogue = (function () {
     if (node.npc_text) {
       npcText = node.npc_text;
       showingNpcText = true;
-      npcTextTimer = Math.max(2.5, npcText.length * 0.06);
       choices = [];
     } else {
       showingNpcText = false;
@@ -162,15 +169,23 @@ Game.Dialogue = (function () {
   }
 
   function update(dt) {
-    if (!active) return;
+  }
 
-    if (showingNpcText) {
-      npcTextTimer -= dt;
-      if (npcTextTimer <= 0) {
-        showingNpcText = false;
-        buildChoices(currentNode);
+  function wrapText(ctx, text, maxWidth) {
+    var words = text.split(' ');
+    var lines = [];
+    var line = '';
+    for (var i = 0; i < words.length; i++) {
+      var test = line ? line + ' ' + words[i] : words[i];
+      if (ctx.measureText(test).width > maxWidth && line) {
+        lines.push(line);
+        line = words[i];
+      } else {
+        line = test;
       }
     }
+    if (line) lines.push(line);
+    return lines;
   }
 
   function draw(ctx) {
@@ -185,11 +200,20 @@ Game.Dialogue = (function () {
     ctx.fillRect(0, panelY, cfg.WIDTH, panelH);
 
     if (showingNpcText) {
-      // NPC text
+      // NPC text — wrapped
       ctx.fillStyle = cfg.COLORS.TEXT_NPC;
       ctx.font = cfg.DIALOGUE_FONT_SIZE + 'px ' + cfg.FONT_FAMILY;
       ctx.textAlign = 'center';
-      ctx.fillText(npcText, cfg.WIDTH / 2, panelY + panelH / 2 + 8);
+
+      var maxW = cfg.WIDTH - 200;
+      var lineH = cfg.DIALOGUE_FONT_SIZE + 10;
+      var lines = wrapText(ctx, npcText, maxW);
+      var totalH = lines.length * lineH;
+      var startY = panelY + (panelH - totalH) / 2 + cfg.DIALOGUE_FONT_SIZE;
+
+      for (var li = 0; li < lines.length; li++) {
+        ctx.fillText(lines[li], cfg.WIDTH / 2, startY + li * lineH);
+      }
 
       ctx.fillStyle = 'rgba(255,255,255,0.4)';
       ctx.font = '14px ' + cfg.FONT_FAMILY;

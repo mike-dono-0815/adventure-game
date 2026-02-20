@@ -41,6 +41,12 @@ Game.Main = (function () {
     Game.Verbs.init();
     Game.Inventory.init();
 
+    // Add starting inventory items
+    var startingInventory = gameData.starting_inventory || [];
+    for (var i = 0; i < startingInventory.length; i++) {
+      Game.Inventory.add(startingInventory[i]);
+    }
+
     // Load starting room
     var startRoom = gameData.start_room || 'lobby';
     var startX = gameData.start_x || 400;

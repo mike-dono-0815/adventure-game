@@ -2,9 +2,57 @@
   "id": "karen",
   "character": "Receptionist",
   "start": "greeting",
+  "start_repeat": "greeting_return",
   "nodes": {
+    "greeting_return": {
+      "npc_text": "Still no badge printer paper, I'm afraid. Is there something else I can help you with?",
+      "choices": [
+        {
+          "id": "meeting_2",
+          "text": "I have a meeting inside. Surely I can just pop through?",
+          "next": "no_badge"
+        },
+        {
+          "id": "exit_return",
+          "text": "Never mind.",
+          "next": null
+        }
+      ]
+    },
     "greeting": {
       "npc_text": "Good morning. I'm afraid all visitors require a valid badge to enter the building.",
+      "choices": [
+        {
+          "id": "meeting",
+          "text": "I have a meeting inside. Surely I can just pop through?",
+          "next": "no_badge"
+        },
+        {
+          "id": "tired",
+          "text": "You look exhausted. Long morning?",
+          "next": "tired_response",
+          "show_once": true
+        },
+        {
+          "id": "badge_printer",
+          "text": "What's wrong with the badge printer?",
+          "next": "badge_printer_response",
+          "show_once": true
+        },
+        {
+          "id": "emergency",
+          "text": "What happens if there's a fire?",
+          "next": "emergency_response",
+          "show_once": true
+        },
+        {
+          "id": "exit",
+          "text": "Never mind.",
+          "next": null
+        }
+      ]
+    },
+    "main_options": {
       "choices": [
         {
           "id": "meeting",
@@ -42,7 +90,7 @@
         {
           "id": "back_1",
           "text": "There has to be another way in...",
-          "next": "greeting"
+          "next": "main_options"
         }
       ]
     },
@@ -57,7 +105,7 @@
         {
           "id": "sympathise",
           "text": "That sounds rough. Sorry.",
-          "next": "greeting"
+          "next": "main_options"
         }
       ]
     },
@@ -77,7 +125,7 @@
         {
           "id": "back_2",
           "text": "Classic.",
-          "next": "greeting"
+          "next": "main_options"
         }
       ]
     },
@@ -97,7 +145,7 @@
         {
           "id": "back_3",
           "text": "No, I'm good. Thanks.",
-          "next": "greeting"
+          "next": "main_options"
         }
       ]
     }

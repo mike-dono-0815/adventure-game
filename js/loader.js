@@ -47,6 +47,14 @@ Game.Loader = (function () {
     var imageFiles = [
       { key: 'bg_lobby', url: 'assets/backgrounds/Reception.png' },
       { key: 'bg_office', url: 'assets/backgrounds/office.png' },
+      { key: 'item_business_card',        url: 'assets/items/thumbs/business_card.png' },
+      { key: 'item_stress_ball',          url: 'assets/items/thumbs/stress_ball.png' },
+      { key: 'item_cappuccino_cup',       url: 'assets/items/thumbs/cappuccino_cup.png' },
+      { key: 'item_visitor_badge',        url: 'assets/items/thumbs/visitor_badge.png' },
+      { key: 'item_coffee_cup',           url: 'assets/items/thumbs/coffee_cup.png' },
+      { key: 'item_separation_agreement', url: 'assets/items/thumbs/separation_agreement.png' },
+      { key: 'item_pen',                  url: 'assets/items/thumbs/pen.png' },
+      { key: 'item_signed_agreement',     url: 'assets/items/thumbs/signed_agreement.png' },
     ];
 
     totalAssets = jsonFiles.length + imageFiles.length;

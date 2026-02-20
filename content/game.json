@@ -3,10 +3,10 @@
   "start_room": "lobby",
   "start_x": 672,
   "start_y": 711,
+  "starting_inventory": ["business_card", "stress_ball"],
   "starting_flags": {
     "intro_seen": false,
     "receptionist_has_coffee": false,
-    "alarm_cover_lifted": false,
     "alarm_triggered": false,
     "talked_to_bob": false,
     "bob_wants_coffee": false,

@@ -1,6 +1,6 @@
 # The Separation Agreement
 
-A classic point-and-click adventure game set in the soul-crushing offices of **MegaCorp Inc.**
+A classic point-and-click adventure game set in the soul-crushing offices of **Amazon Inc.**
 
 You play as **Alex Deskworth**, a mid-level employee who has finally negotiated a Mutual Separation Agreement — their ticket to freedom — only for the signed contract to vanish into the bureaucratic abyss. Navigate office politics, absurd corporate procedures, and passive-aggressive coworkers to recover the document before HR "loses" it permanently.
 

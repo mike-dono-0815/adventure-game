@@ -1,6 +1,42 @@
 {
   "items": [
     {
+      "id": "business_card",
+      "name": "business card",
+      "description": "Jeff Bezos — CEO Amazon. The title meant nothing then. It means even less now.",
+      "color": "#e8e8e8",
+      "icon": "🪪",
+      "interactions": {
+        "look_at": {
+          "text": "An old business card. 'Jeff Bezos — CEO Amazon.' I should probably throw these out. Someday."
+        },
+        "use": {
+          "text": "There's no one left to hand this to."
+        },
+        "give": {
+          "text": "I don't think anyone here needs my contact details."
+        }
+      }
+    },
+    {
+      "id": "stress_ball",
+      "name": "stress ball",
+      "description": "A squishy Amazon-branded stress ball. Ironic, given the circumstances.",
+      "color": "#e05a1a",
+      "icon": "🔴",
+      "interactions": {
+        "look_at": {
+          "text": "A squishy orange stress ball with the Amazon logo on it. They handed these out after the last round of redundancies. The irony was apparently lost on HR."
+        },
+        "use": {
+          "text": "I squeeze it a few times. It doesn't help. It never really did."
+        },
+        "give": {
+          "text": "I think I need this more than anyone else here right now."
+        }
+      }
+    },
+    {
       "id": "cappuccino_cup",
       "name": "cappuccino",
       "description": "A perfect cappuccino from the Barista Pro machine. Frothy, cinnamon-dusted, exactly right.",

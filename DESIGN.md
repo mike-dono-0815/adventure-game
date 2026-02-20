@@ -5,7 +5,7 @@
 
 ## 1. High Concept
 
-A classic point-and-click adventure game set in the labyrinthine offices of **MegaCorp Inc.**, a soulless corporate behemoth. The player controls **Alex Deskworth**, a mid-level employee who has finally negotiated a Mutual Separation Agreement — their ticket to freedom — only for the signed contract to vanish into the bureaucratic abyss. Alex must navigate office politics, absurd corporate procedures, and passive-aggressive coworkers to recover the document before HR "loses" it permanently.
+A classic point-and-click adventure game set in the labyrinthine offices of **Amazon Inc.**, a soulless corporate behemoth. The player controls **Alex Deskworth**, a mid-level employee who has finally negotiated a Mutual Separation Agreement — their ticket to freedom — only for the signed contract to vanish into the bureaucratic abyss. Alex must navigate office politics, absurd corporate procedures, and passive-aggressive coworkers to recover the document before HR "loses" it permanently.
 
 **Genre:** Comedy/Satire Point-and-Click Adventure
 **Tone:** Dry humor, corporate satire (think Office Space meets Monkey Island)
@@ -447,7 +447,7 @@ project/
   "start_node": "greeting",
   "nodes": {
     "greeting": {
-      "npc_text": "Welcome to MegaCorp. Do you have an appointment?",
+      "npc_text": "Welcome to Amazon. Do you have an appointment?",
       "choices": [
         {
           "text": "I work here. Or... worked here. It's complicated.",

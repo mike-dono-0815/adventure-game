@@ -74,7 +74,7 @@ Game.Verbs = (function () {
     ctx.fillStyle = cfg.COLORS.BOTTOM_BAR_BG;
     ctx.fillRect(panelX, panelY, cfg.VERB_PANEL_WIDTH, cfg.BOTTOM_BAR_HEIGHT);
 
-    ctx.font = 'bold 22px ' + cfg.FONT_FAMILY;
+    ctx.font = '600 28px "Cinzel", serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
@@ -96,7 +96,7 @@ Game.Verbs = (function () {
 
       // Subtle grid lines
       ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 3;
       ctx.strokeRect(panelX + col * cellW, panelY + row * cellH, cellW, cellH);
     }
 

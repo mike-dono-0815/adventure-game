@@ -78,9 +78,10 @@ Game.Inventory = (function () {
 
     // Item grid
     var gridX = invX + arrowW + 10;
-    var thumbS = cfg.ITEM_THUMB_SIZE + cfg.ITEM_PADDING;
-    var col = Math.floor((gx - gridX) / thumbS);
-    var row = Math.floor((gy - invY - 10) / thumbS);
+    var thumbSX = cfg.ITEM_THUMB_SIZE + cfg.ITEM_PADDING_X;
+    var thumbSY = cfg.ITEM_THUMB_SIZE + cfg.ITEM_PADDING;
+    var col = Math.floor((gx - gridX) / thumbSX);
+    var row = Math.floor((gy - invY - 10) / thumbSY);
 
     if (col >= 0 && col < cfg.INVENTORY_COLS && row >= 0 && row < cfg.INVENTORY_ROWS) {
       var idx = scrollOffset + row * cfg.INVENTORY_COLS + col;
@@ -121,10 +122,11 @@ Game.Inventory = (function () {
     var invY = cfg.BOTTOM_BAR_Y;
     var arrowW = 40;
     var gridX = invX + arrowW + 10;
-    var thumbS = cfg.ITEM_THUMB_SIZE + cfg.ITEM_PADDING;
+    var thumbSX = cfg.ITEM_THUMB_SIZE + cfg.ITEM_PADDING_X;
+    var thumbSY = cfg.ITEM_THUMB_SIZE + cfg.ITEM_PADDING;
 
-    var col = Math.floor((gx - gridX) / thumbS);
-    var row = Math.floor((gy - invY - 10) / thumbS);
+    var col = Math.floor((gx - gridX) / thumbSX);
+    var row = Math.floor((gy - invY - 10) / thumbSY);
 
     if (col >= 0 && col < cfg.INVENTORY_COLS && row >= 0 && row < cfg.INVENTORY_ROWS) {
       var idx = scrollOffset + row * cfg.INVENTORY_COLS + col;
@@ -164,13 +166,14 @@ Game.Inventory = (function () {
 
     // Item grid
     var gridX = invX + arrowW + 10;
-    var thumbS = cfg.ITEM_THUMB_SIZE + cfg.ITEM_PADDING;
+    var thumbSX = cfg.ITEM_THUMB_SIZE + cfg.ITEM_PADDING_X;
+    var thumbSY = cfg.ITEM_THUMB_SIZE + cfg.ITEM_PADDING;
 
     for (var row = 0; row < cfg.INVENTORY_ROWS; row++) {
       for (var col = 0; col < cfg.INVENTORY_COLS; col++) {
         var idx = scrollOffset + row * cfg.INVENTORY_COLS + col;
-        var dx = gridX + col * thumbS;
-        var dy = invY + 10 + row * thumbS;
+        var dx = gridX + col * thumbSX;
+        var dy = invY + 10 + row * thumbSY;
 
         // Slot background
         ctx.fillStyle = 'rgba(255,255,255,0.05)';

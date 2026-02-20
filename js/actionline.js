@@ -70,7 +70,7 @@ Game.ActionLine = (function () {
     // Text
     var text = getText();
     ctx.fillStyle = cfg.COLORS.ACTION_LINE_TEXT;
-    ctx.font = 'bold 20px ' + cfg.FONT_FAMILY;
+    ctx.font = 'bold 26px ' + cfg.FONT_FAMILY;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(text, cfg.WIDTH / 2, y + h / 2);

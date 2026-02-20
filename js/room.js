@@ -17,6 +17,13 @@ Game.Room = (function () {
     // Build active hotspot list
     rebuildHotspots();
 
+    // In no-walk rooms default to Look at instead of Walk to
+    if (roomData && roomData.no_walk) {
+      Game.Verbs.setCurrent('Look at');
+    } else {
+      Game.Verbs.reset();
+    }
+
     if (callback) callback();
   }
 
@@ -252,28 +259,13 @@ Game.Room = (function () {
   function drawRoomOverlays(ctx) {
     if (currentRoom === 'lobby') {
       // Blinking badge printer error light
-      // Badge printer rect: [507, 307, 130, 146] — dot near top-left of printer face
+      // Badge printer rect: [507, 307, 130, 146] — dot near bottom-left of printer face
       var blinkOn = Math.floor(Date.now() / 500) % 2 === 0;
       ctx.fillStyle = blinkOn ? '#ff2200' : '#660000';
       ctx.beginPath();
-      ctx.arc(522, 328, 7, 0, Math.PI * 2);
+      ctx.arc(524, 358, 7, 0, Math.PI * 2);
       ctx.fill();
 
-      // Fire alarm cover — drawn over pull-handle area when not yet lifted
-      // Fire alarm rect: [527, 184, 104, 104] — cover the lower ~80% of the alarm (the handle area)
-      if (!Game.State.check('alarm_cover_lifted')) {
-        ctx.fillStyle = '#cfd8e0';
-        ctx.fillRect(530, 207, 98, 78);
-        ctx.strokeStyle = '#99aacc';
-        ctx.lineWidth = 1.5;
-        ctx.strokeRect(530, 207, 98, 78);
-        ctx.fillStyle = '#444';
-        ctx.font = '9px ' + Game.Config.FONT_FAMILY;
-        ctx.textAlign = 'center';
-        ctx.fillText('Lift to', 579, 240);
-        ctx.fillText('Activate', 579, 253);
-        ctx.textAlign = 'left';
-      }
     }
   }
 

@@ -126,43 +126,24 @@
       "name": "fire alarm",
       "rect": [527, 184, 104, 104],
       "interactions": {
-        "look_at": [
-          {
-            "condition": { "alarm_cover_lifted": true },
-            "text": "The fire alarm handle is exposed. One firm pull and the whole building goes into emergency protocol. The poster says staff must escort all visitors inside."
-          },
-          {
-            "text": "A wall-mounted fire alarm pull station behind a clear plastic cover. A label reads: 'Lift to Activate'. Another label reads: 'Do not tamper with safety equipment'."
-          }
-        ],
+        "look_at": {
+          "text": "A wall-mounted fire alarm pull station. A label reads: 'Pull to Activate'. Another label reads: 'Do not tamper with safety equipment'."
+        },
         "use": [
           {
             "condition": { "alarm_triggered": true },
             "text": "The alarm is already blaring. I'm already inside."
           },
           {
-            "condition": { "alarm_cover_lifted": true },
-            "text": "You grab the handle and pull hard.",
+            "condition": { "receptionist_has_coffee": true },
+            "text": "You grab the handle and pull hard. RIIIIING! The alarm blares throughout the building, emergency lights flashing red. The receptionist leaps to her feet. 'Oh for— EVERYONE OUT! I— ...ugh. Fire protocol: I have to escort all visitors inside immediately.' She fixes you with a withering look. 'Congratulations. You're officially a fire hazard. Come in.'",
             "effects": [
-              { "type": "say", "text": "RIIIIING! The fire alarm blares throughout the building. Emergency lights flash red.", "x": 672, "y": 427, "color": "#ff4444" },
-              { "type": "say", "text": "\"Oh for— EVERYONE OUT! I— ...ugh. Fire protocol: I have to escort all visitors inside immediately.\"", "x": 672, "y": 360 },
-              { "type": "say", "text": "\"Congratulations. You're officially a fire hazard. Come in.\"", "x": 672, "y": 360 },
               { "type": "set_flag", "flag": "alarm_triggered", "value": true },
               { "type": "transition", "room": "office", "player_x": 1155, "player_y": 616, "player_dir": "left" }
             ]
           },
           {
-            "condition": { "receptionist_has_coffee": true },
-            "text": "While she's distracted, you carefully lift the plastic cover. The alarm handle clicks into view.",
-            "effects": [
-              { "type": "set_flag", "flag": "alarm_cover_lifted", "value": true }
-            ]
-          },
-          {
-            "text": "You reach toward the cover...",
-            "effects": [
-              { "type": "say", "text": "\"Hey! Hands off that! Tampering with safety equipment is grounds for immediate termination.\"", "x": 672, "y": 360 }
-            ]
+            "text": "You reach toward the alarm... 'Hey! Hands off that! Tampering with safety equipment is grounds for immediate termination.'"
           }
         ],
         "pull": [
@@ -171,47 +152,15 @@
             "text": "The alarm is already going. No need."
           },
           {
-            "condition": { "alarm_cover_lifted": true },
-            "text": "You grab the handle and pull hard.",
+            "condition": { "receptionist_has_coffee": true },
+            "text": "You grab the handle and pull hard. RIIIIING! The alarm blares throughout the building, emergency lights flashing red. The receptionist leaps to her feet. 'Oh for— EVERYONE OUT! I— ...ugh. Fire protocol: I have to escort all visitors inside immediately.' She fixes you with a withering look. 'Congratulations. You're officially a fire hazard. Come in.'",
             "effects": [
-              { "type": "say", "text": "RIIIIING! The fire alarm blares throughout the building. Emergency lights flash red.", "x": 672, "y": 427, "color": "#ff4444" },
-              { "type": "say", "text": "\"Oh for— EVERYONE OUT! I— ...ugh. Fire protocol: I have to escort all visitors inside immediately.\"", "x": 672, "y": 360 },
-              { "type": "say", "text": "\"Congratulations. You're officially a fire hazard. Come in.\"", "x": 672, "y": 360 },
               { "type": "set_flag", "flag": "alarm_triggered", "value": true },
               { "type": "transition", "room": "office", "player_x": 1155, "player_y": 616, "player_dir": "left" }
             ]
           },
           {
-            "condition": { "receptionist_has_coffee": true },
-            "text": "While she's distracted, you carefully lift the plastic cover. The alarm handle clicks into view.",
-            "effects": [
-              { "type": "set_flag", "flag": "alarm_cover_lifted", "value": true }
-            ]
-          },
-          {
-            "text": "You reach toward the cover...",
-            "effects": [
-              { "type": "say", "text": "\"Hey! Hands off that! Tampering with safety equipment is grounds for immediate termination.\"", "x": 672, "y": 360 }
-            ]
-          }
-        ],
-        "open": [
-          {
-            "condition": { "alarm_cover_lifted": true },
-            "text": "The cover is already open."
-          },
-          {
-            "condition": { "receptionist_has_coffee": true },
-            "text": "While she's distracted, you carefully lift the plastic cover. The alarm handle clicks into view.",
-            "effects": [
-              { "type": "set_flag", "flag": "alarm_cover_lifted", "value": true }
-            ]
-          },
-          {
-            "text": "You reach toward the cover...",
-            "effects": [
-              { "type": "say", "text": "\"Hey! Hands off that! Tampering with safety equipment is grounds for immediate termination.\"", "x": 672, "y": 360 }
-            ]
+            "text": "You reach toward the alarm... 'Hey! Hands off that! Tampering with safety equipment is grounds for immediate termination.'"
           }
         ]
       }
@@ -330,6 +279,42 @@
             { "type": "say", "text": "\"Okay. I can handle a small distraction now.\"", "x": 672, "y": 360 },
             { "type": "set_flag", "flag": "receptionist_has_coffee", "value": true },
             { "type": "remove_item", "item": "cappuccino_cup" }
+          ]
+        },
+        {
+          "item": "business_card",
+          "verb": "give",
+          "text": "You slide the business card across the desk with quiet confidence.",
+          "effects": [
+            { "type": "say", "text": "\"...Jeff Bezos. CEO Amazon.\" She looks up slowly.", "x": 672, "y": 360 },
+            { "type": "say", "text": "\"I'm going to need a little more than a business card to believe you're Jeff Bezos.\"", "x": 672, "y": 360 }
+          ]
+        },
+        {
+          "item": "business_card",
+          "verb": "use",
+          "text": "You slide the business card across the desk with quiet confidence.",
+          "effects": [
+            { "type": "say", "text": "\"...Jeff Bezos. CEO Amazon.\" She looks up slowly.", "x": 672, "y": 360 },
+            { "type": "say", "text": "\"I'm going to need a little more than a business card to believe you're Jeff Bezos.\"", "x": 672, "y": 360 }
+          ]
+        },
+        {
+          "item": "stress_ball",
+          "verb": "give",
+          "text": "You offer her the stress ball. She eyes it for a moment.",
+          "effects": [
+            { "type": "say", "text": "\"A stress ball? How thoughtful.\"", "x": 672, "y": 360 },
+            { "type": "say", "text": "\"Working at Amazon is never stressful. This will go straight to lost property.\"", "x": 672, "y": 360 }
+          ]
+        },
+        {
+          "item": "stress_ball",
+          "verb": "use",
+          "text": "You place the stress ball on the desk. She stares at it.",
+          "effects": [
+            { "type": "say", "text": "\"A stress ball? How thoughtful.\"", "x": 672, "y": 360 },
+            { "type": "say", "text": "\"Working at Amazon is never stressful. This will go straight to lost property.\"", "x": 672, "y": 360 }
           ]
         }
       ]
