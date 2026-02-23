@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Debug Launcher</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #1a1a2e; color: #e0e0e0; font: 15px/1.6 "Segoe UI", Arial, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; gap: 32px; }
+    h1 { font-size: 22px; color: #FF9900; letter-spacing: 0.05em; }
+    .subtitle { color: #888; font-size: 13px; }
+    .scenarios { display: flex; flex-direction: column; gap: 12px; width: 480px; }
+    .card { background: #232F3E; border: 1px solid #37475A; border-radius: 6px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .card-info { flex: 1; }
+    .card-label { font-weight: 600; color: #FEBD69; margin-bottom: 4px; }
+    .card-desc { font-size: 13px; color: #aaa; }
+    .card-meta { font-size: 12px; color: #666; margin-top: 6px; font-family: monospace; }
+    .btn { background: #FF9900; color: #131A22; border: none; border-radius: 4px; padding: 8px 18px; font: 600 14px "Segoe UI", Arial, sans-serif; cursor: pointer; white-space: nowrap; text-decoration: none; }
+    .btn:hover { background: #FEBD69; }
+    .btn-normal { background: #37475A; color: #e0e0e0; }
+    .btn-normal:hover { background: #4a5f75; }
+    .divider { width: 480px; border: none; border-top: 1px solid #37475A; }
+    .normal-start { display: flex; align-items: center; justify-content: space-between; width: 480px; }
+    .normal-label { color: #888; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<div>
+  <h1>The Separation Agreement — Debug Launcher</h1>
+  <p class="subtitle">Choose a scenario to start from</p>
+</div>
+
+<div class="scenarios" id="scenarios">
+  <!-- populated by JS -->
+</div>
+
+<hr class="divider">
+
+<div class="normal-start">
+  <span class="normal-label">Normal game start (lobby)</span>
+  <a class="btn btn-normal" href="index.html">Play from start</a>
+</div>
+
+<script>
+  // Fetch scenarios from debug.json and build cards
+  fetch('content/debug.json')
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      var container = document.getElementById('scenarios');
+      var scenarios = data.scenarios || {};
+      var keys = Object.keys(scenarios);
+
+      if (keys.length === 0) {
+        container.innerHTML = '<p style="color:#888">No scenarios defined in content/debug.json</p>';
+        return;
+      }
+
+      keys.forEach(function (key) {
+        var s = scenarios[key];
+
+        var flags = s.flags ? Object.keys(s.flags).map(function(k){ return k + '=' + s.flags[k]; }).join(', ') : '—';
+        var inv   = s.inventory ? s.inventory.join(', ') : '—';
+
+        var card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML =
+          '<div class="card-info">' +
+            '<div class="card-label">' + (s.label || key) + '</div>' +
+            '<div class="card-desc">' + (s.description || '') + '</div>' +
+            '<div class="card-meta">room: ' + s.room + ' &nbsp;|&nbsp; flags: ' + flags + '<br>inventory: ' + inv + '</div>' +
+          '</div>' +
+          '<a class="btn" href="index.html?scenario=' + encodeURIComponent(key) + '">Launch</a>';
+        container.appendChild(card);
+      });
+    })
+    .catch(function () {
+      document.getElementById('scenarios').innerHTML = '<p style="color:#e74c3c">Failed to load content/debug.json</p>';
+    });
+</script>
+</body>
+</html>

@@ -2,7 +2,7 @@ Game.Player = (function () {
   var x = 960, y = 600;
   var targetPath = [];
   var walking = false;
-  var direction = 'front'; // front, back, left, right
+  var direction = 'right'; // left, right
   var animFrame = 0;
   var animTimer = 0;
   var arriveCallback = null;
@@ -59,11 +59,9 @@ Game.Player = (function () {
     var dist = Math.sqrt(dx * dx + dy * dy);
     var speed = Game.Config.PLAYER_SPEED * dt;
 
-    // Direction detection
+    // Direction detection — only left/right; keep last direction for vertical movement
     if (Math.abs(dx) > Math.abs(dy)) {
       direction = dx > 0 ? 'right' : 'left';
-    } else {
-      direction = dy > 0 ? 'front' : 'back';
     }
 
     if (dist <= speed) {
@@ -85,7 +83,7 @@ Game.Player = (function () {
     animTimer += dt;
     if (animTimer >= 0.15) {
       animTimer = 0;
-      animFrame = (animFrame + 1) % 4;
+      animFrame = (animFrame + 1) % 2;
     }
   }
 
@@ -95,45 +93,21 @@ Game.Player = (function () {
     var drawX = Math.round(x - pw / 2);
     var drawY = Math.round(y - ph);
 
-    // Draw character as colored rectangle with simple details
-    ctx.fillStyle = Game.Config.COLORS.PLAYER;
-    ctx.fillRect(drawX, drawY, pw, ph);
+    var sprite = Game.Loader.getImage('player_sprite');
+    if (!sprite) return;
 
-    // Head
-    ctx.fillStyle = '#ffd5b4';
-    ctx.beginPath();
-    ctx.arc(x, drawY + 18, 16, 0, Math.PI * 2);
-    ctx.fill();
+    var COLS = 4, ROWS = 2;
+    var frameW = sprite.width / COLS;
+    var frameH = sprite.height / ROWS;
+    var crop = 4;
 
-    // Hair
-    ctx.fillStyle = '#4a3728';
-    ctx.beginPath();
-    ctx.arc(x, drawY + 12, 16, Math.PI, Math.PI * 2);
-    ctx.fill();
+    // Right: row 0, cols 0-1 — Left: row 1, cols 2-3
+    var row = direction === 'right' ? 0 : 1;
+    var col = direction === 'right' ? animFrame : 2 + animFrame;
 
-    // Body
-    ctx.fillStyle = '#3b5998';
-    ctx.fillRect(drawX + 8, drawY + 34, pw - 16, 50);
-
-    // Legs
-    ctx.fillStyle = '#2c3e50';
-    ctx.fillRect(drawX + 12, drawY + 84, 16, 44);
-    ctx.fillRect(drawX + pw - 28, drawY + 84, 16, 44);
-
-    // Walk animation - leg movement
-    if (walking) {
-      var legOff = Math.sin(animFrame * Math.PI / 2) * 6;
-      ctx.fillStyle = '#2c3e50';
-      ctx.fillRect(drawX + 12, drawY + 84 + legOff, 16, 44);
-      ctx.fillRect(drawX + pw - 28, drawY + 84 - legOff, 16, 44);
-    }
-
-    // Direction indicator (eyes)
-    ctx.fillStyle = '#333';
-    var eyeOff = { front: [0, 2], back: [0, -5], left: [-4, 0], right: [4, 0] };
-    var eo = eyeOff[direction] || [0, 2];
-    ctx.fillRect(x - 6 + eo[0], drawY + 16 + eo[1], 3, 3);
-    ctx.fillRect(x + 3 + eo[0], drawY + 16 + eo[1], 3, 3);
+    ctx.drawImage(sprite,
+      col * frameW + crop, row * frameH + crop, frameW - crop * 2, frameH - crop * 2,
+      drawX, drawY, pw, ph);
   }
 
   function getX() { return x; }
@@ -148,7 +122,7 @@ Game.Player = (function () {
   function deserialize(data) {
     x = data.x;
     y = data.y;
-    direction = data.direction || 'front';
+    direction = data.direction || 'right';
     targetPath = [];
     walking = false;
   }

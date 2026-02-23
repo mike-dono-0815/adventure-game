@@ -1,0 +1,18 @@
+{
+  "scenarios": {
+    "office": {
+      "label": "Office — lobby complete",
+      "description": "Start in Bob's office with visitor badge obtained and Bob ready for coffee.",
+      "room": "office",
+      "player_x": 300,
+      "player_y": 600,
+      "player_dir": "right",
+      "flags": {
+        "intro_seen": true,
+        "receptionist_has_coffee": true,
+        "bob_wants_coffee": true
+      },
+      "inventory": ["business_card", "stress_ball", "visitor_badge"]
+    }
+  }
+}

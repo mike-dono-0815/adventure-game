@@ -17,6 +17,50 @@ Game.Loader = (function () {
       });
   }
 
+  function erodeAlpha(data, width, height) {
+    // Copy alpha channel before mutating
+    var alpha = new Uint8Array(width * height);
+    for (var i = 0; i < width * height; i++) alpha[i] = data[i * 4 + 3];
+    // Any opaque pixel adjacent to a transparent neighbour becomes transparent
+    for (var y = 0; y < height; y++) {
+      for (var x = 0; x < width; x++) {
+        if (alpha[y * width + x] === 0) continue;
+        var erode = false;
+        for (var dy = -1; dy <= 1 && !erode; dy++) {
+          for (var dx = -1; dx <= 1 && !erode; dx++) {
+            if (dx === 0 && dy === 0) continue;
+            var nx = x + dx, ny = y + dy;
+            if (nx < 0 || nx >= width || ny < 0 || ny >= height) continue;
+            if (alpha[ny * width + nx] === 0) erode = true;
+          }
+        }
+        if (erode) data[(y * width + x) * 4 + 3] = 0;
+      }
+    }
+  }
+
+  function removeWhiteBackground(img, threshold) {
+    return new Promise(function (resolve) {
+      var offscreen = document.createElement('canvas');
+      offscreen.width  = img.naturalWidth;
+      offscreen.height = img.naturalHeight;
+      var octx = offscreen.getContext('2d');
+      octx.drawImage(img, 0, 0);
+      var imageData = octx.getImageData(0, 0, offscreen.width, offscreen.height);
+      var data = imageData.data;
+      for (var i = 0; i < data.length; i += 4) {
+        if (data[i] >= threshold && data[i+1] >= threshold && data[i+2] >= threshold) {
+          data[i+3] = 0;
+        }
+      }
+      erodeAlpha(data, offscreen.width, offscreen.height);
+      octx.putImageData(imageData, 0, 0);
+      var result = new Image();
+      result.onload = function () { resolve(result); };
+      result.src = offscreen.toDataURL('image/png');
+    });
+  }
+
   function loadImage(url) {
     return new Promise(function (resolve, reject) {
       var img = new Image();
@@ -42,6 +86,7 @@ Game.Loader = (function () {
       { key: 'dialogues/bob', url: 'content/dialogues/bob.json' },
       { key: 'dialogues/coffee_machine', url: 'content/dialogues/coffee_machine.json' },
       { key: 'items', url: 'content/items/items.json' },
+      { key: 'debug', url: 'content/debug.json' },
     ];
 
     var imageFiles = [
@@ -55,6 +100,7 @@ Game.Loader = (function () {
       { key: 'item_separation_agreement', url: 'assets/items/thumbs/separation_agreement.png' },
       { key: 'item_pen',                  url: 'assets/items/thumbs/pen.png' },
       { key: 'item_signed_agreement',     url: 'assets/items/thumbs/signed_agreement.png' },
+      { key: 'player_sprite',             url: 'assets/characters/Player.jpg' },
     ];
 
     totalAssets = jsonFiles.length + imageFiles.length;
@@ -72,6 +118,14 @@ Game.Loader = (function () {
     });
 
     return Promise.all(jsonPromises.concat(imagePromises)).then(function () {
+      var sprite = images['player_sprite'];
+      if (sprite) {
+        return removeWhiteBackground(sprite, 240).then(function (processed) {
+          images['player_sprite'] = processed;
+          loadingComplete = true;
+          console.log('All assets loaded');
+        });
+      }
       loadingComplete = true;
       console.log('All assets loaded');
     });

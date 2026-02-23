@@ -30,7 +30,7 @@ Game.Config = {
 
   // Player
   PLAYER_SPEED: 400, // pixels per second
-  PLAYER_WIDTH: 64,
+  PLAYER_WIDTH: 115,
   PLAYER_HEIGHT: 128,
 
   // Text
