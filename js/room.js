@@ -20,8 +20,10 @@ Game.Room = (function () {
     // In no-walk rooms default to Look at instead of Walk to
     if (roomData && roomData.no_walk) {
       Game.Verbs.setCurrent('Look at');
+      Game.ActionLine.setVerb('Look at');
     } else {
       Game.Verbs.reset();
+      Game.ActionLine.reset();
     }
 
     if (callback) callback();
@@ -263,7 +265,7 @@ Game.Room = (function () {
       var blinkOn = Math.floor(Date.now() / 500) % 2 === 0;
       ctx.fillStyle = blinkOn ? '#ff2200' : '#660000';
       ctx.beginPath();
-      ctx.arc(524, 358, 7, 0, Math.PI * 2);
+      ctx.arc(529, 358, 7, 0, Math.PI * 2);
       ctx.fill();
 
     }
