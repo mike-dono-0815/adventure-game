@@ -3,6 +3,10 @@ Game.ActionLine = (function () {
   var object1 = null;
   var object2 = null;
   var hoverTarget = null;
+  var overrideText = null;
+
+  function setOverride(text) { overrideText = text; }
+  function clearOverride()   { overrideText = null; }
 
   function setVerb(v) { verb = v; }
   function setObject1(o) { object1 = o; }
@@ -13,6 +17,7 @@ Game.ActionLine = (function () {
   function getObject2() { return object2; }
 
   function getText() {
+    if (overrideText) return overrideText;
     var parts = [];
     var v = verb || Game.Config.DEFAULT_VERB;
     parts.push(v);
@@ -85,6 +90,8 @@ Game.ActionLine = (function () {
     setHoverTarget: setHoverTarget,
     getObject1: getObject1,
     getObject2: getObject2,
+    setOverride: setOverride,
+    clearOverride: clearOverride,
     getText: getText,
     reset: reset,
     draw: draw,

@@ -30,13 +30,12 @@ Game.Config = {
 
   // Player
   PLAYER_SPEED: 400, // pixels per second
-  PLAYER_WIDTH: 115,
-  PLAYER_HEIGHT: 128,
+  PLAYER_HEIGHT: 421,
 
   // Text
   FONT_FAMILY: '"Segoe UI", Arial, sans-serif',
   FONT_SIZE: 22,
-  DIALOGUE_FONT_SIZE: 24,
+  DIALOGUE_FONT_SIZE: 28,
 
   // Colors — Amazon brand palette
   // #131A22 Cool Black · #232F3E Ebony Clay · #37475A Space
@@ -57,7 +56,8 @@ Game.Config = {
     PLAYER: '#FF9900',
     TEXT_DEFAULT: '#ffffff',
     TEXT_NPC: '#FEBD69',
-    TEXT_PLAYER_CHOICE: '#FF9900',
+    TEXT_PLAYER: '#7EC8E3',
+    TEXT_PLAYER_CHOICE: '#7EC8E3',
     DIALOGUE_BG: 'rgba(19, 26, 34, 0.92)',
     SAVE_MENU_BG: 'rgba(35, 47, 62, 0.97)',
     FADE: '#000000',

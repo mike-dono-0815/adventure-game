@@ -1,6 +1,9 @@
 Game.Loader = (function () {
   var data = {};
   var images = {};
+  var pads = {};
+  var topPads = {};
+  var frameBounds = {};
   var totalAssets = 0;
   var loadedAssets = 0;
   var loadingComplete = false;
@@ -61,6 +64,66 @@ Game.Loader = (function () {
     });
   }
 
+  function analyzeFrameBoundsForSheet(img, cols) {
+    var offscreen = document.createElement('canvas');
+    offscreen.width  = img.naturalWidth;
+    offscreen.height = img.naturalHeight;
+    var octx = offscreen.getContext('2d');
+    octx.drawImage(img, 0, 0);
+    var fw = img.naturalWidth / cols;
+    var fh = img.naturalHeight;
+    var bounds = [];
+    for (var c = 0; c < cols; c++) {
+      var imageData = octx.getImageData(Math.round(c * fw), 0, Math.round(fw), fh);
+      var d = imageData.data;
+      var w = Math.round(fw);
+      var minX = w, maxX = -1, sumX = 0, count = 0;
+      for (var y = 0; y < fh; y++) {
+        for (var x = 0; x < w; x++) {
+          if (d[(y * w + x) * 4 + 3] > 10) {
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+            sumX += x;
+            count++;
+          }
+        }
+      }
+      var cx = count > 0 ? sumX / count / fw : 0.5;
+      bounds.push(maxX >= minX ? { left: minX / fw, right: maxX / fw, cx: cx } : { left: 0, right: 1, cx: 0.5 });
+    }
+    return bounds;
+  }
+
+  function erodeImage(img) {
+    return new Promise(function (resolve) {
+      var offscreen = document.createElement('canvas');
+      offscreen.width  = img.naturalWidth;
+      offscreen.height = img.naturalHeight;
+      var octx = offscreen.getContext('2d');
+      octx.drawImage(img, 0, 0);
+      var id = octx.getImageData(0, 0, offscreen.width, offscreen.height);
+      erodeAlpha(id.data, offscreen.width, offscreen.height);
+      octx.putImageData(id, 0, 0);
+      var result = new Image();
+      result.onload = function () { resolve(result); };
+      result.src = offscreen.toDataURL('image/png');
+    });
+  }
+
+  function loadDualSheet(charKey, rightUrl, leftUrl) {
+    var dirs = [{ dir: 'right', url: rightUrl }, { dir: 'left', url: leftUrl }];
+    return Promise.all(dirs.map(function (d) {
+      return loadImage(d.url).then(function (img) {
+        if (!img) return;
+        return erodeImage(img).then(function (processed) {
+          var sheetKey = charKey + '_sheet_' + d.dir;
+          images[sheetKey] = processed;
+          frameBounds[sheetKey] = analyzeFrameBoundsForSheet(processed, 3);
+        });
+      });
+    }));
+  }
+
   function loadImage(url) {
     return new Promise(function (resolve, reject) {
       var img = new Image();
@@ -82,16 +145,20 @@ Game.Loader = (function () {
       { key: 'game', url: 'content/game.json' },
       { key: 'rooms/lobby', url: 'content/rooms/lobby.json' },
       { key: 'rooms/office', url: 'content/rooms/office.json' },
+      { key: 'rooms/open_office', url: 'content/rooms/open_office.json' },
       { key: 'dialogues/karen', url: 'content/dialogues/karen.json' },
       { key: 'dialogues/bob', url: 'content/dialogues/bob.json' },
       { key: 'dialogues/coffee_machine', url: 'content/dialogues/coffee_machine.json' },
+      { key: 'dialogues/stakeholder_intro', url: 'content/dialogues/stakeholder_intro.json' },
+      { key: 'wordfight', url: 'content/wordfight.json' },
       { key: 'items', url: 'content/items/items.json' },
       { key: 'debug', url: 'content/debug.json' },
     ];
 
     var imageFiles = [
       { key: 'bg_lobby', url: 'assets/backgrounds/Reception.png' },
-      { key: 'bg_office', url: 'assets/backgrounds/office.png' },
+      { key: 'bg_office', url: 'assets/backgrounds/StakeholderZoom.png' },
+      { key: 'bg_open_office', url: 'assets/backgrounds/office.png' },
       { key: 'item_business_card',        url: 'assets/items/thumbs/business_card.png' },
       { key: 'item_stress_ball',          url: 'assets/items/thumbs/stress_ball.png' },
       { key: 'item_cappuccino_cup',       url: 'assets/items/thumbs/cappuccino_cup.png' },
@@ -100,10 +167,15 @@ Game.Loader = (function () {
       { key: 'item_separation_agreement', url: 'assets/items/thumbs/separation_agreement.png' },
       { key: 'item_pen',                  url: 'assets/items/thumbs/pen.png' },
       { key: 'item_signed_agreement',     url: 'assets/items/thumbs/signed_agreement.png' },
-      { key: 'player_sprite',             url: 'assets/characters/Player.jpg' },
     ];
 
-    totalAssets = jsonFiles.length + imageFiles.length;
+    var dualSheetChars = [
+      { key: 'player',      rightUrl: 'assets/characters/User_Right.png',        leftUrl: 'assets/characters/User_Left.png' },
+      { key: 'stakeholder', rightUrl: 'assets/characters/StakeHolder_Right.png', leftUrl: 'assets/characters/StakeHolder_Left.png' },
+    ];
+
+    // 2 images per dualSheet character
+    totalAssets = jsonFiles.length + imageFiles.length + dualSheetChars.length * 2;
 
     var jsonPromises = jsonFiles.map(function (f) {
       return loadJSON(f.url).then(function (json) {
@@ -112,20 +184,18 @@ Game.Loader = (function () {
     });
 
     var imagePromises = imageFiles.map(function (f) {
+      if (f.padFrac)    pads[f.key]    = f.padFrac;
+      if (f.topPadFrac) topPads[f.key] = f.topPadFrac;
       return loadImage(f.url).then(function (img) {
         images[f.key] = img;
       });
     });
 
-    return Promise.all(jsonPromises.concat(imagePromises)).then(function () {
-      var sprite = images['player_sprite'];
-      if (sprite) {
-        return removeWhiteBackground(sprite, 240).then(function (processed) {
-          images['player_sprite'] = processed;
-          loadingComplete = true;
-          console.log('All assets loaded');
-        });
-      }
+    var dualSheetPromises = dualSheetChars.map(function (c) {
+      return loadDualSheet(c.key, c.rightUrl, c.leftUrl);
+    });
+
+    return Promise.all(jsonPromises.concat(imagePromises).concat(dualSheetPromises)).then(function () {
       loadingComplete = true;
       console.log('All assets loaded');
     });
@@ -148,8 +218,21 @@ Game.Loader = (function () {
     return images[key];
   }
 
+  function getImagePad(key) {
+    return pads[key] || 0;
+  }
+
+  function getImageTopPad(key) {
+    return topPads[key] || 0;
+  }
+
   function addImage(key, img) {
     images[key] = img;
+  }
+
+  function getFrameBounds(sheetKey, col) {
+    var b = frameBounds[sheetKey];
+    return b ? b[col] : null;
   }
 
   function drawLoadingScreen(ctx) {
@@ -190,6 +273,9 @@ Game.Loader = (function () {
     isComplete: isComplete,
     getData: getData,
     getImage: getImage,
+    getImagePad: getImagePad,
+    getImageTopPad: getImageTopPad,
+    getFrameBounds: getFrameBounds,
     addImage: addImage,
     drawLoadingScreen: drawLoadingScreen,
   };

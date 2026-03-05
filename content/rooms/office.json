@@ -3,8 +3,9 @@
   "name": "Bob's Office",
   "background": "office",
   "walk_area": [
-    [35, 474], [1295, 474], [1295, 749], [35, 749]
+    [68, 570], [1278, 570], [1278, 760], [68, 760]
   ],
+  "perspective": { "min_scale": 1.0, "max_scale": 1.2 },
   "characters": [
     {
       "name": "Bob",

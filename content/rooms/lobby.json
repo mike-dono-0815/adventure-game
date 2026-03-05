@@ -139,7 +139,7 @@
             "text": "You grab the handle and pull hard. RIIIIING! The alarm blares throughout the building, emergency lights flashing red. The receptionist leaps to her feet. 'Oh for— EVERYONE OUT! I— ...ugh. Fire protocol: I have to escort all visitors inside immediately.' She fixes you with a withering look. 'Congratulations. You're officially a fire hazard. Come in.'",
             "effects": [
               { "type": "set_flag", "flag": "alarm_triggered", "value": true },
-              { "type": "transition", "room": "office", "player_x": 1155, "player_y": 616, "player_dir": "left" }
+              { "type": "transition", "room": "open_office", "player_x": 1155, "player_y": 616, "player_dir": "left" }
             ]
           },
           {
@@ -156,7 +156,7 @@
             "text": "You grab the handle and pull hard. RIIIIING! The alarm blares throughout the building, emergency lights flashing red. The receptionist leaps to her feet. 'Oh for— EVERYONE OUT! I— ...ugh. Fire protocol: I have to escort all visitors inside immediately.' She fixes you with a withering look. 'Congratulations. You're officially a fire hazard. Come in.'",
             "effects": [
               { "type": "set_flag", "flag": "alarm_triggered", "value": true },
-              { "type": "transition", "room": "office", "player_x": 1155, "player_y": 616, "player_dir": "left" }
+              { "type": "transition", "room": "open_office", "player_x": 1155, "player_y": 616, "player_dir": "left" }
             ]
           },
           {
@@ -200,7 +200,7 @@
             "condition": { "alarm_triggered": true },
             "text": "The door swings open. I'm in.",
             "effects": [
-              { "type": "transition", "room": "office", "player_x": 1155, "player_y": 616, "player_dir": "left" }
+              { "type": "transition", "room": "open_office", "player_x": 1155, "player_y": 616, "player_dir": "left" }
             ]
           },
           {
@@ -212,7 +212,7 @@
             "condition": { "alarm_triggered": true },
             "text": "The door opens. I walk through.",
             "effects": [
-              { "type": "transition", "room": "office", "player_x": 1155, "player_y": 616, "player_dir": "left" }
+              { "type": "transition", "room": "open_office", "player_x": 1155, "player_y": 616, "player_dir": "left" }
             ]
           },
           {

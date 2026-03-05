@@ -82,6 +82,54 @@ Game.Effects = (function () {
         Game.Dialogue.start(effect.dialogue, done);
         break;
 
+      case 'lock_input':
+        Game.Player.cancelWalk();
+        Game.Input.lock();
+        done();
+        break;
+
+      case 'unlock_input':
+        Game.Input.unlock();
+        done();
+        break;
+
+      case 'spawn_npc':
+        Game.Actors.spawn(effect.id, effect.x, effect.y, effect.sprite, effect.cols, effect.rows, effect.dir || 'right', effect.multiFile || false, effect.dualSheet || false);
+        done();
+        break;
+
+      case 'walk_player':
+        Game.Player.walkTo(effect.to_x, effect.to_y, done);
+        break;
+
+      case 'set_player_dir':
+        Game.Player.setDirection(effect.dir);
+        done();
+        break;
+
+      case 'walk_npc':
+        Game.Actors.walkTo(effect.id, effect.to_x, effect.to_y, done);
+        break;
+
+      case 'parallel':
+        var subEffects = effect.effects;
+        if (!subEffects || subEffects.length === 0) { done(); break; }
+        var remaining = subEffects.length;
+        var oneDone = function () { if (--remaining === 0) done(); };
+        for (var pi = 0; pi < subEffects.length; pi++) {
+          runOne(subEffects[pi], oneDone);
+        }
+        break;
+
+      case 'remove_npc':
+        Game.Actors.remove(effect.id);
+        done();
+        break;
+
+      case 'wordfight':
+        Game.Wordfight.start(effect, done);
+        break;
+
       case 'victory':
         Game.State.set('game_won', true);
         Game.Renderer.showVictory();

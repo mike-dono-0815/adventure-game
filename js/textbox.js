@@ -2,6 +2,13 @@ Game.TextBox = (function () {
   var activeTexts = [];
   var blocking = false;
   var blockCallback = null;
+  var talkPhase    = 0;
+  var talkTimer    = 0;
+  var talkInterval = 0.25;
+
+  function randomTalkInterval() {
+    return 0.10 + Math.random() * 0.30; // 0.10 – 0.40 s
+  }
 
   function show(text, x, y, color, duration, callback) {
     activeTexts.push({
@@ -49,6 +56,19 @@ Game.TextBox = (function () {
   }
 
   function update(dt) {
+    if (activeTexts.length > 0) {
+      talkTimer += dt;
+      if (talkTimer >= talkInterval) {
+        talkTimer    = 0;
+        talkPhase    = 1 - talkPhase;
+        talkInterval = randomTalkInterval();
+      }
+    } else {
+      talkPhase    = 0;
+      talkTimer    = 0;
+      talkInterval = randomTalkInterval();
+    }
+
     for (var i = activeTexts.length - 1; i >= 0; i--) {
       activeTexts[i].timer -= dt;
       if (activeTexts[i].timer <= 0.3) {
@@ -102,19 +122,22 @@ Game.TextBox = (function () {
   }
 
   function wordWrap(ctx, text, maxWidth) {
-    var words = text.split(' ');
+    var paragraphs = text.split('\n');
     var lines = [];
-    var current = '';
-    for (var i = 0; i < words.length; i++) {
-      var test = current ? current + ' ' + words[i] : words[i];
-      if (ctx.measureText(test).width > maxWidth && current) {
-        lines.push(current);
-        current = words[i];
-      } else {
-        current = test;
+    for (var p = 0; p < paragraphs.length; p++) {
+      var words = paragraphs[p].split(' ');
+      var current = '';
+      for (var i = 0; i < words.length; i++) {
+        var test = current ? current + ' ' + words[i] : words[i];
+        if (ctx.measureText(test).width > maxWidth && current) {
+          lines.push(current);
+          current = words[i];
+        } else {
+          current = test;
+        }
       }
+      if (current) lines.push(current);
     }
-    if (current) lines.push(current);
     return lines;
   }
 
@@ -124,6 +147,9 @@ Game.TextBox = (function () {
     blockCallback = null;
   }
 
+  function getTalkPhase()    { return talkPhase; }
+  function getSpeakerColor() { return activeTexts.length > 0 ? activeTexts[0].color : null; }
+
   return {
     show: show,
     showBlocking: showBlocking,
@@ -132,5 +158,7 @@ Game.TextBox = (function () {
     update: update,
     draw: draw,
     clear: clear,
+    getTalkPhase: getTalkPhase,
+    getSpeakerColor: getSpeakerColor,
   };
 })();

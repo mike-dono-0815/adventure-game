@@ -1,0 +1,42 @@
+{
+  "id": "stakeholder_intro",
+  "start": "stake_1",
+  "nodes": {
+    "stake_1": {
+      "npc_text": "You. You're the one who pulled the fire alarm, aren't you?",
+      "choices": [
+        { "id": "p1", "text": "Me? I was just... yes. Yes I was.", "next": "stake_2" }
+      ]
+    },
+    "stake_2": {
+      "npc_text": "Do you know how many OKRs you just disrupted? We have a KPI for average time-to-desk. You've tanked it.",
+      "choices": [
+        { "id": "p2", "text": "Happy to help. I hear Amazon loves disruption.", "next": "stake_3" }
+      ]
+    },
+    "stake_3": {
+      "npc_text": "We disrupt markets. Not fire drills. There is a Leadership Principle for this.",
+      "choices": [
+        { "id": "p3", "text": "Which one — 'Invent and Simplify'? I simplified getting inside.", "next": "stake_4" }
+      ]
+    },
+    "stake_4": {
+      "npc_text": "*sighs deeply* What do you actually want?",
+      "choices": [
+        { "id": "p4", "text": "I just need to sign some paperwork and leave. Very customer-obsessed — I'm the customer.", "next": "stake_5" }
+      ]
+    },
+    "stake_5": {
+      "npc_text": "Bob's office is down the hall. And next time — just email ahead. We have a ticketing system.",
+      "choices": [
+        { "id": "p5", "text": "What's the response time on that?", "next": "stake_6" }
+      ]
+    },
+    "stake_6": {
+      "npc_text": "Four to six business days. It's backlogged.",
+      "choices": [
+        { "id": "p6", "text": "So... fire alarm it is.", "next": null }
+      ]
+    }
+  }
+}

@@ -4,10 +4,8 @@ Game.Dialogue = (function () {
   var dialogueId = null;
   var currentNode = null;
   var endCallback = null;
-  var npcText = '';
   var choices = [];
   var hoverChoice = -1;
-  var showingNpcText = false;
 
   function start(dialogueName, callback) {
     dialogueData = Game.Loader.getData('dialogues/' + dialogueName);
@@ -44,13 +42,19 @@ Game.Dialogue = (function () {
     }
 
     currentNode = node;
+    choices = [];
+    hoverChoice = -1;
 
     if (node.npc_text) {
-      npcText = node.npc_text;
-      showingNpcText = true;
-      choices = [];
+      // NPC speaks above their character in the viewport
+      var sx   = dialogueData.speaker_x || Game.Config.WIDTH / 2;
+      var sy   = dialogueData.speaker_y || 300;
+      var text = node.npc_text.replace(/\n/g, ' ');
+      Game.TextBox.showBlocking(text, sx, sy,
+        Game.Config.COLORS.TEXT_NPC, function () {
+          buildChoices(node);
+        });
     } else {
-      showingNpcText = false;
       buildChoices(node);
     }
   }
@@ -65,28 +69,24 @@ Game.Dialogue = (function () {
     for (var i = 0; i < node.choices.length; i++) {
       var ch = node.choices[i];
 
-      // Check condition
       if (ch.condition && !Game.State.evaluate(ch.condition)) continue;
-
-      // Check show_once
       if (ch.show_once && Game.State.hasSeen(dialogueId, ch.id || ('c' + i))) continue;
 
       choices.push({
         index: i,
-        id: ch.id || ('c' + i),
-        text: ch.text,
-        next: ch.next,
+        id:     ch.id || ('c' + i),
+        text:   ch.text,
+        next:   ch.next,
         effects: ch.effects,
       });
     }
 
-    // Add "end conversation" if no choices or if node has allow_exit
     if (choices.length === 0 || node.allow_exit) {
       choices.push({
-        index: -1,
-        id: '_exit',
-        text: 'End conversation',
-        next: null,
+        index:   -1,
+        id:      '_exit',
+        text:    'End conversation',
+        next:    null,
         effects: null,
       });
     }
@@ -95,34 +95,40 @@ Game.Dialogue = (function () {
   function handleClick(gx, gy) {
     if (!active) return false;
 
-    if (showingNpcText) {
-      // Click to dismiss NPC text
-      showingNpcText = false;
-      buildChoices(currentNode);
-      return true;
-    }
-
-    // Check choice click
+    // NPC text is now handled by TextBox in input.js — only handle choice clicks here
     if (hoverChoice >= 0 && hoverChoice < choices.length) {
       selectChoice(hoverChoice);
       return true;
     }
 
-    return true; // Absorb click even if nothing hit
+    return true; // absorb
   }
 
   function selectChoice(idx) {
     var choice = choices[idx];
+    choices = [];     // clear list while player is speaking
+    hoverChoice = -1;
 
-    // Mark as seen
     Game.State.markSeen(dialogueId, choice.id);
 
-    if (choice.effects) {
-      Game.Effects.execute(choice.effects, function () {
+    function proceed() {
+      if (choice.effects) {
+        Game.Effects.execute(choice.effects, function () {
+          navigateAfterChoice(choice);
+        });
+      } else {
         navigateAfterChoice(choice);
-      });
+      }
+    }
+
+    // Show player reply above player in walk rooms; skip for synthetic exit choice
+    if (!Game.Room.isNoWalk() && choice.id !== '_exit') {
+      var px = Game.Player.getX();
+      var py = Game.Player.getHeadY();
+      Game.TextBox.showBlocking(choice.text, px, py,
+        Game.Config.COLORS.TEXT_PLAYER_CHOICE, proceed);
     } else {
-      navigateAfterChoice(choice);
+      proceed();
     }
   }
 
@@ -139,7 +145,7 @@ Game.Dialogue = (function () {
     dialogueData = null;
     currentNode = null;
     choices = [];
-    npcText = '';
+    hoverChoice = -1;
     if (endCallback) {
       var cb = endCallback;
       endCallback = null;
@@ -148,15 +154,15 @@ Game.Dialogue = (function () {
   }
 
   function handleHover(gx, gy) {
-    if (!active || showingNpcText) {
+    if (!active) {
       hoverChoice = -1;
       return;
     }
 
-    var cfg = Game.Config;
+    var cfg    = Game.Config;
     var panelY = cfg.BOTTOM_BAR_Y;
-    var lineH = 36;
-    var startY = panelY + 20;
+    var lineH  = 46;
+    var startY = panelY + 2;
 
     for (var i = 0; i < choices.length; i++) {
       var cy = startY + i * lineH;
@@ -171,83 +177,44 @@ Game.Dialogue = (function () {
   function update(dt) {
   }
 
-  function wrapText(ctx, text, maxWidth) {
-    var words = text.split(' ');
-    var lines = [];
-    var line = '';
-    for (var i = 0; i < words.length; i++) {
-      var test = line ? line + ' ' + words[i] : words[i];
-      if (ctx.measureText(test).width > maxWidth && line) {
-        lines.push(line);
-        line = words[i];
-      } else {
-        line = test;
-      }
-    }
-    if (line) lines.push(line);
-    return lines;
-  }
-
   function draw(ctx) {
     if (!active) return;
 
-    var cfg = Game.Config;
+    var cfg    = Game.Config;
     var panelY = cfg.BOTTOM_BAR_Y;
     var panelH = cfg.BOTTOM_BAR_HEIGHT;
 
-    // Background overlay on bottom bar
+    // Dark panel always shown while dialogue is active
     ctx.fillStyle = cfg.COLORS.DIALOGUE_BG;
     ctx.fillRect(0, panelY, cfg.WIDTH, panelH);
 
-    if (showingNpcText) {
-      // NPC text — wrapped
-      ctx.fillStyle = cfg.COLORS.TEXT_NPC;
-      ctx.font = cfg.DIALOGUE_FONT_SIZE + 'px ' + cfg.FONT_FAMILY;
-      ctx.textAlign = 'center';
+    if (choices.length === 0) return; // NPC or player is speaking via TextBox above
 
-      var maxW = cfg.WIDTH - 200;
-      var lineH = cfg.DIALOGUE_FONT_SIZE + 10;
-      var lines = wrapText(ctx, npcText, maxW);
-      var totalH = lines.length * lineH;
-      var startY = panelY + (panelH - totalH) / 2 + cfg.DIALOGUE_FONT_SIZE;
+    var lineH  = 46;
+    var startY = panelY + 2;
 
-      for (var li = 0; li < lines.length; li++) {
-        ctx.fillText(lines[li], cfg.WIDTH / 2, startY + li * lineH);
-      }
+    ctx.font         = cfg.DIALOGUE_FONT_SIZE + 'px ' + cfg.FONT_FAMILY;
+    ctx.textAlign    = 'left';
+    ctx.textBaseline = 'top';
 
-      ctx.fillStyle = 'rgba(255,255,255,0.4)';
-      ctx.font = '14px ' + cfg.FONT_FAMILY;
-      ctx.fillText('(click to continue)', cfg.WIDTH / 2, panelY + panelH - 20);
-      ctx.textAlign = 'left';
-    } else {
-      // Player choices
-      var lineH = 36;
-      var startY = panelY + 20;
-
-      ctx.font = (cfg.DIALOGUE_FONT_SIZE - 2) + 'px ' + cfg.FONT_FAMILY;
-      ctx.textAlign = 'left';
-
-      for (var i = 0; i < choices.length; i++) {
-        var cy = startY + i * lineH;
-        if (i === hoverChoice) {
-          ctx.fillStyle = cfg.COLORS.VERB_HOVER;
-        } else {
-          ctx.fillStyle = cfg.COLORS.TEXT_PLAYER_CHOICE;
-        }
-        ctx.fillText((i + 1) + '. ' + choices[i].text, 80, cy + cfg.DIALOGUE_FONT_SIZE);
-      }
+    for (var i = 0; i < choices.length; i++) {
+      var cy = startY + i * lineH;
+      ctx.fillStyle = (i === hoverChoice) ? cfg.COLORS.VERB_HOVER : cfg.COLORS.TEXT_PLAYER_CHOICE;
+      ctx.fillText((i + 1) + '. ' + choices[i].text, 80, cy + 4);
     }
+
+    ctx.textBaseline = 'alphabetic';
   }
 
   function isActive() { return active; }
 
   return {
-    start: start,
-    handleClick: handleClick,
-    handleHover: handleHover,
-    update: update,
-    draw: draw,
-    isActive: isActive,
-    end: end,
+    start:        start,
+    handleClick:  handleClick,
+    handleHover:  handleHover,
+    update:       update,
+    draw:         draw,
+    isActive:     isActive,
+    end:          end,
   };
 })();

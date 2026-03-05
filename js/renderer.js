@@ -81,8 +81,11 @@ Game.Renderer = (function () {
     }
 
     Game.Player.update(dt);
+    Game.Actors.update(dt);
+    Game.Room.checkTriggers();
     Game.TextBox.update(dt);
     Game.Dialogue.update(dt);
+    Game.Wordfight.update(dt);
   }
 
   function render() {
@@ -103,6 +106,7 @@ Game.Renderer = (function () {
 
     Game.Room.draw(ctx);
     if (!Game.Room.isNoWalk()) Game.Player.draw(ctx);
+    Game.Wordfight.drawOverlay(ctx);
     Game.TextBox.draw(ctx);
 
     ctx.restore();
@@ -111,7 +115,9 @@ Game.Renderer = (function () {
     Game.ActionLine.draw(ctx);
 
     // Bottom bar
-    if (Game.Dialogue.isActive()) {
+    if (Game.Wordfight.isActive()) {
+      Game.Wordfight.draw(ctx);
+    } else if (Game.Dialogue.isActive()) {
       Game.Dialogue.draw(ctx);
     } else {
       Game.Verbs.draw(ctx);

@@ -1,0 +1,244 @@
+{
+  "duels": [
+    {
+      "objection": "You skim the surface, wave after wave,\nThe details you miss become problems you've paved.\nYour spreadsheet's a lie, your dashboard's a show,\nWithout diving deep, you're the last one to know!",
+      "replies": [
+        {
+          "text": "I checked all the numbers — they looked pretty clean,\nThe clearest of dashboards I have ever seen.",
+          "correct": false,
+          "comeback": "Clearly clean. Not actually analyzed. Distinctions matter."
+        },
+        {
+          "text": "I built a six-pager with root-cause in place,\nAnd traced every metric back to its source with grace.",
+          "correct": true
+        },
+        {
+          "text": "My manager approved it, so clearly it's fine,\nDeep dives are for people who don't have my shine.",
+          "correct": false,
+          "comeback": "Approved by your manager, who also never read it. An impressive chain."
+        },
+        {
+          "text": "I dove to the data — I looked at the mean,\nThe median's okay and the mode's looking keen.",
+          "correct": false,
+          "comeback": "Mean, median, mode. Without context, use case, or action. Brilliant."
+        }
+      ]
+    },
+    {
+      "objection": "It's not my problem — that's what you say,\nYou pass the blame like it's Groundhog Day.\nOwnership means you step up and lead,\nNot wait for permission for every small deed!",
+      "replies": [
+        {
+          "text": "I own it completely — my part and my piece,\nThe rest of the project can go as it please.",
+          "correct": false,
+          "comeback": "You own your part. The rest of the project: entirely on its own."
+        },
+        {
+          "text": "I spotted the outage at midnight last night,\nAnd stayed on the bridge call until we got it right.",
+          "correct": true
+        },
+        {
+          "text": "I sent a Chime ping to flag up the dread,\nAnd added myself to the calendar thread.",
+          "correct": false,
+          "comeback": "A calendar invite to a crisis. Leadership by RSVP."
+        },
+        {
+          "text": "I plan to escalate to my skip-level next week,\nWith a three-slide summary for the update they seek.",
+          "correct": false,
+          "comeback": "Escalating next week. The outage appreciates your schedule."
+        }
+      ]
+    },
+    {
+      "objection": "Your vision is modest, it fits on a Post-It,\nWhile rivals are running, your dreams are a closet.\nThink bigger, think bolder, break open the box!\nOr shuffle back home to your inbox of rocks!",
+      "replies": [
+        {
+          "text": "My idea will scale to at least twenty users,\nA niche little product for discerning choosers!",
+          "correct": false,
+          "comeback": "Twenty users. Truly the addressable market of our time."
+        },
+        {
+          "text": "My roadmap targets a ten-billion TAM,\nBuilt on a flywheel that outpaces the RAM.",
+          "correct": true
+        },
+        {
+          "text": "I thought big last Tuesday from nine until ten,\nAnd then I filed it and closed it again.",
+          "correct": false,
+          "comeback": "An hour of big thinking, neatly filed. Ambition shelved under done."
+        },
+        {
+          "text": "My dreams are enormous and fill up the hall,\nBut data and planning aren't needed at all.",
+          "correct": false,
+          "comeback": "Dreams without data. How refreshingly uncommitted."
+        }
+      ]
+    },
+    {
+      "objection": "You wait for permission on everything small,\nWhile windows close shut and opportunities call.\nA two-way door swings — just walk right on through!\nBut you're still at the doormat, awaiting review!",
+      "replies": [
+        {
+          "text": "I'll schedule a meeting to plan our next steps,\nAnd pre-read the pre-read to manage my reps.",
+          "correct": false,
+          "comeback": "A meeting to plan the meeting. The circle of corporate life."
+        },
+        {
+          "text": "Reversible actions still need sign-off from eight,\nI can't move a muscle until approvals are great.",
+          "correct": false,
+          "comeback": "Eight approvals. For a reversible two-way door. In an emergency. Noted."
+        },
+        {
+          "text": "I launched an experiment by the end of last week,\nThe data came back — the results are unique.",
+          "correct": true
+        },
+        {
+          "text": "I biased toward action — I biased toward lunch!\nWhich technically counts as a meaningful crunch.",
+          "correct": false,
+          "comeback": "Lunch is not a deliverable. However appetizing."
+        }
+      ]
+    },
+    {
+      "objection": "You spent the Q3 budget on swag and on snacks,\nWhile ROI crumbles from your lavish attacks.\nWe do more with less — it's a core pillar here,\nBut more of your spending means less of our year!",
+      "replies": [
+        {
+          "text": "But morale needed lifting with that custom tote!\nWithout branded merchandise, teams can't stay afloat.",
+          "correct": false,
+          "comeback": "Tote bags. The cornerstone of fiscal discipline."
+        },
+        {
+          "text": "I cut tooling costs from seven vendors to two,\nAnd consolidated headcount to see the work through.",
+          "correct": true
+        },
+        {
+          "text": "Frugality means never approving a spend,\nI've zeroed the budget right down to the end.",
+          "correct": false,
+          "comeback": "Refusing all budgets is anarchy with spreadsheets."
+        },
+        {
+          "text": "The snacks boost morale, which boosts productivity gains,\nThe ROI's clearly positive — just follow the chains.",
+          "correct": false,
+          "comeback": "I will not be approving the pretzel-to-productivity conversion model."
+        }
+      ]
+    },
+    {
+      "objection": "Your promises crumble like old meeting cake,\nYour timelines are fiction, your updates are fake.\nTrust must be earned with each action and word,\nBut your credibility? Frankly absurd!",
+      "replies": [
+        {
+          "text": "I tell people exactly what they want to hear,\nMy trust scores go up every end of the year.",
+          "correct": false,
+          "comeback": "Trust scores. Measured by people you've never disagreed with."
+        },
+        {
+          "text": "Trust is like Wi-Fi — sometimes it just drops,\nI'll reconnect later once the interference stops.",
+          "correct": false,
+          "comeback": "Your trust metaphor is as unreliable as your delivery dates."
+        },
+        {
+          "text": "I flagged the delay two full sprints before due,\nWith a mitigation plan and a fresh status view.",
+          "correct": true
+        },
+        {
+          "text": "I earned trust by never admitting mistakes,\nProjecting pure confidence — whatever it takes.",
+          "correct": false,
+          "comeback": "Confidence without competence. A bold strategy. Let me know how it lands."
+        }
+      ]
+    },
+    {
+      "objection": "Your bar is set low, it scrapes on the ground,\nYou ship it as good enough — look what you've found!\nWe raise the bar higher and higher again,\nNot hand off half-baked work down the delivery chain!",
+      "replies": [
+        {
+          "text": "I raised my bar once — it was exhausting, I'll say,\nSo I quietly lowered it before end of the day.",
+          "correct": false,
+          "comeback": "A one-time bar raise followed by a permanent bar drop. Inspiring arc."
+        },
+        {
+          "text": "Standards are relative — mine just are mine,\nAnd relative to nothing, my work is just fine.",
+          "correct": false,
+          "comeback": "Standards relative to nothing. The philosophical foundation of mediocrity."
+        },
+        {
+          "text": "I rejected three drafts and revised the design,\nUntil every data point finally aligned.",
+          "correct": true
+        },
+        {
+          "text": "My bar is so high that I check every word,\nNo document ships until spacing's preferred.",
+          "correct": false,
+          "comeback": "Impeccably spaced documents full of wrong conclusions. A truly high bar."
+        }
+      ]
+    },
+    {
+      "objection": "Your judgment is foggy, your instincts are off,\nGreat leaders have wisdom — you fumble and scoff.\nBeing right, and a lot, takes a calibrated mind,\nNot hunches spun loose from assumptions you find!",
+      "replies": [
+        {
+          "text": "I'm right 100 percent of the time,\nMy colleagues are simply not keeping in line.",
+          "correct": false,
+          "comeback": "One hundred percent correct. Not even statistically plausible."
+        },
+        {
+          "text": "I stress-tested my thesis with three teams last week,\nAnd updated my stance when the data did speak.",
+          "correct": true
+        },
+        {
+          "text": "I look for opinions that mirror my own,\nThat way I stay right in a comfortable zone.",
+          "correct": false,
+          "comeback": "An echo chamber of agreement. Efficiently and catastrophically wrong."
+        },
+        {
+          "text": "Being right is a spectrum — I'm on the good side,\nWhich is slightly more right than the ones who have tried.",
+          "correct": false,
+          "comeback": "Slightly more right than people who are wrong. The bar has never been lower."
+        }
+      ]
+    },
+    {
+      "objection": "Your process is tangled in seventeen steps,\nYou complicate simple with PowerPoint reps.\nSimplicity is genius — complexity is shame!\nIf Einstein ran this project, you'd still be to blame!",
+      "replies": [
+        {
+          "text": "I simplified boldly — I removed all the docs!\nNow nothing is tracked and the process just rocks.",
+          "correct": false,
+          "comeback": "Documentation: gone. Accountability: also gone. Bold simplification."
+        },
+        {
+          "text": "Complex processes need complexity — that's law!\nYou can't reduce nuance without finding a flaw.",
+          "correct": false,
+          "comeback": "Complexity as doctrine. How many steps does it take to send an email?"
+        },
+        {
+          "text": "I invented a simpler complicated way!\nSix steps instead of eight — progress, I'd say.",
+          "correct": false,
+          "comeback": "Six steps instead of eight. Progress requiring a microscope to observe."
+        },
+        {
+          "text": "I cut the approval chain from five steps to one,\nAnd automated the handoff — the toil is done.",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "objection": "Your output is noise, your launches are smoke,\nYour OKRs limp and your roadmap's a joke.\nResults are what matter — we measure what's real,\nNot activity theater and performative zeal!",
+      "replies": [
+        {
+          "text": "I was very busy — I had meetings all year!\nMy calendar's full — is that not results, dear?",
+          "correct": false,
+          "comeback": "A full calendar. The ultimate lagging indicator of zero output."
+        },
+        {
+          "text": "My results are coming — they're nearly pre-ready,\nI just need more time to keep progress steady.",
+          "correct": false,
+          "comeback": "Nearly pre-ready. I'm adding that to our list of banned phrases."
+        },
+        {
+          "text": "Results are subjective — it all depends how you look,\nI've documented everything neatly in a book.",
+          "correct": false,
+          "comeback": "Reframing zero output as a documented success. Efficiently reframed."
+        },
+        {
+          "text": "I launched three features and closed out the year,\nEach tied to a revenue goal — results are clear.",
+          "correct": true
+        }
+      ]
+    }
+  ]
+}

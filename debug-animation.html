@@ -5,10 +5,12 @@
   <title>Animation Debug</title>
   <style>
     body { margin: 0; background: #1a1a2e; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; gap: 0; }
-    canvas { background: #2a3a4a url('assets/backgrounds/Stakeholder.png') center/cover no-repeat; cursor: crosshair; display: block; }
+    canvas { background: #2a3a4a url('assets/backgrounds/office.png') center/cover no-repeat; cursor: crosshair; display: block; }
     #controls { display: flex; gap: 8px; margin-bottom: 6px; }
     .char-btn { background: #37475A; color: #ccc; border: 1px solid #37475A; border-radius: 4px; padding: 6px 16px; font: 13px "Segoe UI", Arial, sans-serif; cursor: pointer; }
     .char-btn.active { background: #FF9900; color: #131A22; border-color: #FF9900; font-weight: 600; }
+    .char-btn.say { background: #1a5276; border-color: #2e86c1; color: #aed6f1; }
+    .char-btn.say.active { background: #2e86c1; color: #fff; border-color: #2e86c1; }
     #info { color: #aaa; font: 13px monospace; margin-top: 6px; letter-spacing: 0.04em; }
   </style>
 </head>
@@ -16,7 +18,7 @@
 
 <div id="controls"></div>
 <canvas id="c" width="1344" height="768"></canvas>
-<div id="info">click to move</div>
+<div id="info">click to move · space to speak</div>
 
 <script>
   var canvas = document.getElementById('c');
@@ -24,33 +26,112 @@
   var info   = document.getElementById('info');
 
   // --- Character configs ---
-  // frames: { right: [[row,col], ...], left: [[row,col], ...] }
+  // Sheet-based: frames: { right: [[row,col], ...], left: [[row,col], ...] }
+  // Multi-file:  multiFile: true, srcs: { stand_right, stand_left, walk_right, walk_left, talk_right, talk_left }
   var CHAR_DEFS = {
     player: {
-      label:    'Player',
-      src:      'assets/characters/Player.jpg',
-      cols: 4, rows: 2,
-      removeBg: true,
-      frames: {
-        right: [[0, 0], [0, 1]],
-        left:  [[1, 2], [1, 3]]
+      label:      'Player',
+      dualSheet:  true,
+      removeBg:   false,
+      cols:       3,
+      frameCols: {
+        right: { stand: 0, walk: 1, talk: 2 },
+        left:  { stand: 2, walk: 1, talk: 0 },
+      },
+      srcs: {
+        right: 'assets/characters/User_Right.png',
+        left:  'assets/characters/User_Left.png',
       }
     },
     stakeholder: {
-      label:    'Stakeholder',
-      src:      'assets/characters/Stakeholder.png',
-      cols: 4, rows: 2,
-      removeBg: true,
-      frames: {
-        right: [[1, 0], [0, 2]],
-        left:  [[1, 3], [0, 1]]
+      label:      'Stakeholder',
+      dualSheet:  true,
+      removeBg:   false,
+      cols:       3,
+      frameCols: {
+        right: { stand: 0, walk: 1, talk: 2 },
+        left:  { stand: 2, walk: 1, talk: 0 },
+      },
+      srcs: {
+        right: 'assets/characters/StakeHolder_Right.png',
+        left:  'assets/characters/StakeHolder_Left.png',
+      }
+    },
+    boy: {
+      label:      'Boy',
+      dualSheet:  true,
+      removeBg:   false,
+      cols:       3,
+      frameCols: {
+        right: { stand: 0, walk: 1, talk: 2 },
+        left:  { stand: 2, walk: 1, talk: 0 },
+      },
+      srcs: {
+        right: 'assets/characters/Boy_Right.png',
+        left:  'assets/characters/Boy_Left.png',
       }
     }
   };
 
-  var activeChar = 'player';
-  var sprites    = {};   // key → processed Image
-  var loaded     = {};   // key → bool
+  // --- Demo speech lines ---
+  var DEMO_LINES = [
+    'Has anyone seen the Separation Agreement?',
+    'This meeting could have been an email.',
+    'I know my Leadership Principles. Most of them.',
+    'Customer obsession starts with finding the printer.',
+    'I\'m going to need a bigger visitor badge.',
+  ];
+  var demoLineIdx = 0;
+
+  // --- Speech bubble state ---
+  var TALK_FRAME_INTERVAL = 0.25; // seconds per phase (stand ↔ talk)
+  var speech = { active: false, text: '', timer: 0, alpha: 1, talkPhase: 0, talkTimer: 0 };
+
+  var SPEECH_COLOR   = '#7EC8E3';
+  var SPEECH_FONT    = '22px "Segoe UI", Arial, sans-serif';
+  var SPEECH_FONT_SZ = 22;
+  var SPEECH_MAX_W   = 600;
+
+  function wordWrap(text, maxWidth) {
+    var paragraphs = text.split('\n');
+    var lines = [];
+    ctx.font = SPEECH_FONT;
+    paragraphs.forEach(function (para) {
+      var words = para.split(' ');
+      var current = '';
+      words.forEach(function (word) {
+        var test = current ? current + ' ' + word : word;
+        if (ctx.measureText(test).width > maxWidth && current) {
+          lines.push(current);
+          current = word;
+        } else {
+          current = test;
+        }
+      });
+      if (current) lines.push(current);
+    });
+    return lines;
+  }
+
+  function say(text) {
+    speech.text      = text;
+    speech.timer     = Math.max(2.5, text.length * 0.06);
+    speech.alpha     = 1;
+    speech.active    = true;
+    speech.talkPhase = 0;
+    speech.talkTimer = 0;
+    player.walking   = false;
+  }
+
+  function dismissSpeech() {
+    if (!speech.active) return;
+    speech.active = false;
+  }
+
+  function triggerSay() {
+    say(DEMO_LINES[demoLineIdx % DEMO_LINES.length]);
+    demoLineIdx++;
+  }
 
   // --- Image processing ---
   function erodeAlpha(data, width, height) {
@@ -73,7 +154,9 @@
     }
   }
 
-  function removeWhiteBackground(img, callback) {
+  function removeWhiteBackground(img, callback, threshold, erodeCount) {
+    threshold  = threshold  || 240;
+    erodeCount = erodeCount || 1;
     var offscreen = document.createElement('canvas');
     offscreen.width  = img.naturalWidth;
     offscreen.height = img.naturalHeight;
@@ -82,9 +165,9 @@
     var imageData = octx.getImageData(0, 0, offscreen.width, offscreen.height);
     var data = imageData.data;
     for (var i = 0; i < data.length; i += 4) {
-      if (data[i] >= 240 && data[i+1] >= 240 && data[i+2] >= 240) data[i+3] = 0;
+      if (data[i] >= threshold && data[i+1] >= threshold && data[i+2] >= threshold) data[i+3] = 0;
     }
-    erodeAlpha(data, offscreen.width, offscreen.height);
+    for (var e = 0; e < erodeCount; e++) erodeAlpha(data, offscreen.width, offscreen.height);
     octx.putImageData(imageData, 0, 0);
     var result = new Image();
     result.onload = function () { callback(result); };
@@ -93,6 +176,65 @@
 
   function loadCharacter(key) {
     var def = CHAR_DEFS[key];
+
+    if (def.dualSheet) {
+      var dirs  = ['right', 'left'];
+      var total = dirs.length;
+      var done  = 0;
+      dirs.forEach(function (dir) {
+        var spriteKey = key + '_' + dir;
+        var img = new Image();
+        img.onerror = function () { console.error('Failed to load:', def.srcs[dir]); done++; if (done === total) loaded[key] = true; };
+        img.onload  = function (sk, img) { return function () {
+          var offscreen = document.createElement('canvas');
+          offscreen.width  = img.naturalWidth;
+          offscreen.height = img.naturalHeight;
+          var octx = offscreen.getContext('2d');
+          octx.drawImage(img, 0, 0);
+          var id = octx.getImageData(0, 0, offscreen.width, offscreen.height);
+          erodeAlpha(id.data, offscreen.width, offscreen.height);
+          octx.putImageData(id, 0, 0);
+          var processed = new Image();
+          processed.onload = function () {
+            sprites[sk] = processed;
+            analyzeFrameBounds(processed, def.cols || 3, function (bounds) {
+              frameBounds[sk] = bounds;
+              done++;
+              if (done === total) loaded[key] = true;
+            });
+          };
+          processed.src = offscreen.toDataURL('image/png');
+        }; }(spriteKey, img);
+        img.src = def.srcs[dir];
+      });
+      return;
+    }
+
+    if (def.multiFile) {
+      var stateKeys = Object.keys(def.srcs);
+      var total = stateKeys.length;
+      var done  = 0;
+      stateKeys.forEach(function (sk) {
+        var spriteKey = key + '_' + sk;
+        var srcEntry  = def.srcs[sk];
+        var srcUrl    = typeof srcEntry === 'object' ? srcEntry.src      : srcEntry;
+        var doRemove  = typeof srcEntry === 'object' ? srcEntry.removeBg : def.removeBg;
+        var img = new Image();
+        img.onerror = function () { console.error('Failed to load:', srcUrl); done++; if (done === total) loaded[key] = true; };
+        img.onload  = function () {
+          function finish(processed) {
+            sprites[spriteKey] = processed;
+            done++;
+            if (done === total) loaded[key] = true;
+          }
+          if (doRemove) removeWhiteBackground(img, finish, def.bgThreshold, def.bgErode);
+          else finish(img);
+        };
+        img.src = srcUrl;
+      });
+      return;
+    }
+
     var img = new Image();
     img.onerror = function () { console.error('Failed to load:', def.src); };
     img.onload  = function () {
@@ -100,7 +242,7 @@
         removeWhiteBackground(img, function (processed) {
           sprites[key] = processed;
           loaded[key]  = true;
-        });
+        }, def.bgThreshold, def.bgErode);
       } else {
         sprites[key] = img;
         loaded[key]  = true;
@@ -109,31 +251,126 @@
     img.src = def.src;
   }
 
+  var activeChar   = 'player';
+  var manualTalking = false;  // for multiFile chars: forced talk pose via [T]
+  var sprites      = {};
+  var loaded       = {};
+  var frameBounds = {};  // spriteKey -> [{left, right} fractions per col]
+
+  // Compute leftmost and rightmost non-transparent pixel fractions per frame column
+  function analyzeFrameBounds(img, cols, callback) {
+    var offscreen = document.createElement('canvas');
+    offscreen.width  = img.naturalWidth;
+    offscreen.height = img.naturalHeight;
+    var octx = offscreen.getContext('2d');
+    octx.drawImage(img, 0, 0);
+    var fw = img.naturalWidth / cols;
+    var fh = img.naturalHeight;
+    var bounds = [];
+    for (var c = 0; c < cols; c++) {
+      var data = octx.getImageData(Math.round(c * fw), 0, Math.round(fw), fh).data;
+      var w = Math.round(fw);
+      var minX = w, maxX = -1;
+      for (var y = 0; y < fh; y++) {
+        for (var x = 0; x < w; x++) {
+          if (data[(y * w + x) * 4 + 3] > 10) {
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+          }
+        }
+      }
+      bounds.push(maxX >= minX
+        ? { left: minX / fw, right: maxX / fw }
+        : { left: 0, right: 1 });
+    }
+    callback(bounds);
+  }
+
   Object.keys(CHAR_DEFS).forEach(loadCharacter);
 
-  // --- Character picker buttons ---
+  // --- Character picker buttons (skip talking variants) ---
   var controlsEl = document.getElementById('controls');
+  var talkBtn    = null;
+
   Object.keys(CHAR_DEFS).forEach(function (key) {
+    if (key === 'player_talking') return;
     var btn = document.createElement('button');
     btn.className = 'char-btn' + (key === activeChar ? ' active' : '');
     btn.textContent = CHAR_DEFS[key].label;
     btn.addEventListener('click', function () {
-      activeChar = key;
+      dismissSpeech();
+      activeChar    = key;
+      manualTalking = false;
       player.animFrame = 0;
       player.animTimer = 0;
+      talkBtn.classList.remove('active');
       document.querySelectorAll('.char-btn').forEach(function (b) { b.classList.remove('active'); });
       btn.classList.add('active');
     });
     controlsEl.appendChild(btn);
   });
 
+  // --- Talk toggle button ---
+  talkBtn = document.createElement('button');
+  talkBtn.className   = 'char-btn';
+  talkBtn.textContent = 'Talk [T]';
+  talkBtn.addEventListener('click', toggleTalk);
+  controlsEl.appendChild(talkBtn);
+
+  function toggleTalk() {
+    var def = CHAR_DEFS[activeChar];
+
+    // Multi-file characters: toggle manualTalking flag
+    if (def && def.multiFile) {
+      manualTalking = !manualTalking;
+      player.walking = false;
+      if (manualTalking) talkBtn.classList.add('active');
+      else talkBtn.classList.remove('active');
+      return;
+    }
+
+    // Sheet-based characters: switch to/from talkingKey variant
+    if (def && def.talkingKey) {
+      activeChar = def.talkingKey;
+      player.animFrame = 0;
+      player.animTimer = 0;
+      player.walking   = false;
+      talkBtn.classList.add('active');
+    } else {
+      Object.keys(CHAR_DEFS).forEach(function (k) {
+        if (CHAR_DEFS[k].talkingKey === activeChar) {
+          activeChar = k;
+          player.animFrame = 0;
+          player.animTimer = 0;
+          document.querySelectorAll('.char-btn').forEach(function (b) {
+            if (b.textContent === CHAR_DEFS[k].label) b.classList.add('active');
+          });
+        }
+      });
+      talkBtn.classList.remove('active');
+    }
+  }
+
+  // --- Say button ---
+  var sayBtn = document.createElement('button');
+  sayBtn.className   = 'char-btn say';
+  sayBtn.textContent = 'Say [Space]';
+  sayBtn.addEventListener('click', triggerSay);
+  controlsEl.appendChild(sayBtn);
+
+  // --- Keyboard ---
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 't' || e.key === 'T') { toggleTalk(); return; }
+    if (e.key === ' ') { e.preventDefault(); triggerSay(); return; }
+  });
+
   // --- Player state ---
-  var PH    = 320;
+  var PH    = 495;
   var SPEED = 400;
 
   var player = {
     x: canvas.width  / 2,
-    y: canvas.height / 2,
+    y: 665,
     tx: null, ty: null,
     walking:   false,
     direction: 'right',
@@ -141,14 +378,20 @@
     animTimer: 0
   };
 
-  // --- Click to walk ---
+  // --- Click to walk (or dismiss speech) ---
+  var WA          = { x1: 68, y1: 610, x2: 1278, y2: 760 };
+  var PERSPECTIVE = { min_scale: 1.0, max_scale: 1.1 };
+
   canvas.addEventListener('click', function (e) {
+    if (speech.active) { dismissSpeech(); return; }
     var rect   = canvas.getBoundingClientRect();
     var scaleX = canvas.width  / rect.width;
     var scaleY = canvas.height / rect.height;
-    player.tx  = (e.clientX - rect.left) * scaleX;
-    player.ty  = (e.clientY - rect.top)  * scaleY;
+    player.tx  = Math.min(Math.max((e.clientX - rect.left) * scaleX, WA.x1), WA.x2);
+    player.ty  = Math.min(Math.max((e.clientY - rect.top)  * scaleY, WA.y1), WA.y2);
     player.walking = true;
+    manualTalking  = false;
+    talkBtn.classList.remove('active');
   });
 
   // --- Loop ---
@@ -164,6 +407,18 @@
   }
 
   function update(dt) {
+    // Tick speech timer + stand/talk alternation
+    if (speech.active) {
+      speech.timer     -= dt;
+      speech.talkTimer += dt;
+      if (speech.talkTimer >= TALK_FRAME_INTERVAL) {
+        speech.talkTimer -= TALK_FRAME_INTERVAL;
+        speech.talkPhase  = 1 - speech.talkPhase; // toggle 0 ↔ 1
+      }
+      if (speech.timer <= 0.3) speech.alpha = Math.max(0, speech.timer / 0.3);
+      if (speech.timer <= 0)   dismissSpeech();
+    }
+
     if (!player.walking) {
       player.animFrame = 0;
       player.animTimer = 0;
@@ -183,21 +438,34 @@
       player.y = player.ty;
       player.walking = false;
     } else {
-      player.x += (dx / dist) * SPEED * dt;
-      player.y += (dy / dist) * SPEED * dt;
+      player.x = Math.min(Math.max(player.x + (dx / dist) * SPEED * dt, WA.x1), WA.x2);
+      player.y = Math.min(Math.max(player.y + (dy / dist) * SPEED * dt, WA.y1), WA.y2);
     }
 
     player.animTimer += dt;
     if (player.animTimer >= 0.15) {
       player.animTimer = 0;
       var def = CHAR_DEFS[activeChar];
-      var frameCount = def.frames[player.direction].length;
-      player.animFrame = (player.animFrame + 1) % frameCount;
+      if (def.multiFile || def.dualSheet) {
+        player.animFrame = (player.animFrame + 1) % 2;  // alternates stand ↔ walk
+      } else {
+        var frameCount = def.frames[player.direction].length;
+        player.animFrame = (player.animFrame + 1) % frameCount;
+      }
     }
   }
 
   function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Walk area
+    var wa = [[68, 570], [1278, 570], [1278, 760], [68, 760]];
+    ctx.fillStyle = 'rgba(255,255,255,0.08)';
+    ctx.beginPath();
+    ctx.moveTo(wa[0][0], wa[0][1]);
+    for (var w = 1; w < wa.length; w++) ctx.lineTo(wa[w][0], wa[w][1]);
+    ctx.closePath();
+    ctx.fill();
 
     // Grid
     ctx.strokeStyle = 'rgba(255,255,255,0.05)';
@@ -214,38 +482,148 @@
       ctx.beginPath(); ctx.moveTo(player.tx, player.ty - r); ctx.lineTo(player.tx, player.ty + r); ctx.stroke();
     }
 
-    // Character
-    var def    = CHAR_DEFS[activeChar];
-    var sprite = sprites[activeChar];
-    var isLoaded = loaded[activeChar];
+    var baseDef = CHAR_DEFS[activeChar];
 
-    var frameW = isLoaded ? sprite.naturalWidth  / def.cols : 0;
-    var frameH = isLoaded ? sprite.naturalHeight / def.rows : 0;
-    var PW     = Math.round(PH * (frameW / frameH)) || Math.round(PH * 0.9);
+    var t     = (player.y - WA.y1) / (WA.y2 - WA.y1);
+    var scale = PERSPECTIVE.min_scale + t * (PERSPECTIVE.max_scale - PERSPECTIVE.min_scale);
+    var sPH   = Math.round(PH * scale);
 
-    var drawX = Math.round(player.x - PW / 2);
-    var drawY = Math.round(player.y - PH);
+    var sprite, isLoaded, PW, frameW, frameH, drawX, drawY;
+    var hudState;
 
-    if (isLoaded) {
-      var crop   = 4;
-      var frames = def.frames[player.direction];
-      var f      = frames[player.animFrame % frames.length];
-      var row = f[0], col = f[1];
-      ctx.drawImage(sprite,
-        col * frameW + crop, row * frameH + crop, frameW - crop * 2, frameH - crop * 2,
-        drawX, drawY, PW, PH);
+    if (baseDef.multiFile) {
+      // Pick state: talking > walking > standing
+      var isTalking = manualTalking || (speech.active && speech.talkPhase === 1);
+      var statePrefix = isTalking ? 'talk'
+                      : (player.walking ? (player.animFrame === 0 ? 'stand' : 'walk') : 'stand');
+      var spriteKey = activeChar + '_' + statePrefix + '_' + player.direction;
+      sprite   = sprites[spriteKey];
+      isLoaded = loaded[activeChar] && !!sprite;
+
+      // Use a stand frame for aspect ratio if current sprite not ready
+      var refSprite = sprite || sprites[activeChar + '_stand_right'] || sprites[activeChar + '_stand_left'];
+      frameW = refSprite ? refSprite.naturalWidth  : 200;
+      frameH = refSprite ? refSprite.naturalHeight : 300;
+      var padFrac = (baseDef.padFracs && baseDef.padFracs[statePrefix]) || 0;
+      PW     = Math.round(sPH * (frameW / frameH)) || Math.round(sPH * 0.9);
+      drawX  = Math.round(player.x - PW / 2);
+      drawY  = Math.round(player.y - sPH * (1 - padFrac));
+
+      if (isLoaded) {
+        ctx.drawImage(sprite, drawX, drawY, PW, sPH);
+      } else {
+        ctx.fillStyle = '#FF9900';
+        ctx.fillRect(drawX, drawY, PW, sPH);
+      }
+
+      hudState = isTalking ? 'TALKING' : (player.walking ? 'walking' : 'standing');
+
+    } else if (baseDef.dualSheet) {
+      var isTalking  = manualTalking || (speech.active && speech.talkPhase === 1);
+      var fcMap      = baseDef.frameCols ? baseDef.frameCols[player.direction] : { stand: 0, walk: 1, talk: 2 };
+      var frameCol   = isTalking ? fcMap.talk : (player.walking ? (player.animFrame % 2 === 0 ? fcMap.stand : fcMap.walk) : fcMap.stand);
+      var totalCols  = baseDef.cols || 3;
+      var spriteKey  = activeChar + '_' + player.direction;
+      sprite   = sprites[spriteKey];
+      isLoaded = loaded[activeChar] && !!sprite;
+
+      frameW = sprite ? sprite.naturalWidth  / totalCols : 200;
+      frameH = sprite ? sprite.naturalHeight              : 300;
+      PW     = Math.round(sPH * (frameW / frameH)) || Math.round(sPH * 0.9);
+      var fb = frameBounds[spriteKey] && frameBounds[spriteKey][frameCol];
+      var anchorFrac = fb
+        ? (player.direction === 'right' ? fb.left : fb.right)
+        : 0.5;
+      drawX  = Math.round(player.x - anchorFrac * PW);
+      drawY  = Math.round(player.y - sPH);
+
+      if (isLoaded) {
+        ctx.drawImage(sprite, frameCol * frameW, 0, frameW, frameH, drawX, drawY, PW, sPH);
+      } else {
+        ctx.fillStyle = '#FF9900';
+        ctx.fillRect(drawX, drawY, PW, sPH);
+      }
+
+      hudState = isTalking ? 'TALKING' : (player.walking ? 'walking' : 'standing');
+
     } else {
-      ctx.fillStyle = '#FF9900';
-      ctx.fillRect(drawX, drawY, PW, PH);
+      // Sheet-based rendering
+      var renderKey, renderFrame;
+
+      if (speech.active && baseDef.talkingKey) {
+        if (speech.talkPhase === 1) {
+          renderKey   = baseDef.talkingKey;
+          renderFrame = CHAR_DEFS[renderKey].frames[player.direction][0];
+        } else {
+          renderKey   = activeChar;
+          renderFrame = baseDef.frames[player.direction][0];
+        }
+      } else {
+        renderKey   = activeChar;
+        renderFrame = baseDef.frames[player.direction][player.animFrame % baseDef.frames[player.direction].length];
+      }
+
+      var def = CHAR_DEFS[renderKey];
+      sprite   = sprites[renderKey];
+      isLoaded = loaded[renderKey];
+
+      frameW = isLoaded ? sprite.naturalWidth  / def.cols : 0;
+      frameH = isLoaded ? sprite.naturalHeight / def.rows : 0;
+      PW     = Math.round(sPH * (frameW / frameH)) || Math.round(sPH * 0.9);
+      drawX  = Math.round(player.x - PW / 2);
+      drawY  = Math.round(player.y - sPH);
+
+      if (isLoaded) {
+        var crop = 4;
+        var f    = renderFrame;
+        ctx.drawImage(sprite,
+          f[1] * frameW + crop, f[0] * frameH + crop, frameW - crop * 2, frameH - crop * 2,
+          drawX, drawY, PW, sPH);
+      } else {
+        ctx.fillStyle = '#FF9900';
+        ctx.fillRect(drawX, drawY, PW, sPH);
+      }
+
+      hudState = speech.active ? 'SPEAKING' : (player.walking ? 'walking' : 'standing');
+    }
+
+    // Speech bubble
+    if (speech.active) {
+      var lines  = wordWrap(speech.text, SPEECH_MAX_W);
+      var lineH  = SPEECH_FONT_SZ + 6;
+      var totalH = lines.length * lineH;
+      var pad    = 10;
+
+      var bx = Math.max(310, Math.min(player.x, canvas.width - 310));
+      var by = drawY - totalH - 40;
+      if (by < 10) by = 10;
+
+      ctx.font = SPEECH_FONT;
+      var maxW = 0;
+      lines.forEach(function (l) { var w = ctx.measureText(l).width; if (w > maxW) maxW = w; });
+
+      ctx.save();
+      ctx.globalAlpha = speech.alpha * 0.75;
+      ctx.fillStyle   = '#000';
+      ctx.fillRect(bx - maxW / 2 - pad, by - pad, maxW + pad * 2, totalH + pad * 2);
+      ctx.globalAlpha = speech.alpha;
+      ctx.fillStyle   = SPEECH_COLOR;
+      ctx.textAlign   = 'center';
+      ctx.textBaseline = 'top';
+      lines.forEach(function (l, i) { ctx.fillText(l, bx, by + i * lineH); });
+      ctx.restore();
     }
 
     // HUD
+    var sizeStr = isLoaded ? (sprite.naturalWidth + 'x' + sprite.naturalHeight) : 'loading...';
     info.textContent =
-      'char ' + def.label + '  ' +
-      (isLoaded ? 'sprite OK ' + sprite.naturalWidth + 'x' + sprite.naturalHeight : 'loading...') + '  ' +
-      'pos (' + Math.round(player.x) + ', ' + Math.round(player.y) + ')  ' +
-      'dir ' + player.direction + '  frame ' + player.animFrame + '  ' +
-      (player.walking ? 'walking' : 'idle');
+      'char: ' + baseDef.label + '  │  ' +
+      sizeStr + '  │  ' +
+      'pos (' + Math.round(player.x) + ', ' + Math.round(player.y) + ')  │  ' +
+      'dir: ' + player.direction + '  frame: ' + player.animFrame + '  │  ' +
+      'scale: ' + scale.toFixed(2) + '  │  ' +
+      hudState + '  │  ' +
+      '[Space] say  [T] toggle talk  [click] walk / dismiss';
   }
 
   requestAnimationFrame(loop);

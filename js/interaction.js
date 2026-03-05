@@ -22,7 +22,7 @@ Game.Interaction = (function () {
         });
       } else {
         var text = getDefaultResponse(verb, hotspot.name);
-        Game.TextBox.showBlocking(text, Game.Player.getX(), Game.Player.getY() - 140, null, function () {
+        Game.TextBox.showBlocking(text, Game.Player.getX(), Game.Player.getHeadY(), Game.Config.COLORS.TEXT_PLAYER, function () {
           finishInteraction();
         });
       }
@@ -50,7 +50,7 @@ Game.Interaction = (function () {
       });
     } else {
       var text = getDefaultResponse(verb, info.name);
-      Game.TextBox.showBlocking(text, Game.Player.getX(), Game.Player.getY() - 140, null, function () {
+      Game.TextBox.showBlocking(text, Game.Player.getX(), Game.Player.getHeadY(), Game.Config.COLORS.TEXT_PLAYER, function () {
         finishInteraction();
       });
     }
@@ -79,7 +79,7 @@ Game.Interaction = (function () {
         var name1 = Game.Inventory.getItemInfo(obj1).name;
         var name2 = getObjName(obj2);
         var text = "I can't " + verb.toLowerCase() + ' ' + name1 + ' with ' + name2 + '.';
-        Game.TextBox.showBlocking(text, Game.Player.getX(), Game.Player.getY() - 140, null, function () {
+        Game.TextBox.showBlocking(text, Game.Player.getX(), Game.Player.getHeadY(), Game.Config.COLORS.TEXT_PLAYER, function () {
           finishInteraction();
         });
       }
@@ -108,7 +108,7 @@ Game.Interaction = (function () {
       } else {
         var iName = Game.Inventory.getItemInfo(itemId).name;
         var text = "I can't use " + iName + ' with ' + hotspot.name + '.';
-        Game.TextBox.showBlocking(text, Game.Player.getX(), Game.Player.getY() - 140, null, function () {
+        Game.TextBox.showBlocking(text, Game.Player.getX(), Game.Player.getHeadY(), Game.Config.COLORS.TEXT_PLAYER, function () {
           finishInteraction();
         });
       }
@@ -202,7 +202,7 @@ Game.Interaction = (function () {
         response.text,
         Game.Player.getX(),
         Game.Player.getY() - 140,
-        response.color || null,
+        response.color || Game.Config.COLORS.TEXT_PLAYER,
         function () {
           if (response.effects) {
             Game.Effects.execute(response.effects, callback);

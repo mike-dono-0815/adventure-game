@@ -1,6 +1,8 @@
 {
   "id": "bob",
   "character": "Bob",
+  "speaker_x": 637,
+  "speaker_y": 230,
   "start": "greeting",
   "nodes": {
     "greeting": {

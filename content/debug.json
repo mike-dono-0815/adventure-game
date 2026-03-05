@@ -1,5 +1,30 @@
 {
   "scenarios": {
+    "lobby": {
+      "label": "Reception",
+      "description": "Start at the beginning in the lobby. No items, no flags.",
+      "room": "lobby",
+      "player_x": 672,
+      "player_y": 710,
+      "player_dir": "right",
+      "flags": {},
+      "inventory": []
+    },
+    "open_office": {
+      "label": "Open Office — cutscene",
+      "description": "Start in the open office. Walk left to trigger the stakeholder encounter.",
+      "room": "open_office",
+      "player_x": 1200,
+      "player_y": 680,
+      "player_dir": "left",
+      "flags": {
+        "intro_seen": true,
+        "receptionist_has_coffee": true,
+        "bob_wants_coffee": true,
+        "alarm_triggered": true
+      },
+      "inventory": ["business_card", "stress_ball", "visitor_badge"]
+    },
     "office": {
       "label": "Office — lobby complete",
       "description": "Start in Bob's office with visitor badge obtained and Bob ready for coffee.",

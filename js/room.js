@@ -4,6 +4,7 @@ Game.Room = (function () {
   var hotspots = [];
   var removedHotspots = {};
   var shownHotspots = {};
+  var firedTriggers = {};
 
   function load(roomId, callback) {
     currentRoom = roomId;
@@ -13,6 +14,9 @@ Game.Room = (function () {
       if (callback) callback();
       return;
     }
+
+    // Clear NPC actors from previous room
+    Game.Actors.clear();
 
     // Build active hotspot list
     rebuildHotspots();
@@ -82,6 +86,27 @@ Game.Room = (function () {
     return roomData ? roomData.walk_area : null;
   }
 
+  function getPerspective() {
+    return roomData ? roomData.perspective : null;
+  }
+
+  function checkTriggers() {
+    if (!roomData || !roomData.trigger_zones) return;
+    var px = Game.Player.getX();
+    var py = Game.Player.getY();
+    for (var i = 0; i < roomData.trigger_zones.length; i++) {
+      var zone = roomData.trigger_zones[i];
+      var key  = currentRoom + '::' + zone.id;
+      if (zone.once && firedTriggers[key]) continue;
+      var r = zone.rect;
+      if (px >= r[0] && px <= r[0] + r[2] && py >= r[1] && py <= r[1] + r[3]) {
+        if (zone.once) firedTriggers[key] = true;
+        Game.Effects.execute(zone.effects, null);
+        break;
+      }
+    }
+  }
+
   function getWalkToPoint(hotspot) {
     if (hotspot.walk_to) return { x: hotspot.walk_to[0], y: hotspot.walk_to[1] };
     // Center of rect
@@ -130,6 +155,9 @@ Game.Room = (function () {
         drawNPC(ctx, ch);
       }
     }
+
+    // Draw animated NPC actors (cutscene characters)
+    Game.Actors.draw(ctx);
 
     // Debug: draw hotspot outlines
     if (Game.Config.DEBUG) {
@@ -350,6 +378,10 @@ Game.Room = (function () {
     }
   }
 
+  function resetTrigger(triggerId) {
+    delete firedTriggers[currentRoom + '::' + triggerId];
+  }
+
   function isNoWalk() { return !!(roomData && roomData.no_walk); }
 
   function getCurrentId() { return currentRoom; }
@@ -361,12 +393,14 @@ Game.Room = (function () {
       currentRoom: currentRoom,
       removedHotspots: JSON.parse(JSON.stringify(removedHotspots)),
       shownHotspots: JSON.parse(JSON.stringify(shownHotspots)),
+      firedTriggers: JSON.parse(JSON.stringify(firedTriggers)),
     };
   }
 
   function deserialize(data) {
     removedHotspots = data.removedHotspots || {};
-    shownHotspots = data.shownHotspots || {};
+    shownHotspots   = data.shownHotspots   || {};
+    firedTriggers   = data.firedTriggers   || {};
     load(data.currentRoom);
   }
 
@@ -375,9 +409,12 @@ Game.Room = (function () {
     draw: draw,
     getHotspotAt: getHotspotAt,
     getWalkArea: getWalkArea,
+    getPerspective: getPerspective,
+    checkTriggers: checkTriggers,
     getWalkToPoint: getWalkToPoint,
     removeHotspot: removeHotspot,
     showHotspot: showHotspot,
+    resetTrigger: resetTrigger,
     isNoWalk: isNoWalk,
     getCurrentId: getCurrentId,
     getData: getData,

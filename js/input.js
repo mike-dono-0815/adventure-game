@@ -2,6 +2,7 @@ Game.Input = (function () {
   var mouseX = 0, mouseY = 0;
   var gameX = 0, gameY = 0;
   var cursorStyle = 'default';
+  var locked = false;
 
   function init(canvas) {
     canvas.addEventListener('mousemove', onMouseMove);
@@ -32,6 +33,12 @@ Game.Input = (function () {
 
     if (Game.SaveLoad.isOpen()) {
       Game.SaveLoad.handleHover(gameX, gameY);
+      return;
+    }
+
+    if (Game.Wordfight.isActive()) {
+      Game.Wordfight.handleHover(gameX, gameY);
+      cursorStyle = Game.Wordfight.getCursorStyle();
       return;
     }
 
@@ -89,11 +96,20 @@ Game.Input = (function () {
       return;
     }
 
+    // Wordfight absorbs (before lock check — wordfight runs during locked cutscene)
+    if (Game.Wordfight.isActive()) {
+      Game.Wordfight.handleClick(gx, gy);
+      return;
+    }
+
     // Dialogue absorbs
     if (Game.Dialogue.isActive()) {
       Game.Dialogue.handleClick(gx, gy);
       return;
     }
+
+    // Input locked during cutscene
+    if (locked) return;
 
     // Interaction busy — ignore
     if (Game.Interaction.isBusy()) return;
@@ -189,11 +205,16 @@ Game.Input = (function () {
     }
   }
 
+  function lock()   { locked = true; }
+  function unlock() { locked = false; }
+
   function getCursorStyle() { return cursorStyle; }
   function getGamePos() { return { x: gameX, y: gameY }; }
 
   return {
     init: init,
+    lock: lock,
+    unlock: unlock,
     getCursorStyle: getCursorStyle,
     getGamePos: getGamePos,
   };

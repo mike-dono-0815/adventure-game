@@ -1,6 +1,8 @@
 {
   "id": "coffee_machine",
   "character": "Barista Pro",
+  "speaker_x": 429,
+  "speaker_y": 260,
   "start": "menu",
   "nodes": {
     "menu": {

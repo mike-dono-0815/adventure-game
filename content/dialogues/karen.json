@@ -1,6 +1,8 @@
 {
   "id": "karen",
   "character": "Receptionist",
+  "speaker_x": 880,
+  "speaker_y": 400,
   "start": "greeting",
   "start_repeat": "greeting_return",
   "nodes": {

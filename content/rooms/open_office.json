@@ -1,0 +1,30 @@
+{
+  "id": "open_office",
+  "name": "Main Office",
+  "background": "open_office",
+  "walk_area": [
+    [68, 610], [1278, 610], [1278, 760], [68, 760]
+  ],
+  "perspective": { "min_scale": 1.0, "max_scale": 1.1 },
+  "trigger_zones": [
+    {
+      "id": "stakeholder_encounter",
+      "rect": [68, 570, 650, 190],
+      "once": true,
+      "effects": [
+        { "type": "lock_input" },
+        { "type": "spawn_npc", "id": "stakeholder", "x": -80, "y": 680, "sprite": "stakeholder", "dualSheet": true, "dir": "right" },
+        { "type": "parallel", "effects": [
+          { "type": "walk_npc", "id": "stakeholder", "to_x": 560, "to_y": 680 },
+          { "type": "walk_player", "to_x": 780, "to_y": 680 }
+        ]},
+        { "type": "set_player_dir", "dir": "left" },
+        { "type": "wordfight", "intro_text": "What are you doing here?\nAre you even a real Amazonian?\nProve it — respond in the Amazon way,\nor I'll escort you out...", "on_loss_reset_trigger": "stakeholder_encounter", "on_loss_player_x": 780, "on_loss_player_y": 680 },
+        { "type": "remove_npc", "id": "stakeholder" },
+        { "type": "unlock_input" },
+        { "type": "transition", "room": "office", "player_x": 1155, "player_y": 616, "player_dir": "left" }
+      ]
+    }
+  ],
+  "hotspots": []
+}
