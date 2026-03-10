@@ -5,7 +5,9 @@ Game.Input = (function () {
   var locked = false;
 
   function init(canvas) {
+    canvas.addEventListener('mousedown', onMouseDown);
     canvas.addEventListener('mousemove', onMouseMove);
+    canvas.addEventListener('mouseup',   onMouseUp);
     canvas.addEventListener('click', onClick);
     canvas.addEventListener('contextmenu', onRightClick);
     window.addEventListener('keydown', onKeyDown);
@@ -20,12 +22,29 @@ Game.Input = (function () {
     };
   }
 
+  function onMouseDown(e) {
+    var gp = screenToGame(e.offsetX, e.offsetY);
+    Game.DebugEditor.onMouseDown(gp.x, gp.y);
+  }
+
+  function onMouseUp(e) {
+    var gp = screenToGame(e.offsetX, e.offsetY);
+    Game.DebugEditor.onMouseUp(gp.x, gp.y);
+  }
+
   function onMouseMove(e) {
     mouseX = e.offsetX;
     mouseY = e.offsetY;
     var gp = screenToGame(mouseX, mouseY);
     gameX = gp.x;
     gameY = gp.y;
+
+    // Debug editor drag takes priority
+    if (Game.DebugEditor.onMouseMove(gameX, gameY)) {
+      var dc = Game.DebugEditor.getCursorStyle();
+      if (dc) cursorStyle = dc;
+      return;
+    }
 
     // Route hover
     var cfg = Game.Config;
@@ -80,6 +99,9 @@ Game.Input = (function () {
   }
 
   function onClick(e) {
+    // Suppress click if the debug editor just finished a drag
+    if (Game.DebugEditor.consumedDrag()) return;
+
     var gp = screenToGame(e.offsetX, e.offsetY);
     var gx = gp.x, gy = gp.y;
     var cfg = Game.Config;
@@ -87,6 +109,12 @@ Game.Input = (function () {
     // Save/Load menu absorbs all clicks
     if (Game.SaveLoad.isOpen()) {
       Game.SaveLoad.handleClick(gx, gy);
+      return;
+    }
+
+    // FakeDeath overlay absorbs all clicks (before lock/busy checks)
+    if (Game.FakeDeath.isActive()) {
+      Game.FakeDeath.handleClick(gx, gy);
       return;
     }
 
@@ -108,6 +136,12 @@ Game.Input = (function () {
       return;
     }
 
+    // Verb panel — always reachable, even during walks/interactions
+    if (gy >= cfg.BOTTOM_BAR_Y && gx < cfg.VERB_PANEL_WIDTH) {
+      Game.Verbs.handleClick(gx, gy);
+      return;
+    }
+
     // Input locked during cutscene
     if (locked) return;
 
@@ -116,12 +150,6 @@ Game.Input = (function () {
 
     // Victory screen
     if (Game.State.check('game_won')) return;
-
-    // Verb panel
-    if (gy >= cfg.BOTTOM_BAR_Y && gx < cfg.VERB_PANEL_WIDTH) {
-      Game.Verbs.handleClick(gx, gy);
-      return;
-    }
 
     // Inventory
     if (gy >= cfg.BOTTOM_BAR_Y && gx >= cfg.INVENTORY_X) {
@@ -147,10 +175,9 @@ Game.Input = (function () {
           Game.ActionLine.setObject1(hotspot.id);
           Game.Interaction.executeOnHotspot('Look at', hotspot);
         } else {
-          // No verb selected — walk to
-          var wp = Game.Room.getWalkToPoint(hotspot);
-          Game.Player.cancelWalk();
-          Game.Player.walkTo(wp.x, wp.y);
+          // No verb selected — auto Look at on hotspot click
+          Game.ActionLine.setObject1(hotspot.id);
+          Game.Interaction.executeOnHotspot('Look at', hotspot);
         }
       } else {
         if (Game.Room.isNoWalk()) {

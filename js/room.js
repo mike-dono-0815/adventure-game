@@ -83,7 +83,16 @@ Game.Room = (function () {
   }
 
   function getWalkArea() {
-    return roomData ? roomData.walk_area : null;
+    if (!roomData) return null;
+    if (roomData.walk_areas) {
+      for (var i = 0; i < roomData.walk_areas.length; i++) {
+        var def = roomData.walk_areas[i];
+        if (!def.condition || Game.State.evaluate(def.condition)) {
+          return def.area;
+        }
+      }
+    }
+    return roomData.walk_area;
   }
 
   function getPerspective() {
@@ -131,8 +140,18 @@ Game.Room = (function () {
     // Rebuild hotspots each frame so flag changes are picked up immediately
     rebuildHotspots();
 
-    // Draw background
-    var bg = Game.Loader.getImage('bg_' + currentRoom);
+    // Draw background — support conditional backgrounds array
+    var bgKey = 'bg_' + currentRoom;
+    if (roomData.backgrounds) {
+      for (var bi = 0; bi < roomData.backgrounds.length; bi++) {
+        var bgDef = roomData.backgrounds[bi];
+        if (!bgDef.condition || Game.State.evaluate(bgDef.condition)) {
+          bgKey = 'bg_' + bgDef.image;
+          break;
+        }
+      }
+    }
+    var bg = Game.Loader.getImage(bgKey);
     if (bg) {
       ctx.drawImage(bg, 0, 0, Game.Config.WIDTH, Game.Config.VIEWPORT_HEIGHT);
     } else {
@@ -194,96 +213,12 @@ Game.Room = (function () {
     var W = Game.Config.WIDTH;
     var VH = Game.Config.VIEWPORT_HEIGHT;
 
-    if (currentRoom === 'office') {
-      // Floor
-      ctx.fillStyle = '#696969';
-      ctx.fillRect(0, VH * 0.6, W, VH * 0.4);
+    // Generic fallback for rooms without a background image yet
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillRect(0, 0, W, VH);
+    ctx.fillStyle = '#2a2a3e';
+    ctx.fillRect(0, VH * 0.55, W, VH * 0.45);
 
-      // Walls
-      ctx.fillStyle = '#b8c4d0';
-      ctx.fillRect(0, 0, W, VH * 0.6);
-
-      // Window
-      ctx.fillStyle = '#87ceeb';
-      ctx.fillRect(560, 76, 224, 237);
-      ctx.strokeStyle = '#666';
-      ctx.lineWidth = 4;
-      ctx.strokeRect(560, 76, 224, 237);
-      ctx.beginPath();
-      ctx.moveTo(672, 76);
-      ctx.lineTo(672, 313);
-      ctx.stroke();
-
-      // Desk
-      ctx.fillStyle = '#5c4033';
-      ctx.fillRect(420, 379, 420, 95);
-      // Desk legs
-      ctx.fillRect(434, 474, 14, 76);
-      ctx.fillRect(812, 474, 14, 76);
-
-      // Computer
-      ctx.fillStyle = '#333';
-      ctx.fillRect(595, 322, 84, 57);
-      ctx.fillStyle = '#1a1a3e';
-      ctx.fillRect(599, 327, 77, 47);
-
-      // Filing cabinet
-      ctx.fillStyle = '#777';
-      ctx.fillRect(70, 332, 84, 237);
-      ctx.strokeStyle = '#555';
-      ctx.lineWidth = 2;
-      for (var fy = 0; fy < 4; fy++) {
-        ctx.strokeRect(74, 337 + fy * 57, 77, 52);
-      }
-
-      // Door back to lobby
-      ctx.fillStyle = '#4a3728';
-      ctx.fillRect(1120, 237, 112, 332);
-      ctx.fillStyle = '#c0a060';
-      ctx.fillRect(1134, 398, 11, 14);
-
-      // Bookshelf
-      ctx.fillStyle = '#654321';
-      ctx.fillRect(210, 142, 140, 285);
-      for (var by = 0; by < 4; by++) {
-        ctx.fillStyle = ['#8b0000', '#006400', '#00008b', '#8b8b00'][by];
-        ctx.fillRect(217, 152 + by * 68, 126, 57);
-      }
-
-      // Bob's name plate
-      ctx.fillStyle = '#c0a060';
-      ctx.fillRect(595, 370, 84, 19);
-      ctx.fillStyle = '#333';
-      ctx.font = '14px ' + Game.Config.FONT_FAMILY;
-      ctx.textAlign = 'center';
-      ctx.fillText('BOB JOHNSON', 637, 384);
-      ctx.textAlign = 'left';
-
-      // Coffee machine table
-      ctx.fillStyle = '#7a5c47';
-      ctx.fillRect(938, 417, 84, 57);
-      // Table legs
-      ctx.fillRect(945, 474, 7, 76);
-      ctx.fillRect(1008, 474, 7, 76);
-      // Coffee machine body
-      ctx.fillStyle = '#222';
-      ctx.fillRect(949, 360, 63, 57);
-      // Machine top
-      ctx.fillStyle = '#333';
-      ctx.fillRect(945, 351, 70, 14);
-      // Drip area
-      ctx.fillStyle = '#555';
-      ctx.fillRect(959, 398, 35, 19);
-      // Cup slot
-      ctx.fillStyle = '#8b4513';
-      ctx.fillRect(968, 403, 17, 14);
-      // Label
-      ctx.fillStyle = '#aaa';
-      ctx.font = '10px ' + Game.Config.FONT_FAMILY;
-      ctx.textAlign = 'center';
-      ctx.fillText('COFFEE', 980, 384);
-      ctx.textAlign = 'left';
-    }
   }
 
   function drawRoomOverlays(ctx) {
@@ -293,7 +228,7 @@ Game.Room = (function () {
       var blinkOn = Math.floor(Date.now() / 500) % 2 === 0;
       ctx.fillStyle = blinkOn ? '#ff2200' : '#660000';
       ctx.beginPath();
-      ctx.arc(529, 358, 7, 0, Math.PI * 2);
+      ctx.arc(542, 358, 7, 0, Math.PI * 2);
       ctx.fill();
 
     }
@@ -301,38 +236,60 @@ Game.Room = (function () {
 
   function drawNPC(ctx, ch) {
     var nx = ch.x, ny = ch.y;
-    var pw = 56, ph = 112;
 
-    // Body
+    // Perspective scaling — match player logic
+    var ph = Game.Config.PLAYER_HEIGHT;
+    var perspective = roomData ? roomData.perspective : null;
+    var walkArea    = getWalkArea();
+    if (perspective && walkArea) {
+      var ys = walkArea.map(function (p) { return p[1]; });
+      var y1 = Math.min.apply(null, ys);
+      var y2 = Math.max.apply(null, ys);
+      var t  = (ny - y1) / (y2 - y1);
+      var s  = perspective.min_scale + t * (perspective.max_scale - perspective.min_scale);
+      ph = Math.round(ph * s);
+    }
+
+    // Sprite-sheet character
+    if (ch.key) {
+      var dir      = ch.dir || 'left';
+      var sheetKey = ch.key + '_sheet_' + dir;
+      var sheet    = Game.Loader.getImage(sheetKey);
+      if (sheet) {
+        var STAND_COL = { right: 0, left: 2 };
+        var col    = STAND_COL[dir] !== undefined ? STAND_COL[dir] : 0;
+        var frameW = sheet.naturalWidth / 3;
+        var frameH = sheet.naturalHeight;
+        var pw     = Math.round(ph * (frameW / frameH));
+        var fb     = Game.Loader.getFrameBounds(sheetKey, col);
+        var cx     = fb ? fb.cx : 0.5;
+        ctx.drawImage(sheet, col * frameW, 0, frameW, frameH,
+                      Math.round(nx - cx * pw), Math.round(ny - ph), pw, ph);
+        return;
+      }
+    }
+
+    // Procedural fallback
+    var pw = 56, phf = 112;
     ctx.fillStyle = ch.color || '#4a90d9';
-    ctx.fillRect(nx - pw / 2, ny - ph, pw, ph);
-
-    // Head
+    ctx.fillRect(nx - pw / 2, ny - phf, pw, phf);
     ctx.fillStyle = '#ffd5b4';
     ctx.beginPath();
-    ctx.arc(nx, ny - ph + 16, 14, 0, Math.PI * 2);
+    ctx.arc(nx, ny - phf + 16, 14, 0, Math.PI * 2);
     ctx.fill();
-
-    // Hair
     ctx.fillStyle = ch.hair_color || '#333';
     ctx.beginPath();
-    ctx.arc(nx, ny - ph + 10, 14, Math.PI, Math.PI * 2);
+    ctx.arc(nx, ny - phf + 10, 14, Math.PI, Math.PI * 2);
     ctx.fill();
-
-    // Shirt
     ctx.fillStyle = ch.shirt_color || '#ffffff';
-    ctx.fillRect(nx - pw / 2 + 6, ny - ph + 30, pw - 12, 42);
-
-    // Pants
+    ctx.fillRect(nx - pw / 2 + 6, ny - phf + 30, pw - 12, 42);
     ctx.fillStyle = ch.pants_color || '#2c3e50';
     ctx.fillRect(nx - pw / 2 + 8, ny - 40, 16, 40);
     ctx.fillRect(nx + pw / 2 - 24, ny - 40, 16, 40);
-
-    // Name label
     ctx.fillStyle = '#ffffff';
     ctx.font = '16px ' + Game.Config.FONT_FAMILY;
     ctx.textAlign = 'center';
-    ctx.fillText(ch.name, nx, ny - ph - 8);
+    ctx.fillText(ch.name, nx, ny - phf - 8);
     ctx.textAlign = 'left';
   }
 

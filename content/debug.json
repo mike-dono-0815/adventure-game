@@ -8,36 +8,141 @@
       "player_y": 710,
       "player_dir": "right",
       "flags": {},
-      "inventory": []
+      "inventory": ["business_card", "stress_ball"]
     },
-    "open_office": {
-      "label": "Open Office — cutscene",
-      "description": "Start in the open office. Walk left to trigger the stakeholder encounter.",
-      "room": "open_office",
+    "kitchen": {
+      "label": "Office Kitchen",
+      "description": "Start in the kitchen. Fridge closed, egg available.",
+      "room": "kitchen",
+      "player_x": 600,
+      "player_y": 680,
+      "player_dir": "right",
+      "flags": {
+        "alarm_triggered": true
+      },
+      "inventory": ["business_card", "stress_ball"]
+    },
+    "office_space": {
+      "label": "Open Plan Office",
+      "description": "Start in the open plan office. Coworker has headphones. Cupboard closed.",
+      "room": "office_space",
+      "player_x": 400,
+      "player_y": 680,
+      "player_dir": "right",
+      "flags": {
+        "alarm_triggered": true
+      },
+      "inventory": ["business_card", "stress_ball"]
+    },
+    "aisle": {
+      "label": "Office Aisle",
+      "description": "In the aisle. Lab locked, elevator needs floor code.",
+      "room": "aisle",
+      "player_x": 685,
+      "player_y": 700,
+      "player_dir": "right",
+      "flags": {
+        "alarm_triggered": true
+      },
+      "inventory": ["business_card", "stress_ball"]
+    },
+    "it_department": {
+      "label": "IT Department",
+      "description": "Start in IT with Chip present. Distract him to get to the computer.",
+      "room": "it_department",
+      "player_x": 300,
+      "player_y": 680,
+      "player_dir": "right",
+      "flags": {
+        "alarm_triggered": true,
+        "headphones_taken": true
+      },
+      "inventory": ["business_card", "stress_ball", "headphones"]
+    },
+    "lab": {
+      "label": "CVNA Lab",
+      "description": "In the lab with FIFA setup ready. Book not yet read.",
+      "room": "lab",
+      "player_x": 400,
+      "player_y": 700,
+      "player_dir": "right",
+      "flags": {
+        "alarm_triggered": true,
+        "chip_distracted": true,
+        "knows_lab_code": true,
+        "lab_unlocked": true
+      },
+      "inventory": ["business_card", "stress_ball", "headphones", "winning_ugly"]
+    },
+    "lab_ready_to_win": {
+      "label": "Lab — ready to beat FIFA",
+      "description": "All 5 Winning Ugly chapters read. Ready to challenge Chip.",
+      "room": "lab",
+      "player_x": 400,
+      "player_y": 700,
+      "player_dir": "right",
+      "flags": {
+        "alarm_triggered": true,
+        "chip_distracted": true,
+        "knows_lab_code": true,
+        "lab_unlocked": true,
+        "read_winning_ugly_1": true,
+        "read_winning_ugly_2": true,
+        "read_winning_ugly_3": true,
+        "read_winning_ugly_4": true,
+        "read_winning_ugly": true,
+        "floor_digit_1_known": true
+      },
+      "inventory": ["business_card", "stress_ball", "winning_ugly", "mystery_package"]
+    },
+    "hr_floor": {
+      "label": "HR Floor — wordfight",
+      "description": "Walk left to trigger the stakeholder encounter.",
+      "room": "hr_floor",
       "player_x": 1200,
       "player_y": 680,
       "player_dir": "left",
       "flags": {
-        "intro_seen": true,
-        "receptionist_has_coffee": true,
-        "bob_wants_coffee": true,
-        "alarm_triggered": true
+        "alarm_triggered": true,
+        "fifa_won": true,
+        "floor_digit_1_known": true,
+        "floor_digit_2_known": true
       },
-      "inventory": ["business_card", "stress_ball", "visitor_badge"]
+      "inventory": ["business_card", "stress_ball", "mystery_package"]
     },
-    "office": {
-      "label": "Office — lobby complete",
-      "description": "Start in Bob's office with visitor badge obtained and Bob ready for coffee.",
-      "room": "office",
+    "bobs_office": {
+      "label": "Bob's Office — start of end puzzle",
+      "description": "In Bob's office. Stress ball, mystery package, and USB stick in hand.",
+      "room": "bobs_office",
       "player_x": 300,
       "player_y": 600,
       "player_dir": "right",
       "flags": {
-        "intro_seen": true,
-        "receptionist_has_coffee": true,
-        "bob_wants_coffee": true
+        "alarm_triggered": true,
+        "fifa_won": true,
+        "floor_digit_1_known": true,
+        "floor_digit_2_known": true
       },
-      "inventory": ["business_card", "stress_ball", "visitor_badge"]
+      "inventory": ["business_card", "stress_ball", "mystery_package", "usb_stick"]
+    },
+    "bobs_office_endgame": {
+      "label": "Bob's Office — near win",
+      "description": "All pre-requisites done. Just need to co-sign and give to Bob.",
+      "room": "bobs_office",
+      "player_x": 300,
+      "player_y": 600,
+      "player_dir": "right",
+      "flags": {
+        "alarm_triggered": true,
+        "fifa_won": true,
+        "stress_ball_given": true,
+        "mystery_package_given": true,
+        "usb_used": true,
+        "agreement_retrieved": true,
+        "found_pen": true,
+        "agreement_signed": true
+      },
+      "inventory": ["business_card", "signed_agreement"]
     }
   }
 }

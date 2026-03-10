@@ -1,0 +1,139 @@
+{
+  "id": "coworker",
+  "character": "Coworker",
+  "speaker_x": 490,
+  "speaker_y": 530,
+  "start": "intro",
+  "nodes": {
+    "intro": {
+      "npc_text": "Oh! Hi. Sorry, I was completely in the zone. What's up?",
+      "choices": [
+        {
+          "id": "ask_cost_center",
+          "text": "Do you know the IT cost center number?",
+          "next": "cost_center"
+        },
+        {
+          "id": "ask_about_chip",
+          "text": "What do you know about Chip in IT?",
+          "next": "chip"
+        },
+        {
+          "id": "ask_about_alex",
+          "text": "Have you heard anything about Alex?",
+          "next": "alex"
+        },
+        {
+          "id": "goodbye",
+          "text": "Never mind.",
+          "next": null
+        }
+      ]
+    },
+    "cost_center": {
+      "npc_text": "Cost center? No idea. That's all locked down in IT systems. Chip would know — he has access to the Phone Tool. It shows everyone's cost center. Though, fair warning: Chip is basically surgically attached to his monitor.",
+      "choices": [
+        {
+          "id": "ask_about_chip_followup",
+          "text": "How do I get his attention?",
+          "next": "chip_attention"
+        },
+        {
+          "id": "back_intro",
+          "text": "Thanks. One more thing.",
+          "next": "intro"
+        },
+        {
+          "id": "goodbye2",
+          "text": "Got it, thanks.",
+          "next": null
+        }
+      ]
+    },
+    "chip_attention": {
+      "npc_text": "He's got three monitors going at once. The only thing that ever breaks his concentration is FIFA. He gets completely derailed the second someone mentions it. Last Thursday he spent forty minutes explaining xG metrics to a contractor. Unprompted.",
+      "choices": [
+        {
+          "id": "back_intro2",
+          "text": "Good to know. Anything else?",
+          "next": "intro"
+        },
+        {
+          "id": "goodbye3",
+          "text": "Perfect. Thanks.",
+          "next": null
+        }
+      ]
+    },
+    "chip": {
+      "npc_text": "Chip? He's been in IT for six years. Knows every system, never writes documentation. The institutional knowledge will die with him. He's also undefeated at FIFA in the lab. Like, pathologically. It's concerning.",
+      "choices": [
+        {
+          "id": "ask_fifa",
+          "text": "The lab? There's a FIFA setup in the lab?",
+          "next": "fifa"
+        },
+        {
+          "id": "back_intro3",
+          "text": "Interesting. What else?",
+          "next": "intro"
+        },
+        {
+          "id": "goodbye4",
+          "text": "Thanks.",
+          "next": null
+        }
+      ]
+    },
+    "fifa": {
+      "npc_text": "Yeah, it was supposed to be a 'collaborative innovation space'. Now it's mostly Chip's FIFA den. He takes his lunch in there. The people in the lab just... let it happen. Nobody wants to be the one who tells him to stop.",
+      "choices": [
+        {
+          "id": "back_intro4",
+          "text": "Right. One more thing.",
+          "next": "intro"
+        },
+        {
+          "id": "goodbye5",
+          "text": "Okay. Thanks.",
+          "next": null
+        }
+      ]
+    },
+    "alex": {
+      "npc_text": "Alex? Yeah. They cleared the desk on Tuesday. No announcement, no goodbye, just... gone. Someone booked the meeting room in their name and it got auto-cancelled. That's when people noticed.",
+      "choices": [
+        {
+          "id": "ask_why",
+          "text": "Did anyone say why?",
+          "next": "alex_why"
+        },
+        {
+          "id": "back_intro5",
+          "text": "That's sad. One more thing.",
+          "next": "intro"
+        },
+        {
+          "id": "goodbye6",
+          "text": "Thanks.",
+          "next": null
+        }
+      ]
+    },
+    "alex_why": {
+      "npc_text": "No. And that's the thing — nobody asks, do they? You just see the desk clear, and the calendar drop off, and you think: same thing could happen to me. Then you put your headphones on. It helps.",
+      "choices": [
+        {
+          "id": "back_intro6",
+          "text": "Right. One more thing.",
+          "next": "intro"
+        },
+        {
+          "id": "goodbye7",
+          "text": "Yeah. Thanks.",
+          "next": null
+        }
+      ]
+    }
+  }
+}

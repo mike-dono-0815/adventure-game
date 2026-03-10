@@ -1,0 +1,40 @@
+{
+  "id": "keypad_lab",
+  "character": "Lab Keypad",
+  "speaker_x": 150,
+  "speaker_y": 380,
+  "start": "enter_code",
+  "nodes": {
+    "enter_code": {
+      "npc_text": "CVNA LAB ACCESS — ENTER 4-DIGIT CODE: ____",
+      "choices": [
+        {
+          "id": "enter_2847",
+          "text": "2847",
+          "next": "accepted",
+          "effects": [
+            { "type": "set_flag", "flag": "lab_unlocked", "value": true }
+          ]
+        },
+        {
+          "id": "cancel",
+          "text": "Cancel.",
+          "next": null
+        }
+      ]
+    },
+    "accepted": {
+      "npc_text": "CODE ACCEPTED. Welcome, Amazonian. The door clicks open.",
+      "choices": [
+        {
+          "id": "enter_lab",
+          "text": "Enter the lab.",
+          "next": null,
+          "effects": [
+            { "type": "transition", "room": "lab", "player_x": 200, "player_y": 700, "player_dir": "right" }
+          ]
+        }
+      ]
+    }
+  }
+}

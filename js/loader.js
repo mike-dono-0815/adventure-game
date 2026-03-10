@@ -8,8 +8,10 @@ Game.Loader = (function () {
   var loadedAssets = 0;
   var loadingComplete = false;
 
+  var CACHE_BUST = '?v=' + Date.now();
+
   function loadJSON(url) {
-    return fetch(url)
+    return fetch(url + CACHE_BUST)
       .then(function (r) {
         if (!r.ok) throw new Error('Failed to load ' + url);
         return r.json();
@@ -120,6 +122,8 @@ Game.Loader = (function () {
           images[sheetKey] = processed;
           frameBounds[sheetKey] = analyzeFrameBoundsForSheet(processed, 3);
         });
+      }).catch(function (err) {
+        console.warn('Failed to load character sheet:', charKey, d.dir, err);
       });
     }));
   }
@@ -140,38 +144,103 @@ Game.Loader = (function () {
     });
   }
 
+  function sliceItemSheets() {
+    var itemOrder = [
+      'business_card', 'stress_ball', 'cappuccino_cup', 'visitor_badge',
+      'terrible_filter_coffee', 'frozen_egg', 'thawed_egg', 'headphones',
+      'winning_ugly', 'mystery_package', 'usb_stick', 'coffee_cup',
+      'separation_agreement', 'pen', 'signed_agreement', 'co_signed_agreement'
+    ];
+    var sheetKeys = ['items_sheet_01', 'items_sheet_02', 'items_sheet_03', 'items_sheet_04'];
+    // col/row positions for upper-left, upper-right, lower-left, lower-right
+    var positions = [[0, 0], [1, 0], [0, 1], [1, 1]];
+
+    var promises = [];
+    sheetKeys.forEach(function (sheetKey, si) {
+      var img = images[sheetKey];
+      if (!img) return;
+      var fw = img.naturalWidth / 2;
+      var fh = img.naturalHeight / 2;
+      positions.forEach(function (pos, pi) {
+        var itemId = itemOrder[si * 4 + pi];
+        if (!itemId) return;
+        var offscreen = document.createElement('canvas');
+        offscreen.width = fw;
+        offscreen.height = fh;
+        var octx = offscreen.getContext('2d');
+        octx.drawImage(img, pos[0] * fw, pos[1] * fh, fw, fh, 0, 0, fw, fh);
+        promises.push(new Promise(function (resolve) {
+          var result = new Image();
+          result.onload = function () {
+            images['item_' + itemId] = result;
+            resolve();
+          };
+          result.src = offscreen.toDataURL('image/png');
+        }));
+      });
+    });
+    return Promise.all(promises);
+  }
+
   function loadAll() {
     var jsonFiles = [
-      { key: 'game', url: 'content/game.json' },
-      { key: 'rooms/lobby', url: 'content/rooms/lobby.json' },
-      { key: 'rooms/office', url: 'content/rooms/office.json' },
-      { key: 'rooms/open_office', url: 'content/rooms/open_office.json' },
-      { key: 'dialogues/karen', url: 'content/dialogues/karen.json' },
-      { key: 'dialogues/bob', url: 'content/dialogues/bob.json' },
-      { key: 'dialogues/coffee_machine', url: 'content/dialogues/coffee_machine.json' },
+      { key: 'game',                    url: 'content/game.json' },
+      // Rooms
+      { key: 'rooms/lobby',             url: 'content/rooms/lobby.json' },
+      { key: 'rooms/kitchen',           url: 'content/rooms/kitchen.json' },
+      { key: 'rooms/office_space',      url: 'content/rooms/office_space.json' },
+      { key: 'rooms/it_department',     url: 'content/rooms/it_department.json' },
+      { key: 'rooms/aisle',             url: 'content/rooms/aisle.json' },
+      { key: 'rooms/lab',               url: 'content/rooms/lab.json' },
+      { key: 'rooms/hr_floor',          url: 'content/rooms/hr_floor.json' },
+      { key: 'rooms/bobs_office',       url: 'content/rooms/bobs_office.json' },
+      // Dialogues
+      { key: 'dialogues/karen',         url: 'content/dialogues/karen.json' },
+      { key: 'dialogues/bob',           url: 'content/dialogues/bob.json' },
+      { key: 'dialogues/coffee_machine',url: 'content/dialogues/coffee_machine.json' },
       { key: 'dialogues/stakeholder_intro', url: 'content/dialogues/stakeholder_intro.json' },
-      { key: 'wordfight', url: 'content/wordfight.json' },
-      { key: 'items', url: 'content/items/items.json' },
-      { key: 'debug', url: 'content/debug.json' },
+      { key: 'dialogues/keypad_lab',    url: 'content/dialogues/keypad_lab.json' },
+      { key: 'dialogues/elevator',      url: 'content/dialogues/elevator.json' },
+      { key: 'dialogues/coworker',      url: 'content/dialogues/coworker.json' },
+      { key: 'dialogues/chip',          url: 'content/dialogues/chip.json' },
+      { key: 'dialogues/fifa_players',  url: 'content/dialogues/fifa_players.json' },
+      // Other
+      { key: 'wordfight',               url: 'content/wordfight.json' },
+      { key: 'items',                   url: 'content/items/items.json' },
+      { key: 'debug',                   url: 'content/debug.json' },
     ];
 
     var imageFiles = [
-      { key: 'bg_lobby', url: 'assets/backgrounds/Reception.png' },
-      { key: 'bg_office', url: 'assets/backgrounds/StakeholderZoom.png' },
-      { key: 'bg_open_office', url: 'assets/backgrounds/office.png' },
-      { key: 'item_business_card',        url: 'assets/items/thumbs/business_card.png' },
-      { key: 'item_stress_ball',          url: 'assets/items/thumbs/stress_ball.png' },
-      { key: 'item_cappuccino_cup',       url: 'assets/items/thumbs/cappuccino_cup.png' },
-      { key: 'item_visitor_badge',        url: 'assets/items/thumbs/visitor_badge.png' },
-      { key: 'item_coffee_cup',           url: 'assets/items/thumbs/coffee_cup.png' },
-      { key: 'item_separation_agreement', url: 'assets/items/thumbs/separation_agreement.png' },
-      { key: 'item_pen',                  url: 'assets/items/thumbs/pen.png' },
-      { key: 'item_signed_agreement',     url: 'assets/items/thumbs/signed_agreement.png' },
+      // Backgrounds (existing)
+      { key: 'bg_title',         url: 'assets/backgrounds/TitlePage.jpg' },
+      { key: 'bg_lobby',       url: 'assets/backgrounds/Reception.png' },
+      { key: 'bg_bobs_office', url: 'assets/backgrounds/BobsOffice.png' },
+      { key: 'bg_hr_floor',    url: 'assets/backgrounds/office.png' },
+      { key: 'bg_kitchen',        url: 'assets/backgrounds/Kitchen.jpg' },
+      { key: 'bg_kitchen_egg',    url: 'assets/backgrounds/Kitchen_Egg.jpg' },
+      { key: 'bg_office_space',  url: 'assets/backgrounds/OfficeSpace.jpg' },
+      { key: 'bg_office_space2', url: 'assets/backgrounds/OfficeSpace2.jpg' },
+      { key: 'bg_it_department', url: 'assets/backgrounds/ITDepartment.jpg' },
+      { key: 'bg_aisle',         url: 'assets/backgrounds/Aisle.jpg' },
+      { key: 'bg_aisle2',        url: 'assets/backgrounds/Aisle2.jpg' },
+      { key: 'bg_lab_empty',        url: 'assets/backgrounds/LabEmpty.jpg' },
+      { key: 'bg_lab_full',         url: 'assets/backgrounds/Lab_Full.jpg' },
+      { key: 'bg_lab_full_nousb',   url: 'assets/backgrounds/Lab_Full_NoUSB.png' },
+      { key: 'bg_lab_empty_nousb',  url: 'assets/backgrounds/LabEmpty_NoUSB.png' },
+      { key: 'bg_it_department_headphones', url: 'assets/backgrounds/ITDepartment_HeadPhones.jpg' },
+      { key: 'bg_end',              url: 'assets/backgrounds/EndPage.jpg' },
+      // Item sprite sheets (2x2 grid, 4 items each)
+      { key: 'items_sheet_01', url: 'assets/items/Objects_01.png' },
+      { key: 'items_sheet_02', url: 'assets/items/Objects_02.png' },
+      { key: 'items_sheet_03', url: 'assets/items/Objects_03.png' },
+      { key: 'items_sheet_04', url: 'assets/items/Objects_04.png' },
     ];
 
     var dualSheetChars = [
       { key: 'player',      rightUrl: 'assets/characters/User_Right.png',        leftUrl: 'assets/characters/User_Left.png' },
       { key: 'stakeholder', rightUrl: 'assets/characters/StakeHolder_Right.png', leftUrl: 'assets/characters/StakeHolder_Left.png' },
+      { key: 'girl',        rightUrl: 'assets/characters/Girl_Right.png',        leftUrl: 'assets/characters/Girl_Left.png' },
+      { key: 'hr',          rightUrl: 'assets/characters/HR_Right.png',          leftUrl: 'assets/characters/HR_Left.png' },
     ];
 
     // 2 images per dualSheet character
@@ -195,10 +264,29 @@ Game.Loader = (function () {
       return loadDualSheet(c.key, c.rightUrl, c.leftUrl);
     });
 
-    return Promise.all(jsonPromises.concat(imagePromises).concat(dualSheetPromises)).then(function () {
-      loadingComplete = true;
-      console.log('All assets loaded');
-    });
+    var itemOverrides = [
+      { key: 'item_pen', url: 'assets/items/Pen.png' },
+    ];
+
+    function applyItemOverrides() {
+      return Promise.all(itemOverrides.map(function (o) {
+        return loadImage(o.url).then(function (img) {
+          if (img) images[o.key] = img;
+        });
+      }));
+    }
+
+    return Promise.all(jsonPromises.concat(imagePromises).concat(dualSheetPromises))
+      .then(sliceItemSheets)
+      .catch(function (err) {
+        console.warn('Error during asset processing, retrying item sheets:', err);
+        return sliceItemSheets();
+      })
+      .then(applyItemOverrides)
+      .then(function () {
+        loadingComplete = true;
+        console.log('All assets loaded');
+      });
   }
 
   function getProgress() {

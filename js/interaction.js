@@ -122,8 +122,15 @@ Game.Interaction = (function () {
     }
   }
 
+  var VERB_KEY_MAP = { 'take': 'pick_up' };
+
+  function verbToKey(verb) {
+    var k = verb.toLowerCase().replace(/ /g, '_');
+    return VERB_KEY_MAP[k] || k;
+  }
+
   function findResponse(verb, hotspot) {
-    var verbKey = verb.toLowerCase().replace(/ /g, '_');
+    var verbKey = verbToKey(verb);
     if (hotspot.interactions && hotspot.interactions[verbKey]) {
       var responses = hotspot.interactions[verbKey];
       // Array of conditional responses
@@ -144,7 +151,7 @@ Game.Interaction = (function () {
     var allItems = Game.Loader.getData('items');
     if (!allItems || !allItems.items) return null;
 
-    var verbKey = verb.toLowerCase().replace(/ /g, '_');
+    var verbKey = verbToKey(verb);
     for (var i = 0; i < allItems.items.length; i++) {
       var item = allItems.items[i];
       if (item.id === itemId && item.interactions && item.interactions[verbKey]) {
@@ -171,7 +178,7 @@ Game.Interaction = (function () {
       if (h.id === obj2 && h.combinations) {
         for (var j = 0; j < h.combinations.length; j++) {
           var combo = h.combinations[j];
-          if (combo.item === obj1 && combo.verb === verb.toLowerCase().replace(/ /g, '_')) {
+          if (combo.item === obj1 && combo.verb === verbToKey(verb)) {
             if (!combo.condition || Game.State.evaluate(combo.condition)) {
               return combo;
             }
@@ -198,11 +205,15 @@ Game.Interaction = (function () {
 
   function executeResponse(response, callback) {
     if (response.text) {
+      var respColor = response.color;
+      if (!respColor || respColor === 'player') respColor = Game.Config.COLORS.TEXT_PLAYER;
+      else if (respColor === 'narrator') respColor = Game.Config.COLORS.TEXT_NARRATOR;
+      else if (respColor === 'npc') respColor = Game.Config.COLORS.TEXT_NPC;
       Game.TextBox.showBlocking(
         response.text,
         Game.Player.getX(),
         Game.Player.getY() - 140,
-        response.color || Game.Config.COLORS.TEXT_PLAYER,
+        respColor,
         function () {
           if (response.effects) {
             Game.Effects.execute(response.effects, callback);
@@ -221,14 +232,14 @@ Game.Interaction = (function () {
   function getDefaultResponse(verb, name) {
     var gameData = Game.Loader.getData('game');
     if (gameData && gameData.default_responses) {
-      var key = verb.toLowerCase().replace(/ /g, '_');
+      var key = verbToKey(verb);
       var template = gameData.default_responses[key];
       if (template) return template.replace('{name}', name);
     }
 
     switch (verb) {
       case 'Look at': return "It's " + name + '. Nothing special.';
-      case 'Pick up': return "I can't pick that up.";
+      case 'Take': return "I can't take that.";
       case 'Open': return "I can't open that.";
       case 'Close': return "I can't close that.";
       case 'Push': return "I can't push that.";

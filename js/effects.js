@@ -68,15 +68,20 @@ Game.Effects = (function () {
         });
         break;
 
-      case 'say':
+      case 'say': {
+        var sayColor = effect.color;
+        if (!sayColor || sayColor === 'npc') sayColor = Game.Config.COLORS.TEXT_NPC;
+        else if (sayColor === 'player') sayColor = Game.Config.COLORS.TEXT_PLAYER;
+        else if (sayColor === 'narrator') sayColor = Game.Config.COLORS.TEXT_NARRATOR;
         Game.TextBox.showBlocking(
           effect.text,
           effect.x || Game.Config.WIDTH / 2,
           effect.y || 200,
-          effect.color || Game.Config.COLORS.TEXT_NPC,
+          sayColor,
           done
         );
         break;
+      }
 
       case 'dialogue':
         Game.Dialogue.start(effect.dialogue, done);
@@ -128,6 +133,10 @@ Game.Effects = (function () {
 
       case 'wordfight':
         Game.Wordfight.start(effect, done);
+        break;
+
+      case 'fake_death':
+        Game.FakeDeath.start(effect.item, done);
         break;
 
       case 'victory':

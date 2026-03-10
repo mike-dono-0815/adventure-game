@@ -3,12 +3,34 @@
   "name": "Building Entrance",
   "background": "lobby",
   "no_walk": true,
-  "walk_area": [[660, 700], [680, 700], [680, 720], [660, 720]],
+  "walk_area": [
+    [
+      660,
+      700
+    ],
+    [
+      680,
+      700
+    ],
+    [
+      680,
+      720
+    ],
+    [
+      660,
+      720
+    ]
+  ],
   "hotspots": [
     {
       "id": "potted_plant_left",
       "name": "potted plant",
-      "rect": [0, 392, 71, 263],
+      "rect": [
+        0,
+        392,
+        73,
+        263
+      ],
       "interactions": {
         "look_at": {
           "text": "A large leafy plant in the corner. It's doing better than most things in this building."
@@ -21,7 +43,12 @@
     {
       "id": "potted_plant_right",
       "name": "potted plant",
-      "rect": [1281, 392, 63, 259],
+      "rect": [
+        1311,
+        392,
+        65,
+        259
+      ],
       "interactions": {
         "look_at": {
           "text": "Another decorative plant by the door. Probably the most carefree thing in this reception area."
@@ -34,7 +61,12 @@
     {
       "id": "emergency_poster",
       "name": "emergency procedure poster",
-      "rect": [1094, 144, 164, 179],
+      "rect": [
+        1130,
+        144,
+        158,
+        210
+      ],
       "interactions": {
         "look_at": {
           "text": "An emergency procedure poster. Step 4 catches my eye: 'Staff must escort visitors inside in fire event.' Interesting policy."
@@ -50,7 +82,12 @@
     {
       "id": "security_camera",
       "name": "security camera monitor",
-      "rect": [700, 72, 333, 150],
+      "rect": [
+        734,
+        72,
+        324,
+        154
+      ],
       "interactions": {
         "look_at": {
           "text": "A security monitor showing two feeds: the lobby entrance, and the IT department — extension 204. Looks quiet in there."
@@ -61,25 +98,14 @@
       }
     },
     {
-      "id": "reception_desk",
-      "name": "reception desk",
-      "rect": [507, 307, 678, 174],
-      "interactions": {
-        "look_at": {
-          "text": "A large reception desk. On it: a computer, some papers, and a small ceramic mug that reads 'cap \u2665'. Someone has opinions about coffee."
-        },
-        "use": {
-          "text": "I shouldn't mess with the desk. The receptionist seems like the type who'd notice."
-        },
-        "pick_up": {
-          "text": "The desk isn't going anywhere."
-        }
-      }
-    },
-    {
       "id": "badge_printer",
       "name": "visitor badge printer",
-      "rect": [507, 307, 130, 146],
+      "rect": [
+        529,
+        307,
+        123,
+        145
+      ],
       "interactions": {
         "look_at": {
           "text": "A visitor badge printer blinking a red error light. The display reads: OUT OF PAPER. Typical IT response time: three days and counting."
@@ -94,24 +120,31 @@
     },
     {
       "id": "desk_papers",
-      "name": "papers on the desk",
-      "rect": [656, 406, 69, 75],
+      "name": "information sign",
+      "rect": [
+        683,
+        406,
+        64,
+        85
+      ],
       "interactions": {
         "look_at": {
-          "text": "A stack of visitor intake forms and daily logs. All meticulously filed. Nothing I'd be allowed to touch."
-        },
-        "pick_up": {
-          "text": "I don't need those. And it would definitely be noticed."
+          "text": "A laminated sign propped on the desk. It reads: 'LOST YOUR BADGE? Please complete form IT-394b, have it countersigned by your line manager, your line manager's line manager, and one witness who has known you personally for at least three years. Processing time: 10–14 business days. In the meantime, please remain outside. Thank you for your understanding. Amazon cares about your security. ♥'"
         },
         "use": {
-          "text": "There's nothing useful to do with those papers."
+          "text": "The sign has already said everything it has to say."
         }
       }
     },
     {
       "id": "desk_computer",
       "name": "reception computer",
-      "rect": [1044, 426, 141, 48],
+      "rect": [
+        1085,
+        426,
+        128,
+        43
+      ],
       "interactions": {
         "look_at": {
           "text": "The receptionist's computer. The screen shows a visitor log system. My name isn't in it — obviously."
@@ -124,43 +157,71 @@
     {
       "id": "fire_alarm",
       "name": "fire alarm",
-      "rect": [527, 184, 104, 104],
+      "rect": [
+        554,
+        184,
+        97,
+        105
+      ],
       "interactions": {
         "look_at": {
           "text": "A wall-mounted fire alarm pull station. A label reads: 'Pull to Activate'. Another label reads: 'Do not tamper with safety equipment'."
         },
         "use": [
           {
-            "condition": { "alarm_triggered": true },
+            "condition": {
+              "alarm_triggered": true
+            },
             "text": "The alarm is already blaring. I'm already inside."
           },
           {
-            "condition": { "receptionist_has_coffee": true },
-            "text": "You grab the handle and pull hard. RIIIIING! The alarm blares throughout the building, emergency lights flashing red. The receptionist leaps to her feet. 'Oh for— EVERYONE OUT! I— ...ugh. Fire protocol: I have to escort all visitors inside immediately.' She fixes you with a withering look. 'Congratulations. You're officially a fire hazard. Come in.'",
+            "condition": {
+              "receptionist_has_coffee": true
+            },
             "effects": [
+              { "type": "say", "text": "You grab the handle and pull hard. RIIIIING! The alarm blares throughout the building, emergency lights flashing red. The receptionist leaps to her feet.", "color": "narrator" },
+              { "type": "say", "text": "Oh for— EVERYONE OUT! I— ...ugh. Fire protocol: I have to escort all visitors inside immediately.", "x": 880, "y": 400 },
+              { "type": "say", "text": "She fixes you with a withering look.", "color": "narrator" },
+              { "type": "say", "text": "Congratulations. You're officially a fire hazard. Come in.", "x": 880, "y": 400 },
               { "type": "set_flag", "flag": "alarm_triggered", "value": true },
-              { "type": "transition", "room": "open_office", "player_x": 1155, "player_y": 616, "player_dir": "left" }
+              { "type": "add_item", "item": "visitor_badge" },
+              { "type": "transition", "room": "office_space", "player_x": 1200, "player_y": 680, "player_dir": "left" }
             ]
           },
           {
-            "text": "You reach toward the alarm... 'Hey! Hands off that! Tampering with safety equipment is grounds for immediate termination.'"
+            "effects": [
+              { "type": "say", "text": "You reach toward the alarm...", "color": "narrator" },
+              { "type": "say", "text": "Hey! Hands off that! Tampering with safety equipment is grounds for immediate termination.", "x": 880, "y": 400 }
+            ]
           }
         ],
         "pull": [
           {
-            "condition": { "alarm_triggered": true },
-            "text": "The alarm is already going. No need."
+            "condition": {
+              "alarm_triggered": true
+            },
+            "text": "The alarm is already going. No need.",
+            "color": "narrator"
           },
           {
-            "condition": { "receptionist_has_coffee": true },
-            "text": "You grab the handle and pull hard. RIIIIING! The alarm blares throughout the building, emergency lights flashing red. The receptionist leaps to her feet. 'Oh for— EVERYONE OUT! I— ...ugh. Fire protocol: I have to escort all visitors inside immediately.' She fixes you with a withering look. 'Congratulations. You're officially a fire hazard. Come in.'",
+            "condition": {
+              "receptionist_has_coffee": true
+            },
             "effects": [
+              { "type": "say", "text": "You grab the handle and pull hard. RIIIIING! The alarm blares throughout the building, emergency lights flashing red. The receptionist leaps to her feet.", "color": "narrator" },
+              { "type": "say", "text": "Oh for— EVERYONE OUT! I— ...ugh. Fire protocol: I have to escort all visitors inside immediately.", "x": 880, "y": 400 },
+              { "type": "say", "text": "She fixes you with a withering look.", "color": "narrator" },
+              { "type": "say", "text": "Congratulations. You're officially a fire hazard. Come in.", "x": 880, "y": 400 },
               { "type": "set_flag", "flag": "alarm_triggered", "value": true },
-              { "type": "transition", "room": "open_office", "player_x": 1155, "player_y": 616, "player_dir": "left" }
+              { "type": "add_item", "item": "visitor_badge" },
+              { "type": "transition", "room": "office_space", "player_x": 1200, "player_y": 680, "player_dir": "left" }
             ]
           },
           {
-            "text": "You reach toward the alarm... 'Hey! Hands off that! Tampering with safety equipment is grounds for immediate termination.'"
+            "effects": [
+              { "type": "say", "text": "You reach toward the alarm...", "color": "narrator" },
+              { "type": "say", "text": "Hey! Hands off that! Tampering with safety equipment is grounds for immediate termination.", "x": 880, "y": 400 }
+            ]
           }
         ]
       }
@@ -168,15 +229,23 @@
     {
       "id": "coffee_machine",
       "name": "coffee machine",
-      "rect": [370, 260, 118, 200],
+      "rect": [
+        383,
+        260,
+        121,
+        198
+      ],
       "dialogue": "coffee_machine",
       "interactions": {
         "look_at": {
-          "text": "A 'Barista Pro' coffee machine with a display panel. A sticky note on the side reads: 'likes it frothy! \u2615 cap'. Several drink options are available."
+          "text": "A 'Barista Pro' coffee machine with a display panel. Several drink options are available."
         },
         "use": {
           "effects": [
-            { "type": "dialogue", "dialogue": "coffee_machine" }
+            {
+              "type": "dialogue",
+              "dialogue": "coffee_machine"
+            }
           ]
         },
         "talk_to": {
@@ -190,17 +259,34 @@
     {
       "id": "entrance_door",
       "name": "authorized personnel door",
-      "rect": [48, 108, 294, 516],
+      "rect": [
+        87,
+        124,
+        275,
+        500
+      ],
       "interactions": {
         "look_at": {
           "text": "A heavy door marked 'AUTHORIZED PERSONNEL ONLY'. It has a card reader on the side. This is exactly where I need to get through."
         },
         "open": [
           {
-            "condition": { "alarm_triggered": true },
+            "condition": {
+              "alarm_triggered": true
+            },
             "text": "The door swings open. I'm in.",
             "effects": [
-              { "type": "transition", "room": "open_office", "player_x": 1155, "player_y": 616, "player_dir": "left" }
+              {
+                "type": "add_item",
+                "item": "visitor_badge"
+              },
+              {
+                "type": "transition",
+                "room": "office_space",
+                "player_x": 1200,
+                "player_y": 680,
+                "player_dir": "left"
+              }
             ]
           },
           {
@@ -209,10 +295,22 @@
         ],
         "use": [
           {
-            "condition": { "alarm_triggered": true },
+            "condition": {
+              "alarm_triggered": true
+            },
             "text": "The door opens. I walk through.",
             "effects": [
-              { "type": "transition", "room": "open_office", "player_x": 1155, "player_y": 616, "player_dir": "left" }
+              {
+                "type": "add_item",
+                "item": "visitor_badge"
+              },
+              {
+                "type": "transition",
+                "room": "office_space",
+                "player_x": 1200,
+                "player_y": 680,
+                "player_dir": "left"
+              }
             ]
           },
           {
@@ -232,12 +330,19 @@
     {
       "id": "receptionist",
       "name": "Receptionist",
-      "rect": [812, 323, 137, 151],
+      "rect": [
+        839,
+        323,
+        141,
+        145
+      ],
       "dialogue": "karen",
       "interactions": {
         "look_at": [
           {
-            "condition": { "receptionist_has_coffee": true },
+            "condition": {
+              "receptionist_has_coffee": true
+            },
             "text": "She's sipping the cappuccino contentedly, eyes slightly glazed. Distracted. Good."
           },
           {
@@ -246,9 +351,13 @@
         ],
         "talk_to": [
           {
-            "condition": { "receptionist_has_coffee": true },
-            "text": "She waves a hand. 'Mm. Busy sipping. Give me a moment.'",
-            "effects": []
+            "condition": {
+              "receptionist_has_coffee": true
+            },
+            "effects": [
+              { "type": "say", "text": "She waves a hand.", "color": "narrator" },
+              { "type": "say", "text": "Mm. Busy sipping. Give me a moment.", "x": 880, "y": 400 }
+            ]
           }
         ],
         "give": {
@@ -263,58 +372,138 @@
           "item": "cappuccino_cup",
           "verb": "give",
           "text": "You slide the cappuccino across the desk. Her eyes lock onto it instantly.",
+          "color": "narrator",
           "effects": [
-            { "type": "say", "text": "\"Ah... finally. The perfect caffeine balance.\"", "x": 672, "y": 360 },
-            { "type": "say", "text": "\"Okay. I can handle a small distraction now.\"", "x": 672, "y": 360 },
-            { "type": "set_flag", "flag": "receptionist_has_coffee", "value": true },
-            { "type": "remove_item", "item": "cappuccino_cup" }
+            {
+              "type": "say",
+              "text": "\"Ah... finally. The perfect caffeine balance.\"",
+              "x": 688,
+              "y": 360
+            },
+            {
+              "type": "say",
+              "text": "\"Okay. I can handle a small distraction now.\"",
+              "x": 688,
+              "y": 360
+            },
+            {
+              "type": "set_flag",
+              "flag": "receptionist_has_coffee",
+              "value": true
+            },
+            {
+              "type": "remove_item",
+              "item": "cappuccino_cup"
+            }
           ]
         },
         {
           "item": "cappuccino_cup",
           "verb": "use",
           "text": "You place the cappuccino on the desk in front of her. She stares at it.",
+          "color": "narrator",
           "effects": [
-            { "type": "say", "text": "\"Ah... finally. The perfect caffeine balance.\"", "x": 672, "y": 360 },
-            { "type": "say", "text": "\"Okay. I can handle a small distraction now.\"", "x": 672, "y": 360 },
-            { "type": "set_flag", "flag": "receptionist_has_coffee", "value": true },
-            { "type": "remove_item", "item": "cappuccino_cup" }
+            {
+              "type": "say",
+              "text": "\"Ah... finally. The perfect caffeine balance.\"",
+              "x": 688,
+              "y": 360
+            },
+            {
+              "type": "say",
+              "text": "\"Okay. I can handle a small distraction now.\"",
+              "x": 688,
+              "y": 360
+            },
+            {
+              "type": "set_flag",
+              "flag": "receptionist_has_coffee",
+              "value": true
+            },
+            {
+              "type": "remove_item",
+              "item": "cappuccino_cup"
+            }
           ]
         },
         {
           "item": "business_card",
           "verb": "give",
           "text": "You slide the business card across the desk with quiet confidence.",
+          "color": "narrator",
           "effects": [
-            { "type": "say", "text": "\"...Jeff Bezos. CEO Amazon.\" She looks up slowly.", "x": 672, "y": 360 },
-            { "type": "say", "text": "\"I'm going to need a little more than a business card to believe you're Jeff Bezos.\"", "x": 672, "y": 360 }
+            {
+              "type": "say",
+              "text": "\"...Jeff Bezos. CEO Amazon.\" She looks up slowly.",
+              "x": 688,
+              "y": 360
+            },
+            {
+              "type": "say",
+              "text": "\"I'm going to need a little more than a business card to believe you're Jeff Bezos.\"",
+              "x": 688,
+              "y": 360
+            }
           ]
         },
         {
           "item": "business_card",
           "verb": "use",
           "text": "You slide the business card across the desk with quiet confidence.",
+          "color": "narrator",
           "effects": [
-            { "type": "say", "text": "\"...Jeff Bezos. CEO Amazon.\" She looks up slowly.", "x": 672, "y": 360 },
-            { "type": "say", "text": "\"I'm going to need a little more than a business card to believe you're Jeff Bezos.\"", "x": 672, "y": 360 }
+            {
+              "type": "say",
+              "text": "\"...Jeff Bezos. CEO Amazon.\" She looks up slowly.",
+              "x": 688,
+              "y": 360
+            },
+            {
+              "type": "say",
+              "text": "\"I'm going to need a little more than a business card to believe you're Jeff Bezos.\"",
+              "x": 688,
+              "y": 360
+            }
           ]
         },
         {
           "item": "stress_ball",
           "verb": "give",
           "text": "You offer her the stress ball. She eyes it for a moment.",
+          "color": "narrator",
           "effects": [
-            { "type": "say", "text": "\"A stress ball? How thoughtful.\"", "x": 672, "y": 360 },
-            { "type": "say", "text": "\"Working at Amazon is never stressful. This will go straight to lost property.\"", "x": 672, "y": 360 }
+            {
+              "type": "say",
+              "text": "\"A stress ball? How thoughtful.\"",
+              "x": 688,
+              "y": 360
+            },
+            {
+              "type": "say",
+              "text": "\"Working at Amazon is never stressful. This will go straight to lost property.\"",
+              "x": 688,
+              "y": 360
+            }
           ]
         },
         {
           "item": "stress_ball",
           "verb": "use",
           "text": "You place the stress ball on the desk. She stares at it.",
+          "color": "narrator",
           "effects": [
-            { "type": "say", "text": "\"A stress ball? How thoughtful.\"", "x": 672, "y": 360 },
-            { "type": "say", "text": "\"Working at Amazon is never stressful. This will go straight to lost property.\"", "x": 672, "y": 360 }
+            {
+              "type": "say",
+              "text": "\"A stress ball? How thoughtful.\"",
+              "x": 688,
+              "y": 360
+            },
+            {
+              "type": "say",
+              "text": "\"Working at Amazon is never stressful. This will go straight to lost property.\"",
+              "x": 688,
+              "y": 360
+            }
           ]
         }
       ]

@@ -79,11 +79,76 @@ Game.Main = (function () {
       Game.Player.setPosition(startX, startY);
       Game.Player.setDirection(startDir);
 
-      // Start game loop
-      Game.Renderer.start();
-
       console.log('Game initialized. Room:', startRoom);
       console.log('Controls: Click to interact, Right-click to cancel, Escape for save/load, F5/F9 quick save/load, Ctrl+D debug mode');
+
+      // Skip title screen for debug scenarios
+      if (scenario) {
+        Game.Renderer.start();
+        return;
+      }
+
+      // Show title screen — click anywhere to start
+      var canvas = document.getElementById('gameCanvas');
+      var titleImg = Game.Loader.getImage('bg_title');
+      var scale = Game.Renderer.getScale();
+      var offset = Game.Renderer.getOffset();
+
+      function drawTitle() {
+        var cfg = Game.Config;
+        var ctx = canvas.getContext('2d');
+        ctx.save();
+        ctx.setTransform(scale, 0, 0, scale, offset.x, offset.y);
+
+        // Title image fills the viewport only
+        if (titleImg) {
+          ctx.drawImage(titleImg, 0, 0, cfg.WIDTH, cfg.VIEWPORT_HEIGHT);
+        } else {
+          ctx.fillStyle = cfg.COLORS.VIEWPORT_BG;
+          ctx.fillRect(0, 0, cfg.WIDTH, cfg.VIEWPORT_HEIGHT);
+        }
+
+        // Action line bar (same as normal game)
+        ctx.fillStyle = cfg.COLORS.ACTION_LINE_BG;
+        ctx.fillRect(0, cfg.ACTION_LINE_Y, cfg.WIDTH, cfg.ACTION_LINE_HEIGHT);
+
+        // Bottom bar background
+        ctx.fillStyle = cfg.COLORS.BOTTOM_BAR_BG;
+        ctx.fillRect(0, cfg.BOTTOM_BAR_Y, cfg.WIDTH, cfg.BOTTOM_BAR_HEIGHT);
+
+        // Story description
+        var storyLines = [
+          'You are Alex. After months of corporate drift inside Amazon\'s peculiar environment,',
+          'you\'ve finally gained clarity: it is enough. You need Bob in HR to co-sign your Mutual Separation',
+          'Agreement - your ticket out. There\'s just one problem: you lost your badge,',
+          'and you have no idea, where to find Bob - but you are willing to find out and optimistically enter your office.',
+        ];
+        ctx.fillStyle = cfg.COLORS.TEXT_DEFAULT;
+        ctx.font = cfg.FONT_SIZE + 'px ' + cfg.FONT_FAMILY;
+        ctx.textAlign = 'left';
+        var lineH = 36;
+        var textX = 60;
+        var textY = cfg.BOTTOM_BAR_Y + 34;
+        for (var li = 0; li < storyLines.length; li++) {
+          ctx.fillText(storyLines[li], textX, textY + li * lineH);
+        }
+
+        // Click to start — right-aligned, highlighted
+        ctx.fillStyle = cfg.COLORS.VERB_HOVER;
+        ctx.font = 'bold 32px ' + cfg.FONT_FAMILY;
+        ctx.textAlign = 'left';
+        ctx.fillText('▶  Click anywhere to start', textX, cfg.BOTTOM_BAR_Y + cfg.BOTTOM_BAR_HEIGHT - 28);
+        ctx.textAlign = 'left';
+        ctx.restore();
+      }
+
+      drawTitle();
+
+      function onTitleClick() {
+        canvas.removeEventListener('click', onTitleClick);
+        Game.Renderer.start();
+      }
+      canvas.addEventListener('click', onTitleClick);
     });
   }
 

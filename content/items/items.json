@@ -8,7 +8,7 @@
       "icon": "🪪",
       "interactions": {
         "look_at": {
-          "text": "An old business card. 'Jeff Bezos — CEO Amazon.' I should probably throw these out. Someday."
+          "text": "An old business card. 'Jeff Bezos — CEO Amazon.' I turn it over. On the back, in a flowing hand, there's a signature — Jeff Bezos. Looks genuine. An L10+ signature on a piece of card. That might actually be worth something."
         },
         "use": {
           "text": "There's no one left to hand this to."
@@ -135,12 +135,192 @@
     {
       "id": "signed_agreement",
       "name": "signed agreement",
-      "description": "The separation agreement, now signed. Time to show Bob.",
+      "description": "The separation agreement, now signed. Time to make it official.",
       "color": "#d4af37",
       "icon": "\u2714\ufe0f",
       "interactions": {
         "look_at": {
-          "text": "The signed separation agreement. My signature sits at the bottom. It feels final. It feels right."
+          "text": "The signed separation agreement. My signature sits at the bottom. It feels final. It feels right. But I still need a counter-signature from someone senior."
+        },
+        "use": {
+          "text": "I need to combine this with something to get a counter-signature."
+        }
+      }
+    },
+    {
+      "id": "frozen_egg",
+      "name": "frozen egg",
+      "description": "An egg from the office fridge. Completely frozen solid. Someone had that fridge set to arctic.",
+      "color": "#aaddff",
+      "icon": "\ud83e\udd5a",
+      "interactions": {
+        "look_at": {
+          "text": "A white egg covered in frost crystals. Frozen solid. I can't microwave this — it'll just sit there. I need to thaw it first."
+        },
+        "use": {
+          "text": "It's too frozen to do anything with yet. I need to thaw it somehow."
+        }
+      }
+    },
+    {
+      "id": "terrible_filter_coffee",
+      "name": "cup of terrible coffee",
+      "description": "A paper cup of filter coffee from the kitchen machine. Grey-brown, lukewarm, profoundly uninspiring.",
+      "color": "#7a5c3a",
+      "icon": "\u2615",
+      "interactions": {
+        "look_at": {
+          "text": "A paper cup of filter coffee. The colour of dishwater. The smell of broken dreams. But it is technically hot."
+        },
+        "use": {
+          "text": "Maybe I can use this with something. It's hot, at least. Barely."
+        }
+      }
+    },
+    {
+      "id": "thawed_egg",
+      "name": "thawed egg",
+      "description": "An egg, recently liberated from its frozen state via coffee. It glistens ominously. It is ready.",
+      "color": "#f5f0dc",
+      "icon": "\ud83e\udd5a",
+      "interactions": {
+        "look_at": {
+          "text": "A damp egg sitting in a faint coffee-brown puddle. The frost is gone. It is room temperature. It is ready for its destiny."
+        },
+        "use": {
+          "text": "I should put this in the microwave."
+        }
+      }
+    },
+    {
+      "id": "headphones",
+      "name": "headphones",
+      "description": "Over-ear headphones, matte black. A 'Property of Amazon' sticker is half-peeled off the left cup.",
+      "color": "#222222",
+      "icon": "\ud83c\udfa7",
+      "interactions": {
+        "look_at": {
+          "text": "A pair of over-ear headphones. They still have the lo-fi beats playlist queued up. Someone is going to be very upset when they notice these are gone."
+        },
+        "use": {
+          "text": "I should give these to someone who needs the distraction."
+        },
+        "give": {
+          "text": "I should give these to a specific person."
+        }
+      }
+    },
+    {
+      "id": "winning_ugly",
+      "name": "Winning Ugly",
+      "description": "A slim, garish self-help book. 'Psychological Tactics for the Desperately Outmatched.' You've read some of it.",
+      "color": "#f0c030",
+      "icon": "\ud83d\udcd5",
+      "interactions": {
+        "look_at": [
+          {
+            "condition": { "read_winning_ugly_1": false },
+            "text": "Chapter 1: The Art of Praise. 'Tell your opponent they're incredible. Repeatedly. Watch their confidence curdle into self-doubt.' You file this away.",
+            "effects": [{ "type": "set_flag", "flag": "read_winning_ugly_1", "value": true }]
+          },
+          {
+            "condition": { "read_winning_ugly_2": false },
+            "text": "Chapter 3: Strategic Whimpering. 'Announce loudly that you are terrible at this. That you have never won anything. That your hands don't work. Plant the seed of sympathy — then exploit it.' Noted.",
+            "effects": [{ "type": "set_flag", "flag": "read_winning_ugly_2", "value": true }]
+          },
+          {
+            "condition": { "read_winning_ugly_3": false },
+            "text": "Chapter 5: The Irrelevant Question. 'Mid-game, ask something completely unrelated. Do you think pigeons have feelings? The opponent's brain will stutter. Strike in that moment.' Interesting.",
+            "effects": [{ "type": "set_flag", "flag": "read_winning_ugly_3", "value": true }]
+          },
+          {
+            "condition": { "read_winning_ugly_4": false },
+            "text": "Chapter 7: Blaming the Controller. 'Always have a bad controller. Inspect it. Shake it. Blow into it. Swap it twice. The opponent grows impatient. Impatience is your ally.' You nod slowly.",
+            "effects": [{ "type": "set_flag", "flag": "read_winning_ugly_4", "value": true }]
+          },
+          {
+            "condition": { "read_winning_ugly": false },
+            "text": "Chapter 9: The Inevitable Victory. 'You are ready. You were always going to win. They just don't know it yet.' You close the book. You feel worse as a person. But strategically superior.",
+            "effects": [{ "type": "set_flag", "flag": "read_winning_ugly", "value": true }]
+          },
+          {
+            "text": "You have read all five chapters. There is nothing left to learn. Only to execute."
+          }
+        ],
+        "use": [
+          {
+            "condition": { "read_winning_ugly_1": false },
+            "text": "Chapter 1: The Art of Praise. 'Tell your opponent they're incredible. Repeatedly. Watch their confidence curdle into self-doubt.' You file this away.",
+            "effects": [{ "type": "set_flag", "flag": "read_winning_ugly_1", "value": true }]
+          },
+          {
+            "condition": { "read_winning_ugly_2": false },
+            "text": "Chapter 3: Strategic Whimpering. 'Announce loudly that you are terrible at this. That you have never won anything. That your hands don't work. Plant the seed of sympathy — then exploit it.' Noted.",
+            "effects": [{ "type": "set_flag", "flag": "read_winning_ugly_2", "value": true }]
+          },
+          {
+            "condition": { "read_winning_ugly_3": false },
+            "text": "Chapter 5: The Irrelevant Question. 'Mid-game, ask something completely unrelated. Do you think pigeons have feelings? The opponent's brain will stutter. Strike in that moment.' Interesting.",
+            "effects": [{ "type": "set_flag", "flag": "read_winning_ugly_3", "value": true }]
+          },
+          {
+            "condition": { "read_winning_ugly_4": false },
+            "text": "Chapter 7: Blaming the Controller. 'Always have a bad controller. Inspect it. Shake it. Blow into it. Swap it twice. The opponent grows impatient. Impatience is your ally.' You nod slowly.",
+            "effects": [{ "type": "set_flag", "flag": "read_winning_ugly_4", "value": true }]
+          },
+          {
+            "condition": { "read_winning_ugly": false },
+            "text": "Chapter 9: The Inevitable Victory. 'You are ready. You were always going to win. They just don't know it yet.' You close the book. You feel worse as a person. But strategically superior.",
+            "effects": [{ "type": "set_flag", "flag": "read_winning_ugly", "value": true }]
+          },
+          {
+            "text": "You have read all five chapters. There is nothing left to learn. Only to execute."
+          }
+        ]
+      }
+    },
+    {
+      "id": "mystery_package",
+      "name": "mystery package",
+      "description": "A small brown cardboard box, sealed with Amazon tape. Addressed to someone who no longer works here.",
+      "color": "#8b6914",
+      "icon": "\ud83d\udce6",
+      "interactions": {
+        "look_at": {
+          "text": "A small Amazon cardboard box. The shipping label is addressed to someone whose nameplate I saw on an empty desk. Shaking it produces a muffled clunk. It never opens on its own. It just sits there, judging you."
+        },
+        "use": {
+          "text": "I should give this to the right person."
+        },
+        "open": {
+          "text": "It's sealed shut with tape. I should give it to whoever it's addressed to."
+        }
+      }
+    },
+    {
+      "id": "usb_stick",
+      "name": "USB stick",
+      "description": "A plain black USB drive. Written in uneven permanent marker: 'IMPORTANT — DO NOT LOSE'. The cap is missing.",
+      "color": "#333333",
+      "icon": "\ud83d\udcbe",
+      "interactions": {
+        "look_at": {
+          "text": "A USB stick with 'IMPORTANT — DO NOT LOSE' written on it in shaky permanent marker. The cap is long gone. Someone, somewhere, is very worried about this right now."
+        },
+        "use": {
+          "text": "I should plug this into a computer to see what's on it."
+        }
+      }
+    },
+    {
+      "id": "co_signed_agreement",
+      "name": "co-signed agreement",
+      "description": "The separation agreement with two signatures. Yours, and Jeff Bezos's. One of these is legitimate.",
+      "color": "#d4af37",
+      "icon": "\ud83d\udcc4",
+      "interactions": {
+        "look_at": {
+          "text": "The separation agreement. Your signature at the bottom. Above it, in a surprisingly confident hand: Jeff Bezos. One of these signatures is real. I choose not to think about which one."
         },
         "use": {
           "text": "I should give this to Bob to make it official."
@@ -152,11 +332,31 @@
     {
       "item1": "pen",
       "item2": "separation_agreement",
-      "text": "I take a deep breath and sign the separation agreement. It's done.",
+      "text": "I take a deep breath and sign the separation agreement. It's done. Now I need a counter-signature.",
       "effects": [
-        { "type": "remove_item", "item": "pen" },
         { "type": "replace_item", "old_item": "separation_agreement", "new_item": "signed_agreement" },
         { "type": "set_flag", "flag": "agreement_signed", "value": true }
+      ]
+    },
+    {
+      "item1": "frozen_egg",
+      "item2": "terrible_filter_coffee",
+      "text": "You lower the frozen egg into the coffee cup. It's not dignified. After a moment, the egg bobs to the surface, thawed and ready for its destiny. The coffee is now undrinkable. Not that it was before.",
+      "color": "narrator",
+      "effects": [
+        { "type": "remove_item", "item": "terrible_filter_coffee" },
+        { "type": "replace_item", "old_item": "frozen_egg", "new_item": "thawed_egg" }
+      ]
+    },
+    {
+      "item1": "business_card",
+      "item2": "signed_agreement",
+      "text": "You flip open the business card. Jeff Bezos — CEO Amazon. You sign his name on the co-signature line with quiet confidence. It's probably fine.",
+      "color": "narrator",
+      "effects": [
+        { "type": "remove_item", "item": "business_card" },
+        { "type": "replace_item", "old_item": "signed_agreement", "new_item": "co_signed_agreement" },
+        { "type": "set_flag", "flag": "co_signed", "value": true }
       ]
     },
     {

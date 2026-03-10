@@ -1,0 +1,230 @@
+{
+  "id": "office_space",
+  "name": "Open Plan Office",
+  "background": "office_space",
+  "backgrounds": [
+    {
+      "condition": {
+        "coworker_left": true
+      },
+      "image": "office_space2"
+    },
+    {
+      "image": "office_space"
+    }
+  ],
+  "walk_area": [
+    [98, 621],
+    [1289, 628],
+    [1356, 750],
+    [20, 750]
+  ],
+  "perspective": {
+    "min_scale": 1,
+    "max_scale": 1.15
+  },
+  "entry_points": {
+    "from_lobby": { "x": 1200, "y": 680, "dir": "left" },
+    "from_aisle":  { "x": 250,  "y": 680, "dir": "right" },
+    "from_it":     { "x": 1200, "y": 680, "dir": "left" }
+  },
+  "trigger_zones": [
+    {
+      "id": "exit_left",
+      "rect": [20, 576, 50, 174],
+      "effects": [
+        { "type": "transition", "room": "aisle", "player_x": 640, "player_y": 700, "player_dir": "right" }
+      ]
+    },
+    {
+      "id": "exit_right",
+      "rect": [1306, 576, 50, 174],
+      "effects": [
+        { "type": "transition", "room": "it_department", "player_x": 150, "player_y": 680, "player_dir": "right" }
+      ]
+    },
+    {
+      "id": "exit_bottom_kitchen",
+      "rect": [538, 730, 300, 30],
+      "effects": [
+        { "type": "transition", "room": "kitchen", "player_x": 400, "player_y": 680, "player_dir": "right" }
+      ]
+    }
+  ],
+  "hotspots": [
+    {
+      "id": "exit_to_kitchen",
+      "name": "Kitchen",
+      "rect": [438, 700, 500, 68],
+      "walk_to": [688, 740],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": { "text": "The way to the kitchen. Coffee, microwaves, passive-aggressive notes." },
+        "open": { "text": "You head to the kitchen.", "effects": [{ "type": "transition", "room": "kitchen", "player_x": 400, "player_y": 680, "player_dir": "right" }] },
+        "use":  { "text": "You head to the kitchen.", "effects": [{ "type": "transition", "room": "kitchen", "player_x": 400, "player_y": 680, "player_dir": "right" }] }
+      }
+    },
+    {
+      "id": "exit_to_aisle",
+      "name": "Aisle",
+      "rect": [0, 22, 95, 746],
+      "walk_to": [35, 700],
+      "face_dir": "left",
+      "interactions": {
+        "look_at": { "text": "The way to the aisle corridor. The lab and elevator are through there." },
+        "open": { "text": "You head to the aisle.", "effects": [{ "type": "transition", "room": "aisle", "player_x": 640, "player_y": 700, "player_dir": "right" }] },
+        "use":  { "text": "You head to the aisle.", "effects": [{ "type": "transition", "room": "aisle", "player_x": 640, "player_y": 700, "player_dir": "right" }] }
+      }
+    },
+    {
+      "id": "exit_to_it",
+      "name": "IT Department",
+      "rect": [1297, 0, 79, 765],
+      "walk_to": [1341, 700],
+      "face_dir": "right",
+      "interactions": {
+        "look_at": { "text": "The door to IT. A sign: 'Knock before entering. No, really. We mean it.'" },
+        "open": { "text": "You push open the IT department door.", "color": "narrator", "effects": [{ "type": "transition", "room": "it_department", "player_x": 150, "player_y": 680, "player_dir": "right" }] },
+        "use":  { "text": "You push open the IT department door.", "color": "narrator", "effects": [{ "type": "transition", "room": "it_department", "player_x": 150, "player_y": 680, "player_dir": "right" }] }
+      }
+    },
+    {
+      "id": "headphones",
+      "name": "headphones",
+      "rect": [168, 280, 67, 67],
+      "walk_to": [201, 680],
+      "face_dir": "back",
+      "hidden_if": { "headphones_taken": true },
+      "interactions": {
+        "look_at": {
+          "text": "Over-ear headphones, firmly on. The coworker is in another dimension entirely. A 'Property of Amazon' sticker is half-peeled off the left cup. The music is faintly audible. It sounds like lo-fi beats."
+        },
+        "pick_up": [
+          {
+            "condition": { "headphones_taken": true },
+            "text": "I already have the headphones."
+          },
+          {
+            "effects": [
+              { "type": "fake_death", "item": "headphones" },
+              { "type": "set_flag", "flag": "headphones_taken", "value": true },
+              { "type": "set_flag", "flag": "coworker_left", "value": true },
+              { "type": "remove_hotspot", "id": "headphones" },
+              { "type": "remove_hotspot", "id": "coworker" }
+            ]
+          }
+        ],
+        "use": { "text": "I should PICK UP the headphones if I want them." }
+      }
+    },
+    {
+      "id": "coworker",
+      "name": "Coworker",
+      "rect": [140, 346, 165, 230],
+      "walk_to": [222, 680],
+      "face_dir": "back",
+      "dialogue": "coworker",
+      "interactions": {
+        "look_at": [
+          {
+            "condition": { "headphones_taken": false },
+            "text": "A coworker deep in focus mode, headphones on, completely unreachable. They are in the zone. The zone has no doors."
+          },
+          {
+            "text": "A coworker without headphones, which means they are theoretically available for conversation. They look like they regret this."
+          }
+        ],
+        "talk_to": [
+          {
+            "condition": { "headphones_taken": false },
+            "text": "They can't hear a word. The headphones are a wall. A very comfortable, noise-cancelling wall."
+          }
+        ],
+        "pick_up": { "text": "I'm not picking up a person." },
+        "give":    { "text": "They don't seem to want anything." }
+      }
+    },
+    {
+      "id": "empty_desk",
+      "name": "empty desk",
+      "rect": [431, 377, 384, 170],
+      "walk_to": [623, 680],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": { "text": "An empty desk, already cleared. A nameplate has been removed, leaving a clean rectangle in the dust. The absence is loud." },
+        "open": { "text": "The drawer slides open. Empty, except for a pen lid, a dead AA battery, and a layer of crumbs that tell a story I don't want to know.", "effects": [] },
+        "use":  { "text": "Nothing useful here." }
+      }
+    },
+    {
+      "id": "coffee_mug_desk",
+      "name": "coffee mug",
+      "rect": [336, 370, 36, 39],
+      "walk_to": [354, 680],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": { "text": "A cold coffee mug sitting at the empty desk. The owner isn't coming back for it." },
+        "pick_up": { "text": "It's just a mug. I don't need a mug." },
+        "use":     { "text": "There's nothing useful to do with an abandoned coffee mug." }
+      }
+    },
+    {
+      "id": "whiteboard_office",
+      "name": "whiteboard",
+      "rect": [51, 91, 275, 180],
+      "walk_to": [188, 680],
+      "face_dir": "left",
+      "interactions": {
+        "look_at": { "text": "A whiteboard covered in the residue of several months of meetings. Visible text: 'OKRs', 'Key Inputs', 'Dive Deep', 'Disagree & Commit', 'Customer Obsession', and at the bottom in a different colour: 'What are we even doing here?' Nobody has erased that last one." },
+        "use":     { "text": "I'm not writing anything. This is someone else's strategic vision." },
+        "pick_up": { "text": "It's fixed to the wall. The corporate wisdom is permanent." }
+      }
+    },
+    {
+      "id": "motivational_poster",
+      "name": "motivational poster",
+      "rect": [1024, 91, 107, 138],
+      "walk_to": [1077, 680],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": { "text": "'THINK OUTSIDE THE BOX — but stay inside the building.' Someone has added in pen: '...and inside the process, and inside the policy, and inside the approved communication channels.' The additions continue off the edge of the poster." },
+        "pick_up": { "text": "It's screwed to the wall. Like Alex." }
+      }
+    },
+    {
+      "id": "printer",
+      "name": "printer",
+      "rect": [1036, 253, 169, 215],
+      "walk_to": [1120, 680],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": { "text": "A large printer-copier. The display reads 'READY' but there's a Post-it on it that says 'DO NOT USE — Chip (IT)'. The Post-it has been there long enough to curl at the corners." },
+        "use":  { "text": "The printer hums ominously. A Post-it from IT says not to touch it. I'll leave it alone." },
+        "open": { "text": "I open the paper tray. Empty. I close it again. That's all I needed to know." }
+      }
+    },
+    {
+      "id": "cupboard",
+      "name": "open cupboard",
+      "rect": [1241, 115, 134, 368],
+      "walk_to": [1298, 680],
+      "face_dir": "right",
+      "interactions": {
+        "look_at": [
+          {
+            "condition": { "has_item": "winning_ugly" },
+            "text": "An open cupboard. Old printer cartridges, a fire warden vest that has never been worn. You've already taken the book."
+          },
+          {
+            "text": "An open cupboard. Old printer cartridges, a fire warden vest that has never been worn, and one book, spine-out: 'WINNING UGLY: Psychological Tactics for the Desperately Outmatched.' You pocket it immediately.",
+            "color": "narrator",
+            "effects": [
+              { "type": "add_item", "item": "winning_ugly" }
+            ]
+          }
+        ],
+        "use": { "text": "It's already open. Nothing else to do with it." }
+      }
+    }
+  ]
+}

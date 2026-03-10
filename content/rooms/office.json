@@ -3,165 +3,312 @@
   "name": "Bob's Office",
   "background": "office",
   "walk_area": [
-    [68, 570], [1278, 570], [1278, 760], [68, 760]
+    [20, 570], [1356, 570], [1356, 760], [20, 760]
   ],
   "perspective": { "min_scale": 1.0, "max_scale": 1.2 },
-  "characters": [
-    {
-      "name": "Bob",
-      "x": 630,
-      "y": 521,
-      "color": "#2c3e50",
-      "hair_color": "#888",
-      "shirt_color": "#8b0000",
-      "pants_color": "#2c3e50",
-      "visible_if": null
-    }
-  ],
   "hotspots": [
     {
+      "id": "whiteboard_office",
+      "name": "whiteboard",
+      "rect": [33, 114, 207, 230],
+      "walk_to": [136, 680],
+      "face_dir": "left",
+      "interactions": {
+        "look_at": {
+          "text": "A whiteboard covered in org charts and initiative timelines. Someone has drawn a large box in the corner labelled 'QUICK WINS'. The box is empty."
+        },
+        "use": {
+          "text": "I'm not writing on Bob's whiteboard."
+        }
+      }
+    },
+    {
+      "id": "headphones",
+      "name": "headphones",
+      "rect": [120, 365, 52, 77],
+      "walk_to": [146, 680],
+      "face_dir": "left",
+      "interactions": {
+        "look_at": {
+          "text": "A pair of noise-cancelling headphones hanging unused. In an office like this, silence is a luxury you have to engineer yourself."
+        },
+        "pick_up": {
+          "text": "Bob's headphones. Not mine to take."
+        },
+        "use": {
+          "text": "I'm not here to listen to anything. I'm here to leave."
+        }
+      }
+    },
+    {
       "id": "bob",
-      "name": "Bob Johnson",
-      "rect": [609, 415, 42, 106],
-      "walk_to": [546, 569],
+      "name": "Bob",
+      "rect": [104, 362, 123, 385],
+      "walk_to": [165, 680],
       "face_dir": "right",
       "dialogue": "bob",
       "interactions": {
-        "look_at": {
-          "text": "Bob Johnson, senior partner. He's in his 50s, grey hair, wearing a dark suit with a burgundy tie. He looks tired but not unkind."
-        },
-        "talk_to": [
+        "look_at": [
           {
-            "condition": { "bob_gave_agreement": true },
-            "text": "Bob nods. 'Just sign it and you're all set. There should be a pen around here somewhere.'"
+            "condition": { "co_signed": true },
+            "text": "Bob looks like a man who has accepted his fate gracefully. He's waiting for the document."
           },
           {
-            "condition": { "coffee_given": true },
-            "text": "Bob sips his coffee contentedly. 'Alright, alright. Let me get that agreement for you.'",
-            "effects": [
-              { "type": "set_flag", "flag": "bob_gave_agreement", "value": true },
-              { "type": "add_item", "item": "separation_agreement" },
-              { "type": "say", "text": "Bob hands you a thick document: THE SEPARATION AGREEMENT.", "color": "#ffdd57" }
-            ]
+            "condition": { "agreement_retrieved": true },
+            "text": "Bob is watching you. He seems marginally calmer now. The agreement is in play. He's waiting."
+          },
+          {
+            "condition": { "stress_ball_given": true },
+            "text": "Bob squeezes the stress ball rhythmically. He's visibly more composed. Something approaching human."
+          },
+          {
+            "text": "Bob. Senior Director, Amazon HR. He has the look of a man who has processed a hundred of these and still finds each one personally expensive."
+          }
+        ],
+        "talk_to": [
+          {
+            "condition": { "co_signed": true },
+            "text": "Bob raises an eyebrow. 'You have the co-signed document?' He extends his hand."
+          },
+          {
+            "condition": { "agreement_retrieved": true },
+            "text": "Bob nods. 'You have the document. Now you just need to sign it. And... co-sign it. You know what that means.'"
           }
         ],
         "pick_up": {
-          "text": "I can't just pick up a lawyer. There are laws against that."
+          "text": "I'm not picking up Bob. Not even in a metaphorical sense."
         },
         "use": {
           "text": "I should TALK TO Bob."
-        },
-        "push": {
-          "text": "Assaulting my lawyer seems counterproductive."
         }
       },
       "combinations": [
         {
-          "item": "coffee_cup",
+          "item": "stress_ball",
           "verb": "give",
-          "text": "Bob's eyes light up. 'Oh, bless you! I've been running on fumes all day.'",
+          "text": "Bob looks at it. Then at you. Then back at it. He takes it. 'Where did you get this?' He squeezes it once. Some tension leaves his face. 'Fine. Sit down.'",
           "effects": [
-            { "type": "remove_item", "item": "coffee_cup" },
-            { "type": "set_flag", "flag": "coffee_given", "value": true },
-            { "type": "say", "text": "Bob takes a long sip and sighs contentedly.", "color": "#7ec8e3" }
+            { "type": "remove_item", "item": "stress_ball" },
+            { "type": "set_flag", "flag": "stress_ball_given", "value": true }
           ]
         },
         {
-          "item": "coffee_cup",
+          "item": "stress_ball",
           "verb": "use",
-          "text": "Bob takes the coffee gratefully. 'You're a lifesaver!'",
+          "text": "Bob takes the stress ball. He squeezes it. Something in him unclenches slightly.",
           "effects": [
-            { "type": "remove_item", "item": "coffee_cup" },
-            { "type": "set_flag", "flag": "coffee_given", "value": true }
+            { "type": "remove_item", "item": "stress_ball" },
+            { "type": "set_flag", "flag": "stress_ball_given", "value": true }
           ]
         },
         {
-          "item": "visitor_badge",
+          "item": "mystery_package",
           "verb": "give",
-          "text": "Bob glances at it. 'You can keep the badge. I need the separation agreement, not your visitor pass.'"
-        },
-        {
-          "item": "pen",
-          "verb": "give",
-          "text": "'I have my own pens, thanks. But you might need that to sign the agreement.'"
-        },
-        {
-          "item": "signed_agreement",
-          "verb": "give",
-          "text": "Bob takes the signed agreement and looks it over. 'Everything looks perfect. Congratulations, Alex. You're officially separated. I hope this is the start of something better for you.'",
+          "text": "Bob stares at it. 'That's... addressed to Chen. They were let go on Tuesday.' He takes it, slowly. 'I'll deal with it.' Something resolves in his expression. 'Right. Let me pull up your file.'",
           "effects": [
-            { "type": "remove_item", "item": "signed_agreement" },
+            { "type": "remove_item", "item": "mystery_package" },
+            { "type": "set_flag", "flag": "mystery_package_given", "value": true }
+          ]
+        },
+        {
+          "item": "mystery_package",
+          "verb": "use",
+          "text": "You hand over the package. Bob takes it without a word. He sets it behind the desk. 'Closure,' he says, quietly. 'Right. Your turn.'",
+          "effects": [
+            { "type": "remove_item", "item": "mystery_package" },
+            { "type": "set_flag", "flag": "mystery_package_given", "value": true }
+          ]
+        },
+        {
+          "item": "co_signed_agreement",
+          "verb": "give",
+          "text": "Bob takes the document. He reads it — actually reads it — line by line. He reaches the bottom. He looks up. 'This is in order. Everything checks out.' He initials the final page. 'Alex. You're free. I hope it's better out there than it was in here.'",
+          "effects": [
+            { "type": "remove_item", "item": "co_signed_agreement" },
+            { "type": "set_flag", "flag": "agreement_complete", "value": true },
+            { "type": "victory" }
+          ]
+        },
+        {
+          "item": "co_signed_agreement",
+          "verb": "use",
+          "text": "You hand Bob the co-signed agreement. He reviews it carefully, nods, and adds his initials. 'You're done here, Alex. Good luck.'",
+          "effects": [
+            { "type": "remove_item", "item": "co_signed_agreement" },
             { "type": "set_flag", "flag": "agreement_complete", "value": true },
             { "type": "victory" }
           ]
         },
         {
           "item": "signed_agreement",
-          "verb": "use",
-          "text": "Bob reviews the signed agreement. 'All in order. You're free to go, Alex. Take care of yourself.'",
-          "effects": [
-            { "type": "remove_item", "item": "signed_agreement" },
-            { "type": "set_flag", "flag": "agreement_complete", "value": true },
-            { "type": "victory" }
-          ]
+          "verb": "give",
+          "text": "'It needs a co-signature. You know whose.' He taps the business card column on the document. 'The credential has to be verified.'"
         },
         {
           "item": "separation_agreement",
           "verb": "give",
-          "text": "'You haven't signed it yet! Find a pen and put your John Hancock on it first.'"
+          "text": "'You haven't signed it yet. And it needs to be co-signed. You know the process.' He says this without irony."
+        },
+        {
+          "item": "usb_stick",
+          "verb": "give",
+          "text": "'What is this for?' He turns it over. 'I'm not plugging a random USB into my machine.' He hands it back."
+        },
+        {
+          "item": "business_card",
+          "verb": "give",
+          "text": "Bob looks at the Jeff Bezos business card for a long time. 'Where did you get this.' It isn't a question. He doesn't take it."
         }
       ]
     },
     {
-      "id": "desk",
-      "name": "Bob's desk",
-      "rect": [420, 379, 420, 95],
-      "walk_to": [490, 550],
-      "face_dir": "back",
+      "id": "stress_ball_on_desk",
+      "name": "stress ball",
+      "rect": [240, 484, 31, 61],
+      "walk_to": [255, 680],
+      "face_dir": "left",
+      "hidden_if": { "stress_ball_given": true },
       "interactions": {
         "look_at": {
-          "text": "A large oak desk covered in legal papers, a computer monitor, and a nameplate reading 'Bob Johnson, Esq.' There's also a half-empty coffee mug."
+          "text": "A small foam stress ball sitting on the desk. It's been squeezed so many times it has a permanent handprint impression. Someone needs it."
+        },
+        "pick_up": {
+          "text": "That's on Bob's desk. I'm not taking it while he's sitting right there."
         },
         "use": {
-          "text": "I shouldn't rummage through Bob's desk while he's sitting right there."
-        },
-        "open": {
-          "text": "I can't open someone else's desk. That's rude. And possibly illegal."
+          "text": "Maybe I should give it to Bob. He seems like he could use it."
         }
       }
     },
     {
       "id": "computer",
       "name": "computer",
-      "rect": [595, 322, 84, 57],
-      "walk_to": [560, 550],
+      "rect": [311, 483, 286, 242],
+      "walk_to": [454, 680],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": [
+          {
+            "condition": { "agreement_retrieved": true },
+            "text": "The computer shows the agreement file as opened. The printer tray has a copy in it."
+          },
+          {
+            "condition": { "mystery_package_given": true },
+            "text": "The screen is unlocked now. Bob's HR system is open. Your file is right there, but the agreement is a locked PDF. I need the USB stick to open it."
+          },
+          {
+            "condition": { "stress_ball_given": true },
+            "text": "Bob's computer is logged in. His HR case management system shows your file. The separation agreement is there — but it's locked behind an access token. There's a USB port on the front."
+          },
+          {
+            "text": "Bob's computer. The screen is on but faced away slightly. I can see it's a case management system. Can't interact while he's watching me like that."
+          }
+        ],
+        "use": [
+          {
+            "condition": { "agreement_retrieved": true },
+            "text": "The document is already printed and retrieved. Nothing more to do here."
+          },
+          {
+            "condition": { "mystery_package_given": true },
+            "text": "Bob's system is open. I can see my file. The agreement PDF is right there but password-locked. The USB stick might have what I need."
+          },
+          {
+            "condition": { "stress_ball_given": true },
+            "text": "Bob nods permission. But the agreement file is locked. 'Token-based access. You'd need an authorised USB device to open it.' He doesn't explain further."
+          },
+          {
+            "text": "Bob's not going to let me touch his computer right now."
+          }
+        ]
+      },
+      "combinations": [
+        {
+          "item": "usb_stick",
+          "verb": "use",
+          "condition": { "mystery_package_given": true },
+          "text": "You plug in the USB stick. The system recognises it — 'CVNA BUILD v4.1 — Token Accepted'. The separation agreement unlocks. Bob prints it without a word. It slides from the printer tray, still warm.",
+          "effects": [
+            { "type": "set_flag", "flag": "usb_used", "value": true },
+            { "type": "set_flag", "flag": "agreement_retrieved", "value": true },
+            { "type": "add_item", "item": "separation_agreement" },
+            { "type": "remove_item", "item": "usb_stick" }
+          ]
+        },
+        {
+          "item": "usb_stick",
+          "verb": "use",
+          "condition": { "stress_ball_given": true },
+          "text": "You slot in the USB stick. The access system activates. But the agreement is still locked — something else is needed first before the file will open.",
+          "effects": []
+        },
+        {
+          "item": "usb_stick",
+          "verb": "use",
+          "text": "Bob doesn't look up. 'Put that away.'"
+        }
+      ]
+    },
+    {
+      "id": "motivational_poster",
+      "name": "motivational poster",
+      "rect": [740, 115, 86, 188],
+      "walk_to": [783, 680],
       "face_dir": "back",
       "interactions": {
         "look_at": {
-          "text": "Bob's computer. The screen shows what looks like a legal document. I can't read it from here."
+          "text": "A framed Leadership Principle printout. All fourteen, laminated, centred. Bob has highlighted two in yellow marker: 'Deliver Results' and 'Are Right, A Lot'. The irony appears unintentional."
         },
         "use": {
-          "text": "I can't use Bob's computer. He's right there watching me."
+          "text": "I don't need to interact with the Leadership Principles. I just need to survive them."
         }
       }
     },
     {
-      "id": "filing_cabinet",
-      "name": "filing cabinet",
-      "rect": [70, 332, 84, 237],
-      "walk_to": [182, 569],
-      "face_dir": "left",
+      "id": "printer_office",
+      "name": "printer",
+      "rect": [755, 335, 121, 275],
+      "walk_to": [815, 680],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": [
+          {
+            "condition": { "agreement_retrieved": true },
+            "text": "The printer tray has a document in it — your separation agreement. Still warm."
+          },
+          {
+            "text": "A network printer with an unusually short queue for an Amazon office. One job pending. Probably Bob's."
+          }
+        ],
+        "use": [
+          {
+            "condition": { "agreement_retrieved": true },
+            "text": "You take the printed agreement from the tray.",
+            "effects": []
+          },
+          {
+            "text": "Nothing in the tray right now."
+          }
+        ]
+      }
+    },
+    {
+      "id": "cupboard",
+      "name": "cupboard",
+      "rect": [918, 150, 48, 522],
+      "walk_to": [942, 680],
+      "face_dir": "right",
       "interactions": {
         "look_at": {
-          "text": "A tall grey metal filing cabinet with four drawers. It looks like it holds decades of legal files."
+          "text": "A tall storage cupboard. Closed. These things always contain either nothing useful or something you shouldn't see."
         },
         "open": [
           {
             "condition": { "filing_cabinet_open": true },
-            "text": "The cabinet is already open."
+            "text": "The cupboard is already open."
           },
           {
-            "text": "I pull open the second drawer. It's full of files... and there's a nice pen rolling around in the back!",
+            "text": "You pull the door open. Inside: stacked reams of paper, some branded Amazon merch, and rolling loose at the back — a ballpoint pen.",
             "effects": [
               { "type": "set_flag", "flag": "filing_cabinet_open", "value": true },
               { "type": "show_hotspot", "id": "pen_in_cabinet" }
@@ -171,7 +318,7 @@
         "close": [
           {
             "condition": { "filing_cabinet_open": true },
-            "text": "I push the drawer shut.",
+            "text": "You push the cupboard door shut.",
             "effects": [
               { "type": "set_flag", "flag": "filing_cabinet_open", "value": false },
               { "type": "remove_hotspot", "id": "pen_in_cabinet" }
@@ -182,16 +329,16 @@
           }
         ],
         "use": {
-          "text": "I should try to OPEN it."
+          "text": "I should OPEN it."
         }
       }
     },
     {
       "id": "pen_in_cabinet",
       "name": "pen",
-      "rect": [84, 417, 56, 19],
-      "walk_to": [182, 569],
-      "face_dir": "left",
+      "rect": [922, 450, 30, 15],
+      "walk_to": [942, 680],
+      "face_dir": "right",
       "visible_if": { "filing_cabinet_open": true },
       "hidden_if": { "found_pen": true },
       "draw": {
@@ -204,10 +351,10 @@
       },
       "interactions": {
         "look_at": {
-          "text": "A fancy ballpoint pen. Just what I need to sign the agreement."
+          "text": "A black ballpoint pen. Amazon-branded. Of course it is."
         },
         "pick_up": {
-          "text": "I grab the pen. This should do for signing the agreement.",
+          "text": "You take the pen.",
           "effects": [
             { "type": "add_item", "item": "pen" },
             { "type": "set_flag", "flag": "found_pen", "value": true },
@@ -220,104 +367,25 @@
       }
     },
     {
-      "id": "window",
-      "name": "window",
-      "rect": [560, 76, 224, 237],
-      "walk_to": [672, 531],
-      "face_dir": "back",
-      "interactions": {
-        "look_at": {
-          "text": "A large window overlooking the city. The view is nice — tall buildings, a park in the distance. At least something pleasant in this whole ordeal."
-        },
-        "open": {
-          "text": "It's sealed shut. Probably for the best in a lawyer's office on the 15th floor."
-        },
-        "use": {
-          "text": "I admire the view for a moment. Then I remember why I'm here."
-        }
-      }
-    },
-    {
-      "id": "bookshelf",
-      "name": "bookshelf",
-      "rect": [210, 142, 140, 285],
-      "walk_to": [280, 531],
-      "face_dir": "back",
-      "interactions": {
-        "look_at": {
-          "text": "Shelves lined with legal textbooks. 'Family Law in Practice', 'Divorce Proceedings 5th Edition', 'When Love Goes Wrong: A Legal Perspective'. Cheery stuff."
-        },
-        "use": {
-          "text": "I'm not here to study law. I'm here to sign a piece of paper."
-        },
-        "pull": {
-          "text": "This isn't a secret passage. It's a law office."
-        }
-      }
-    },
-    {
-      "id": "coffee_machine",
-      "name": "coffee machine",
-      "rect": [945, 360, 70, 95],
-      "walk_to": [945, 550],
-      "face_dir": "back",
-      "interactions": {
-        "look_at": {
-          "text": "A fancy single-serve coffee machine sitting on a small table. It looks like it makes a decent cup."
-        },
-        "use": [
-          {
-            "condition": { "has_item": "coffee_cup" },
-            "text": "I already have coffee."
-          },
-          {
-            "condition": { "bob_wants_coffee": true },
-            "text": "I brew a fresh cup of coffee. The machine hums and gurgles. Perfect.",
-            "effects": [
-              { "type": "add_item", "item": "coffee_cup" }
-            ]
-          },
-          {
-            "text": "I could make some coffee, but I'm jittery enough as it is."
-          }
-        ],
-        "pick_up": {
-          "text": "The coffee machine is way too heavy and expensive to steal."
-        }
-      }
-    },
-    {
       "id": "lobby_door",
-      "name": "door to lobby",
-      "rect": [1120, 237, 112, 332],
-      "walk_to": [1085, 569],
+      "name": "door out",
+      "rect": [1226, 0, 150, 768],
+      "walk_to": [1200, 680],
       "face_dir": "right",
       "interactions": {
         "look_at": {
-          "text": "The door back to the lobby."
+          "text": "The way out. Not yet."
         },
         "open": {
-          "text": "I head back to the lobby.",
+          "text": "You head back to the open office.",
           "effects": [
-            {
-              "type": "transition",
-              "room": "lobby",
-              "player_x": 1015,
-              "player_y": 588,
-              "player_dir": "left"
-            }
+            { "type": "transition", "room": "open_office", "player_x": 1155, "player_y": 616, "player_dir": "left" }
           ]
         },
         "use": {
-          "text": "I go through the door to the lobby.",
+          "text": "You head back to the open office.",
           "effects": [
-            {
-              "type": "transition",
-              "room": "lobby",
-              "player_x": 1015,
-              "player_y": 588,
-              "player_dir": "left"
-            }
+            { "type": "transition", "room": "open_office", "player_x": 1155, "player_y": 616, "player_dir": "left" }
           ]
         }
       }

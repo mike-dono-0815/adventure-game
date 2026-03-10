@@ -19,7 +19,7 @@ Game.ActionLine = (function () {
   function getText() {
     if (overrideText) return overrideText;
     var parts = [];
-    var v = verb || Game.Config.DEFAULT_VERB;
+    var v = verb || (hoverTarget ? 'Look at' : Game.Config.DEFAULT_VERB);
     parts.push(v);
 
     if (object1) {
@@ -29,11 +29,10 @@ Game.ActionLine = (function () {
 
     var prep = Game.Config.TWO_OBJECT_VERBS[verb];
     if (prep && object1) {
-      parts.push(prep);
-      if (object2) {
-        parts.push(getDisplayName(object2));
-      } else if (hoverTarget && hoverTarget !== object1) {
-        parts.push(getDisplayName(hoverTarget));
+      var secondTarget = object2 || (hoverTarget && hoverTarget !== object1 ? hoverTarget : null);
+      if (secondTarget) {
+        parts.push(prep);
+        parts.push(getDisplayName(secondTarget));
       }
     } else if (!object1 && hoverTarget) {
       parts.push(getDisplayName(hoverTarget));

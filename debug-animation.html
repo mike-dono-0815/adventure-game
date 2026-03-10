@@ -6,18 +6,23 @@
   <style>
     body { margin: 0; background: #1a1a2e; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; gap: 0; }
     canvas { background: #2a3a4a url('assets/backgrounds/office.png') center/cover no-repeat; cursor: crosshair; display: block; }
+    #room-controls { display: flex; gap: 6px; margin-bottom: 4px; }
     #controls { display: flex; gap: 8px; margin-bottom: 6px; }
     .char-btn { background: #37475A; color: #ccc; border: 1px solid #37475A; border-radius: 4px; padding: 6px 16px; font: 13px "Segoe UI", Arial, sans-serif; cursor: pointer; }
     .char-btn.active { background: #FF9900; color: #131A22; border-color: #FF9900; font-weight: 600; }
     .char-btn.say { background: #1a5276; border-color: #2e86c1; color: #aed6f1; }
     .char-btn.say.active { background: #2e86c1; color: #fff; border-color: #2e86c1; }
+    .room-btn { background: #1a2a1a; color: #88aa88; border: 1px solid #2a4a2a; border-radius: 4px; padding: 5px 12px; font: 12px "Segoe UI", Arial, sans-serif; cursor: pointer; }
+    .room-btn.active { background: #2a5a2a; color: #aaffaa; border-color: #4a8a4a; font-weight: 600; }
+    .room-btn.missing { opacity: 0.5; font-style: italic; }
     #info { color: #aaa; font: 13px monospace; margin-top: 6px; letter-spacing: 0.04em; }
   </style>
 </head>
 <body>
 
+<div id="room-controls"></div>
 <div id="controls"></div>
-<canvas id="c" width="1344" height="768"></canvas>
+<canvas id="c" width="1376" height="768"></canvas>
 <div id="info">click to move · space to speak</div>
 
 <script>
@@ -251,6 +256,38 @@
     img.src = def.src;
   }
 
+  // --- Room configs ---
+  var ROOMS = {
+    kitchen:       { label: 'Kitchen',          bg: 'assets/backgrounds/Kitchen.jpg',       wa: { x1: 68,  y1: 590, x2: 1212, y2: 760 }, perspective: { min_scale: 1.0, max_scale: 1.15 }, startX: 640,  startY: 680 },
+    office_space:  { label: 'Open Plan Office', bg: 'assets/backgrounds/OfficeSpace.jpg',   wa: { x1: 68,  y1: 590, x2: 1212, y2: 760 }, perspective: { min_scale: 1.0, max_scale: 1.15 }, startX: 471,  startY: 680 },
+    it_department: { label: 'IT Department',    bg: 'assets/backgrounds/ITDepartment.jpg',  wa: { x1: 68,  y1: 590, x2: 1212, y2: 760 }, perspective: { min_scale: 1.0, max_scale: 1.15 }, startX: 523,  startY: 680 },
+    aisle:         { label: 'Aisle',            bg: 'assets/backgrounds/Aisle.jpg',         wa: { x1: 68,  y1: 620, x2: 1212, y2: 760 }, perspective: { min_scale: 1.0, max_scale: 1.15 }, startX: 497,  startY: 700 },
+    lab:           { label: 'Lab',              bg: 'assets/backgrounds/Lab.jpg',           wa: { x1: 68,  y1: 620, x2: 1212, y2: 760 }, perspective: { min_scale: 1.0, max_scale: 1.15 }, startX: 400,  startY: 700 },
+    open_office:   { label: 'HR Floor',         bg: 'assets/backgrounds/office.png',        wa: { x1: 68,  y1: 610, x2: 1278, y2: 760 }, perspective: { min_scale: 1.0, max_scale: 1.1  }, startX: 1200, startY: 680 },
+    office:        { label: "Bob's Office",     bg: 'assets/backgrounds/StakeholderZoom.png', wa: { x1: 68, y1: 570, x2: 1278, y2: 760 }, perspective: { min_scale: 1.0, max_scale: 1.2  }, startX: 300,  startY: 600 },
+  };
+
+  var activeRoom = 'open_office';
+  var WA          = ROOMS[activeRoom].wa;
+  var PERSPECTIVE = ROOMS[activeRoom].perspective;
+
+  function setRoom(key) {
+    activeRoom  = key;
+    var room    = ROOMS[key];
+    WA          = room.wa;
+    PERSPECTIVE = room.perspective;
+    canvas.style.backgroundImage = "url('" + room.bg + "')";
+    player.x       = room.startX;
+    player.y       = room.startY;
+    player.tx      = null;
+    player.ty      = null;
+    player.walking = false;
+    dismissSpeech();
+    document.querySelectorAll('.room-btn').forEach(function (b) {
+      b.classList.toggle('active', b.dataset.room === key);
+    });
+  }
+
   var activeChar   = 'player';
   var manualTalking = false;  // for multiFile chars: forced talk pose via [T]
   var sprites      = {};
@@ -369,8 +406,8 @@
   var SPEED = 400;
 
   var player = {
-    x: canvas.width  / 2,
-    y: 665,
+    x: ROOMS[activeRoom].startX,
+    y: ROOMS[activeRoom].startY,
     tx: null, ty: null,
     walking:   false,
     direction: 'right',
@@ -378,9 +415,29 @@
     animTimer: 0
   };
 
+  // --- Room selector buttons ---
+  var roomControlsEl = document.getElementById('room-controls');
+  Object.keys(ROOMS).forEach(function (key) {
+    var btn = document.createElement('button');
+    btn.className = 'room-btn' + (key === activeRoom ? ' active' : '');
+    btn.dataset.room = key;
+    btn.textContent = ROOMS[key].label;
+    btn.addEventListener('click', function () { setRoom(key); });
+    roomControlsEl.appendChild(btn);
+  });
+
+  // --- Mouse tracking ---
+  var mouseGameX = 0, mouseGameY = 0;
+
+  canvas.addEventListener('mousemove', function (e) {
+    var rect   = canvas.getBoundingClientRect();
+    var scaleX = canvas.width  / rect.width;
+    var scaleY = canvas.height / rect.height;
+    mouseGameX = Math.round((e.clientX - rect.left) * scaleX);
+    mouseGameY = Math.round((e.clientY - rect.top)  * scaleY);
+  });
+
   // --- Click to walk (or dismiss speech) ---
-  var WA          = { x1: 68, y1: 610, x2: 1278, y2: 760 };
-  var PERSPECTIVE = { min_scale: 1.0, max_scale: 1.1 };
 
   canvas.addEventListener('click', function (e) {
     if (speech.active) { dismissSpeech(); return; }
@@ -459,13 +516,8 @@
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Walk area
-    var wa = [[68, 570], [1278, 570], [1278, 760], [68, 760]];
     ctx.fillStyle = 'rgba(255,255,255,0.08)';
-    ctx.beginPath();
-    ctx.moveTo(wa[0][0], wa[0][1]);
-    for (var w = 1; w < wa.length; w++) ctx.lineTo(wa[w][0], wa[w][1]);
-    ctx.closePath();
-    ctx.fill();
+    ctx.fillRect(WA.x1, WA.y1, WA.x2 - WA.x1, WA.y2 - WA.y1);
 
     // Grid
     ctx.strokeStyle = 'rgba(255,255,255,0.05)';
@@ -617,6 +669,8 @@
     // HUD
     var sizeStr = isLoaded ? (sprite.naturalWidth + 'x' + sprite.naturalHeight) : 'loading...';
     info.textContent =
+      'room: ' + ROOMS[activeRoom].label + '  │  ' +
+      'mouse (' + mouseGameX + ', ' + mouseGameY + ')  │  ' +
       'char: ' + baseDef.label + '  │  ' +
       sizeStr + '  │  ' +
       'pos (' + Math.round(player.x) + ', ' + Math.round(player.y) + ')  │  ' +

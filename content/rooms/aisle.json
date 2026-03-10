@@ -1,0 +1,198 @@
+{
+  "id": "aisle",
+  "name": "Office Aisle",
+  "background": "aisle",
+  "backgrounds": [
+    { "condition": { "package_taken": true }, "image": "aisle2" },
+    { "image": "aisle" }
+  ],
+  "walk_area": [
+    [451, 622], [955, 622], [1115, 750], [261, 750]
+  ],
+  "trigger_zones": [
+    {
+      "id": "exit_bottom",
+      "rect": [20, 730, 1336, 30],
+      "effects": [
+        { "type": "transition", "room": "office_space", "player_x": 250, "player_y": 700, "player_dir": "right" }
+      ]
+    }
+  ],
+  "perspective": { "min_scale": 1.0, "max_scale": 1.15 },
+  "entry_points": {
+    "from_office_space": { "x": 640, "y": 700, "dir": "right" },
+    "from_lab":          { "x": 350, "y": 700, "dir": "right" },
+    "from_elevator":     { "x": 1040, "y": 700, "dir": "left" }
+  },
+  "hotspots": [
+    {
+      "id": "lab_door",
+      "name": "lab door",
+      "rect": [56, 119, 318, 580],
+      "walk_to": [350, 700],
+      "face_dir": "left",
+      "interactions": {
+        "look_at": {
+          "text": "A heavy door with a keypad. A small plaque reads: 'CVNA Lab — Authorized Access Only'. The keypad has 4 digit slots and a green confirm button."
+        },
+        "open": [
+          {
+            "condition": { "lab_unlocked": true },
+            "text": "The lab door is open.",
+            "effects": [
+              { "type": "transition", "room": "lab", "player_x": 200, "player_y": 700, "player_dir": "right" }
+            ]
+          },
+          {
+            "condition": { "knows_lab_code": true },
+            "effects": [
+              { "type": "dialogue", "dialogue": "keypad_lab" }
+            ]
+          },
+          {
+            "text": "The keypad blinks red. I need a 4-digit cost center code. I don't have it yet.",
+            "effects": [
+              { "type": "set_flag", "flag": "lab_door_tried", "value": true }
+            ]
+          }
+        ],
+        "use": [
+          {
+            "condition": { "lab_unlocked": true },
+            "text": "The lab door is already unlocked.",
+            "effects": [
+              { "type": "transition", "room": "lab", "player_x": 200, "player_y": 700, "player_dir": "right" }
+            ]
+          },
+          {
+            "condition": { "knows_lab_code": true },
+            "effects": [
+              { "type": "dialogue", "dialogue": "keypad_lab" }
+            ]
+          },
+          {
+            "text": "The keypad blinks red. I need a 4-digit cost center code. I don't have it yet.",
+            "effects": [
+              { "type": "set_flag", "flag": "lab_door_tried", "value": true }
+            ]
+          }
+        ],
+        "push": {
+          "text": "It doesn't budge. The lock holds."
+        }
+      }
+    },
+    {
+      "id": "elevator",
+      "name": "elevator",
+      "rect": [1013, 141, 243, 586],
+      "walk_to": [1040, 700],
+      "face_dir": "right",
+      "interactions": {
+        "look_at": {
+          "text": "A standard office elevator with brushed steel doors. The floor panel is blank except for a sticky note: 'For HR, use 2-digit floor code.'"
+        },
+        "use": [
+          {
+            "condition": { "floor_digit_1_known": true, "floor_digit_2_known": true },
+            "effects": [
+              { "type": "dialogue", "dialogue": "elevator" }
+            ]
+          },
+          {
+            "condition": { "floor_digit_1_known": true },
+            "text": "The floor panel is blank. I know HR is on a floor starting with 2, but I still need the second digit. It must be somewhere in the lab."
+          },
+          {
+            "text": "The floor panel is blank. I need to find out which floor HR is on before I can use this."
+          }
+        ],
+        "open": [
+          {
+            "condition": { "floor_digit_1_known": true, "floor_digit_2_known": true },
+            "effects": [
+              { "type": "dialogue", "dialogue": "elevator" }
+            ]
+          },
+          {
+            "condition": { "floor_digit_1_known": true },
+            "text": "The floor panel is blank. I know HR is on a floor starting with 2, but I still need the second digit. It must be somewhere in the lab."
+          },
+          {
+            "text": "The floor panel is blank. I need to find out which floor HR is on before I can use this."
+          }
+        ],
+        "push": {
+          "text": "I press the call button. The elevator hums distantly and doesn't come."
+        }
+      }
+    },
+    {
+      "id": "notice_board",
+      "name": "notice board",
+      "rect": [575, 273, 220, 157],
+      "walk_to": [685, 700],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": {
+          "text": "A wall-mounted notice board. Outdated announcements: a pizza lunch from six months ago, a mandatory training reminder (overdue), and a dog-eared poster that reads 'INNOVATION: It starts with YOU.' Someone has added a question mark in blue pen."
+        },
+        "use": {
+          "text": "The notice board doesn't need anything from me."
+        }
+      }
+    },
+    {
+      "id": "mystery_package",
+      "name": "Amazon package",
+      "rect": [790, 523, 122, 85],
+      "walk_to": [851, 700],
+      "face_dir": "back",
+      "hidden_if": { "has_item": "mystery_package" },
+      "interactions": {
+        "look_at": [
+          {
+            "condition": { "has_item": "mystery_package" },
+            "text": "The package is already in my bag."
+          },
+          {
+            "text": "A small Amazon cardboard box sitting on the floor under the notice board. The label is addressed to someone whose desk I saw empty upstairs. Shaking it produces a muffled clunk."
+          }
+        ],
+        "pick_up": [
+          {
+            "condition": { "has_item": "mystery_package" },
+            "text": "I already have it."
+          },
+          {
+            "text": "You pick up the package. It clunks once, significantly. You now have a new responsibility.",
+            "color": "narrator",
+            "effects": [
+              { "type": "add_item", "item": "mystery_package" },
+              { "type": "set_flag", "flag": "package_taken", "value": true },
+              { "type": "remove_hotspot", "id": "mystery_package" }
+            ]
+          }
+        ],
+        "use": {
+          "text": "I should give this to whoever it's addressed to."
+        },
+        "open": {
+          "text": "It's sealed shut with tape. I should give it to whoever it's addressed to."
+        }
+      }
+    },
+    {
+      "id": "exit_to_office",
+      "name": "Office",
+      "rect": [0, 700, 1376, 68],
+      "walk_to": [640, 740],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": { "text": "The way back to the main office floor." },
+        "open": { "text": "You head back to the office.", "effects": [{ "type": "transition", "room": "office_space", "player_x": 250, "player_y": 700, "player_dir": "right" }] },
+        "use":  { "text": "You head back to the office.", "effects": [{ "type": "transition", "room": "office_space", "player_x": 250, "player_y": 700, "player_dir": "right" }] }
+      }
+    }
+  ]
+}

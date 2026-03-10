@@ -54,6 +54,12 @@ Game.Dialogue = (function () {
         Game.Config.COLORS.TEXT_NPC, function () {
           buildChoices(node);
         });
+    } else if (node.narrator_text) {
+      var text = node.narrator_text.replace(/\n/g, ' ');
+      Game.TextBox.showBlocking(text, Game.Config.WIDTH / 2, 200,
+        Game.Config.COLORS.TEXT_NARRATOR, function () {
+          buildChoices(node);
+        });
     } else {
       buildChoices(node);
     }

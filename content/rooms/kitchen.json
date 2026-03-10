@@ -1,0 +1,297 @@
+{
+  "id": "kitchen",
+  "name": "Office Kitchen",
+  "background": "kitchen",
+  "backgrounds": [
+    {
+      "condition": { "egg_exploded": true },
+      "image": "kitchen_egg"
+    },
+    {
+      "image": "kitchen"
+    }
+  ],
+  "walk_area": [
+    [354, 580], [1356, 580], [1356, 750], [354, 750]
+  ],
+  "perspective": { "min_scale": 1.0, "max_scale": 1.15 },
+  "entry_points": {
+    "from_office_space": { "x": 400, "y": 680, "dir": "right" }
+  },
+  "trigger_zones": [
+    {
+      "id": "exit_bottom_office",
+      "rect": [538, 730, 300, 30],
+      "effects": [
+        { "type": "transition", "room": "office_space", "player_x": 688, "player_y": 680, "player_dir": "right" }
+      ]
+    }
+  ],
+  "characters": [
+    {
+      "name": "HR Person",
+      "key": "hr",
+      "dir": "left",
+      "x": 835,
+      "y": 700,
+      "visible_if": { "hr_person_entered": true },
+      "hidden_if": { "hr_person_left": true }
+    }
+  ],
+  "hotspots": [
+    {
+      "id": "coffee_machine_kitchen",
+      "name": "coffee machine",
+      "rect": [70, 275, 150, 150],
+      "walk_to": [145, 680],
+      "face_dir": "left",
+      "interactions": {
+        "look_at": {
+          "text": "A drip coffee machine. The carafe holds what appears to be coffee if you use the word loosely. The clock on it is wrong by exactly 12 hours, which means it's technically right twice a day."
+        },
+        "use": [
+          {
+            "condition": { "has_item": "terrible_filter_coffee" },
+            "text": "I already have a cup of terrible coffee. Let's not compound the problem."
+          },
+          {
+            "text": "You press the largest button. The machine groans, shudders, and fills a paper cup with something the colour of dishwater. You take it.",
+            "color": "narrator",
+            "effects": [
+              { "type": "add_item", "item": "terrible_filter_coffee" }
+            ]
+          }
+        ],
+        "pick_up": {
+          "text": "The machine is bolted to the counter. The bolts are the most committed thing in this building."
+        }
+      }
+    },
+    {
+      "id": "kettle",
+      "name": "electric kettle",
+      "rect": [730, 280, 60, 75],
+      "walk_to": [760, 680],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": { "text": "A kettle with a ring of limescale around the inside. Someone has taped a sign to it: 'BOIL TWICE — Karen'. Nobody knows why." },
+        "use":     { "text": "I don't need hot water right now." },
+        "pick_up": { "text": "It's plugged in and full of water. Not a good carry." }
+      }
+    },
+    {
+      "id": "fridge",
+      "name": "fridge",
+      "rect": [1055, 140, 300, 380],
+      "walk_to": [1205, 680],
+      "face_dir": "right",
+      "interactions": {
+        "look_at": {
+          "text": "A large communal fridge covered in passive-aggressive sticky notes. The largest reads: 'DO NOT EAT — Karen — Day 47'. Another: 'WHOSE FISH IS THIS'. A third, in a different hand: 'I LIKE IT COLD — Dave'."
+        },
+        "open": [
+          {
+            "condition": { "fridge_open": true },
+            "text": "The fridge is already open. A wave of cold and mild existential dread flows out."
+          },
+          {
+            "text": "You pull open the fridge. Inside: a sad desk salad, a container labelled 'Karen's lunch', and a single egg — frozen solid. Someone had this fridge set to arctic. You pocket the egg.",
+            "color": "narrator",
+            "effects": [
+              { "type": "set_flag", "flag": "fridge_open", "value": true },
+              { "type": "add_item", "item": "frozen_egg" }
+            ]
+          }
+        ],
+        "close": [
+          {
+            "condition": { "fridge_open": true },
+            "text": "You push the fridge shut.",
+            "effects": [
+              { "type": "set_flag", "flag": "fridge_open", "value": false }
+            ]
+          },
+          {
+            "text": "It's already closed."
+          }
+        ],
+        "use": { "text": "I should OPEN the fridge." }
+      }
+    },
+    {
+      "id": "frozen_egg",
+      "name": "frozen egg",
+      "rect": [1201, 377, 59, 42],
+      "walk_to": [1205, 680],
+      "face_dir": "right",
+      "visible_if": { "fridge_open": true },
+      "hidden_if": { "has_item": "frozen_egg" },
+      "interactions": {
+        "look_at": {
+          "text": "A white egg glazed with frost crystals. It's completely frozen. I need to thaw it before I can do anything with it."
+        },
+        "pick_up": [
+          {
+            "condition": { "has_item": "frozen_egg" },
+            "text": "I already have the egg."
+          },
+          {
+            "text": "You take the frozen egg. It's cold enough to burn. You transfer it quickly to your bag.",
+            "color": "narrator",
+            "effects": [
+              { "type": "add_item", "item": "frozen_egg" },
+              { "type": "remove_hotspot", "id": "frozen_egg" }
+            ]
+          }
+        ],
+        "use": { "text": "I should PICK UP the egg first." }
+      }
+    },
+    {
+      "id": "microwave",
+      "name": "microwave",
+      "rect": [420, 270, 150, 90],
+      "walk_to": [495, 680],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": [
+          {
+            "condition": { "egg_exploded": true },
+            "text": "The microwave is a crime scene. The door hangs open. The interior is... difficult to describe. There is egg everywhere. There will always be egg everywhere now."
+          },
+          {
+            "text": "A standard office microwave. The inside is lightly coated in the residue of a thousand reheated lunches. The door has a small sign: 'CLEAN AFTER USE'. Nobody does."
+          }
+        ],
+        "use": [
+          {
+            "condition": { "egg_exploded": true },
+            "text": "The microwave is out of commission. Permanently and comprehensively."
+          },
+          {
+            "text": "I could put something in there, but it would need to be the right thing."
+          }
+        ],
+        "open": [
+          {
+            "condition": { "egg_exploded": true },
+            "text": "It's already open. In every sense."
+          },
+          {
+            "text": "The microwave door swings open. Empty and ready."
+          }
+        ]
+      },
+      "combinations": [
+        {
+          "item": "thawed_egg",
+          "verb": "use",
+          "text": "You place the egg in the microwave and press START. It begins to spin. The machine hums. Then rattles. Then shakes. Then goes very, very quiet for one second.",
+          "effects": [
+            { "type": "say", "text": "BOOM. The microwave door blows open. The kitchen fills with the smell of existential dread and sulphur.", "x": 625, "y": 280, "color": "#ff6644" },
+            { "type": "say", "text": "Thirty seconds later, the door swings open.", "x": 625, "y": 280 },
+            { "type": "set_flag", "flag": "egg_exploded", "value": true },
+            { "type": "remove_item", "item": "thawed_egg" },
+            { "type": "lock_input" },
+            { "type": "spawn_npc", "id": "hr_actor", "x": 1420, "y": 700, "sprite": "hr", "dualSheet": true, "dir": "left" },
+            { "type": "walk_npc", "id": "hr_actor", "to_x": 835, "to_y": 700 },
+            { "type": "set_flag", "flag": "hr_person_entered", "value": true },
+            { "type": "remove_npc", "id": "hr_actor" },
+            { "type": "unlock_input" }
+          ]
+        },
+        {
+          "item": "frozen_egg",
+          "verb": "use",
+          "text": "You put the frozen egg in the microwave. It spins slowly, perfectly inert. Nothing happens. It's too frozen. You retrieve it, slightly embarrassed.",
+          "effects": []
+        }
+      ]
+    },
+    {
+      "id": "counter",
+      "name": "kitchen counter",
+      "rect": [390, 375, 440, 125],
+      "walk_to": [610, 680],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": { "text": "A long kitchen counter. On it: a kettle, a bowl of fruit that has seen better weeks, a dish rack with two mugs and infinite passive regret." },
+        "use":     { "text": "I don't need anything from the counter right now." }
+      }
+    },
+    {
+      "id": "whiteboard_kitchen",
+      "name": "whiteboard",
+      "rect": [40, 90, 290, 185],
+      "walk_to": [185, 680],
+      "face_dir": "left",
+      "interactions": {
+        "look_at": { "text": "A small whiteboard next to the coffee machine. It reads: 'DAYS SINCE LAST KITCHEN INCIDENT: 0'. The number has been erased and rewritten so many times the surface is grey." },
+        "use":     { "text": "I am not the person who maintains the incident board. I may be the person who resets it, though." }
+      }
+    },
+    {
+      "id": "hr_person",
+      "name": "HR Person",
+      "rect": [791, 264, 102, 407],
+      "walk_to": [700, 700],
+      "face_dir": "right",
+      "visible_if": { "hr_person_entered": true },
+      "hidden_if": { "hr_person_left": true },
+      "interactions": {
+        "look_at": [
+          {
+            "condition": { "floor_digit_1_known": true },
+            "text": "Brisk, lanyard-heavy, thousand-yard stare. Their business card is still clipped to the lanyard. 'Amazon HR — Floor 2_'. The second digit is smudged with what might be egg."
+          },
+          {
+            "text": "Brisk, lanyard-heavy, the thousand-yard stare of someone who processes terminations before breakfast. Their business card is clipped to their lanyard: 'Amazon HR — Floor 2_'. The second digit is smudged with what might be egg.",
+            "effects": [
+              { "type": "set_flag", "flag": "floor_digit_1_known", "value": true }
+            ]
+          }
+        ],
+        "talk_to": [
+          {
+            "condition": { "floor_digit_1_known": true },
+            "effects": [
+              { "type": "say", "text": "I have nothing to say to you without a union rep present.", "x": 835, "y": 330 }
+            ]
+          },
+          {
+            "effects": [
+              { "type": "say", "text": "I have nothing to say to you without a union rep present.", "x": 835, "y": 330 },
+              { "type": "say", "text": "They give you a withering look.", "color": "narrator" }
+            ]
+          }
+        ],
+        "pick_up": { "text": "Pretty sure that's illegal." },
+        "give":    { "text": "They don't want anything from me." }
+      },
+      "combinations": [
+        {
+          "item": "business_card",
+          "verb": "give",
+          "text": "You offer the Jeff Bezos business card. They stare at it for a long moment. 'I am not authorised to accept executive-level credentials from... visitors. Please leave.' They pocket their own lanyard card defensively."
+        },
+        {
+          "item": "business_card",
+          "verb": "use",
+          "text": "You flash the business card like a badge. They squint. 'That's... not an employee ID.' They back away slightly."
+        }
+      ]
+    },
+    {
+      "id": "exit_to_office_bottom",
+      "name": "Office",
+      "rect": [438, 700, 500, 68],
+      "walk_to": [688, 740],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": { "text": "The way back to the main office floor." },
+        "open": { "text": "You head back to the office.", "effects": [{ "type": "transition", "room": "office_space", "player_x": 688, "player_y": 680, "player_dir": "right" }] },
+        "use":  { "text": "You head back to the office.", "effects": [{ "type": "transition", "room": "office_space", "player_x": 688, "player_y": 680, "player_dir": "right" }] }
+      }
+    }
+  ]
+}

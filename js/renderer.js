@@ -86,6 +86,7 @@ Game.Renderer = (function () {
     Game.TextBox.update(dt);
     Game.Dialogue.update(dt);
     Game.Wordfight.update(dt);
+    // FakeDeath has no per-frame update — driven entirely by clicks
   }
 
   function render() {
@@ -105,6 +106,7 @@ Game.Renderer = (function () {
     ctx.clip();
 
     Game.Room.draw(ctx);
+    Game.DebugEditor.draw(ctx);
     if (!Game.Room.isNoWalk()) Game.Player.draw(ctx);
     Game.Wordfight.drawOverlay(ctx);
     Game.TextBox.draw(ctx);
@@ -127,6 +129,11 @@ Game.Renderer = (function () {
     // Hotspot tooltip near cursor
     drawTooltip(ctx);
 
+    // FakeDeath — full-screen overlay, drawn above everything except save menu
+    if (Game.FakeDeath.isActive()) {
+      Game.FakeDeath.draw(ctx);
+    }
+
     // Fade overlay
     if (fadeAlpha > 0) {
       ctx.fillStyle = 'rgba(0,0,0,' + fadeAlpha + ')';
@@ -143,8 +150,8 @@ Game.Renderer = (function () {
 
     ctx.restore();
 
-    // Cursor style
-    canvas.style.cursor = Game.Input.getCursorStyle();
+    // Cursor style — debug editor takes priority
+    canvas.style.cursor = Game.DebugEditor.getCursorStyle() || Game.Input.getCursorStyle();
   }
 
   function drawTooltip(ctx) {
@@ -168,29 +175,44 @@ Game.Renderer = (function () {
 
   function drawVictory(ctx) {
     var cfg = Game.Config;
-    ctx.fillStyle = 'rgba(0,0,0,0.8)';
-    ctx.fillRect(0, 0, cfg.WIDTH, cfg.HEIGHT);
+    var endImg = Game.Loader.getImage('bg_end');
 
-    ctx.fillStyle = '#ffdd57';
-    ctx.font = 'bold 48px ' + cfg.FONT_FAMILY;
-    ctx.textAlign = 'center';
-    ctx.fillText('CONGRATULATIONS!', cfg.WIDTH / 2, cfg.HEIGHT / 2 - 80);
+    // Draw end page image in viewport
+    if (endImg) {
+      ctx.drawImage(endImg, 0, 0, cfg.WIDTH, cfg.VIEWPORT_HEIGHT);
+    } else {
+      ctx.fillStyle = '#0a2a4a';
+      ctx.fillRect(0, 0, cfg.WIDTH, cfg.VIEWPORT_HEIGHT);
+    }
 
-    ctx.fillStyle = '#e0e0e0';
-    ctx.font = '28px ' + cfg.FONT_FAMILY;
-    ctx.fillText('You obtained the Separation Agreement!', cfg.WIDTH / 2, cfg.HEIGHT / 2 - 20);
+    // Action line bar
+    ctx.fillStyle = cfg.COLORS.ACTION_LINE_BG;
+    ctx.fillRect(0, cfg.ACTION_LINE_Y, cfg.WIDTH, cfg.ACTION_LINE_HEIGHT);
 
-    ctx.font = '22px ' + cfg.FONT_FAMILY;
-    ctx.fillText('Alex can finally move on with their life.', cfg.WIDTH / 2, cfg.HEIGHT / 2 + 30);
+    // Bottom bar
+    ctx.fillStyle = cfg.COLORS.BOTTOM_BAR_BG;
+    ctx.fillRect(0, cfg.BOTTOM_BAR_Y, cfg.WIDTH, cfg.BOTTOM_BAR_HEIGHT);
 
-    ctx.fillStyle = '#7ec8e3';
-    ctx.font = '20px ' + cfg.FONT_FAMILY;
-    ctx.fillText('Thank you for playing this demo!', cfg.WIDTH / 2, cfg.HEIGHT / 2 + 90);
+    var endLines = [
+      'Six weeks later. A beach somewhere between Barbados and not-Amazon.',
+      'The agreement is framed on the wall of a rented villa. Bob sent a postcard.',
+      'Chip won the FIFA league. HR relocated to floor 28. Nobody noticed you left.',
+      'You order another coconut drink and watch the horizon. It is, somehow, enough.',
+    ];
+    ctx.fillStyle = cfg.COLORS.TEXT_DEFAULT;
+    ctx.font = cfg.FONT_SIZE + 'px ' + cfg.FONT_FAMILY;
+    ctx.textAlign = 'left';
+    var lineH = 36;
+    var textX = 60;
+    var textY = cfg.BOTTOM_BAR_Y + 34;
+    for (var li = 0; li < endLines.length; li++) {
+      ctx.fillText(endLines[li], textX, textY + li * lineH);
+    }
 
-    ctx.fillStyle = '#888';
-    ctx.font = '16px ' + cfg.FONT_FAMILY;
-    ctx.fillText('The Separation Agreement — A Point & Click Adventure', cfg.WIDTH / 2, cfg.HEIGHT / 2 + 140);
-
+    ctx.fillStyle = cfg.COLORS.VERB_HOVER;
+    ctx.font = 'bold 32px ' + cfg.FONT_FAMILY;
+    ctx.textAlign = 'right';
+    ctx.fillText('THE END', cfg.WIDTH - 60, cfg.BOTTOM_BAR_Y + cfg.BOTTOM_BAR_HEIGHT - 28);
     ctx.textAlign = 'left';
   }
 

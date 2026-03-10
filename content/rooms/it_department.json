@@ -1,0 +1,389 @@
+{
+  "id": "it_department",
+  "name": "IT Department",
+  "background": "it_department",
+  "backgrounds": [
+    {
+      "condition": { "chip_distracted": true },
+      "image": "it_department_headphones"
+    },
+    {
+      "image": "it_department"
+    }
+  ],
+  "walk_area": [
+    [
+      161,
+      624
+    ],
+    [
+      513,
+      622
+    ],
+    [
+      514,
+      760
+    ],
+    [
+      161,
+      760
+    ]
+  ],
+  "perspective": {
+    "min_scale": 1,
+    "max_scale": 1.15
+  },
+  "entry_points": {
+    "from_office_space": {
+      "x": 280,
+      "y": 680,
+      "dir": "right"
+    }
+  },
+  "trigger_zones": [
+    {
+      "id": "exit_left",
+      "rect": [161, 620, 40, 145],
+      "effects": [
+        { "type": "transition", "room": "office_space", "player_x": 1200, "player_y": 680, "player_dir": "left" }
+      ]
+    }
+  ],
+  "hotspots": [
+    {
+      "id": "chip",
+      "name": "Chip",
+      "rect": [
+        610,
+        325,
+        170,
+        395
+      ],
+      "walk_to": [
+        695,
+        680
+      ],
+      "face_dir": "back",
+      "dialogue": "chip",
+      "interactions": {
+        "look_at": [
+          {
+            "condition": {
+              "chip_distracted": true
+            },
+            "text": "Chip is completely sealed off. The Sony WH-1000XM5s are clamped to his head, eyes tracking all four screens simultaneously. He does not register my presence in the slightest.",
+            "color": "narrator"
+          },
+          {
+            "text": "Chip sits at the centre of a four-monitor command post. His eyes move between screens with the focus of someone who finds people a significant step down from servers.",
+            "color": "narrator"
+          }
+        ],
+        "talk_to": [
+          {
+            "condition": {
+              "chip_distracted": true
+            },
+            "text": "The XM5s have created a sealed ecosystem of one. He can't hear a thing. He's mouthing something — FIFA strategy, probably.",
+            "color": "narrator"
+          }
+        ],
+        "pick_up": {
+          "text": "Chip is not an item."
+        },
+        "give": [
+          {
+            "condition": {
+              "chip_distracted": true
+            },
+            "text": "I try to get his attention. Nothing. The headphones have made him unreachable.",
+            "color": "narrator"
+          },
+          {
+            "text": "He doesn't look up."
+          }
+        ]
+      },
+      "combinations": [
+        {
+          "item": "headphones",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "Chip's eyes lock onto the headphones.", "color": "narrator" },
+            { "type": "say", "text": "Are those— those are the Sony WH-1000XM5s. I've been looking for those for three months.", "x": 640, "y": 530 },
+            { "type": "say", "text": "He grabs them without ceremony and puts them on. His expression shifts immediately.", "color": "narrator" },
+            { "type": "say", "text": "Oh. Oh that's... these are leagues better than mine.", "x": 640, "y": 530 },
+            { "type": "say", "text": "He yanks his old headphones off the monitor and drops them straight in the bin.", "color": "narrator" },
+            { "type": "say", "text": "These are staying on forever.", "x": 640, "y": 530 },
+            { "type": "say", "text": "Eyes forward, head nodding slightly. You no longer exist to him.", "color": "narrator" },
+            { "type": "remove_item", "item": "headphones" },
+            { "type": "set_flag", "flag": "chip_distracted", "value": true }
+          ]
+        },
+        {
+          "item": "headphones",
+          "verb": "use",
+          "effects": [
+            { "type": "say", "text": "You hold out the headphones. Chip clocks them instantly.", "color": "narrator" },
+            { "type": "say", "text": "Those are mine.", "x": 640, "y": 530 },
+            { "type": "say", "text": "He takes them, puts them on, and freezes.", "color": "narrator" },
+            { "type": "say", "text": "Wait. These are the XM5s. My old ones are garbage compared to these.", "x": 640, "y": 530 },
+            { "type": "say", "text": "He pulls his old headphones off the hook and tosses them in the bin without looking. The world outside his monitors ceases to matter.", "color": "narrator" },
+            { "type": "remove_item", "item": "headphones" },
+            { "type": "set_flag", "flag": "chip_distracted", "value": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chip_computer",
+      "name": "Chip's workstation",
+      "rect": [
+        440,
+        139,
+        489,
+        232
+      ],
+      "walk_to": [
+        685,
+        680
+      ],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": [
+          {
+            "condition": {
+              "chip_distracted": true,
+              "lab_door_tried": true
+            },
+            "text": "Four monitors. Left: a build terminal, logs scrolling. Second: Phone Tool — the employee directory. I scan straight for the cost center column. There it is: CVNA lab — 2847. Third: support tickets, 47 unread. Far right: a budget spreadsheet. I have what I came for.",
+            "color": "narrator",
+            "effects": [
+              { "type": "set_flag", "flag": "knows_lab_code", "value": true }
+            ]
+          },
+          {
+            "condition": {
+              "chip_distracted": true
+            },
+            "text": "Four monitors, all live. Left: a build terminal. Second: something called Phone Tool — looks like an employee directory with cost center columns. Third: a support ticket system, 47 unread. Far right: a budget spreadsheet. There's a lot here. I'm not sure what I'm looking for.",
+            "color": "narrator"
+          },
+          {
+            "text": "Chip's workstation. Four monitors, all active. I can't really look at the screens without him noticing.",
+            "color": "narrator"
+          }
+        ],
+        "use": [
+          {
+            "condition": {
+              "chip_distracted": true,
+              "lab_door_tried": true
+            },
+            "text": "With Chip sealed off in his headphone bubble, I lean in and check the Phone Tool on screen two. Cost center column... CVNA lab — 2847. That's the one.",
+            "color": "narrator",
+            "effects": [
+              { "type": "set_flag", "flag": "knows_lab_code", "value": true }
+            ]
+          },
+          {
+            "condition": {
+              "chip_distracted": true
+            },
+            "text": "I can get close enough to read the screens, but there's a lot of data across four monitors. I don't know what I'm supposed to be looking for.",
+            "color": "narrator"
+          },
+          {
+            "text": "Chip would notice immediately."
+          }
+        ]
+      }
+    },
+    {
+      "id": "chip_headphones_it",
+      "name": "headphones",
+      "rect": [
+        420,
+        235,
+        70,
+        90
+      ],
+      "walk_to": [
+        455,
+        680
+      ],
+      "face_dir": "back",
+      "hidden_if": {
+        "chip_distracted": true
+      },
+      "interactions": {
+        "look_at": {
+          "text": "Chip's own headphones, hanging unused on the monitor. This is a man so confident in his focus that he doesn't even need them. A power move."
+        },
+        "pick_up": {
+          "text": "These are Chip's. Taking them while he's watching would not go well."
+        },
+        "use": {
+          "text": "I don't need to use the headphones here."
+        }
+      }
+    },
+    {
+      "id": "server_rack",
+      "name": "server rack",
+      "rect": [
+        960,
+        85,
+        185,
+        500
+      ],
+      "walk_to": [
+        1052,
+        680
+      ],
+      "face_dir": "right",
+      "interactions": {
+        "look_at": {
+          "text": "A humming server rack, every port lit, every cable zip-tied with the care of someone who considers this their life's work. A handwritten label reads: 'DO NOT UNPLUG — ANY OF IT — EVER — Chip'."
+        },
+        "use": {
+          "text": "I cannot get there - way is blocked."
+        },
+        "open": {
+          "text": "I cannot get there - way is blocked. A sticker on the latch anyway reads: 'If you have to ask, the answer is no.'"
+        }
+      }
+    },
+    {
+      "id": "it_wall_of_shame",
+      "name": "wall of shame",
+      "rect": [
+        35,
+        90,
+        385,
+        305
+      ],
+      "walk_to": [
+        227,
+        680
+      ],
+      "face_dir": "left",
+      "interactions": {
+        "look_at": {
+          "text": "A corkboard pinned with printed screenshots: terrible support tickets. 'MY COMPUTER IS THINKING TOO LOUD.' 'THE INTERNET IS RUNNING OUT.' 'EXCEL SAYS IT DOESN'T KNOW WHAT I WANT.' Each one has a date. Some have red stars. Chip has a rating system."
+        },
+        "use": {
+          "text": "The Wall of Shame judges me. I shouldn't interfere."
+        }
+      }
+    },
+    {
+      "id": "spare_monitors",
+      "name": "pile of old monitors",
+      "rect": [
+        1205,
+        255,
+        170,
+        420
+      ],
+      "walk_to": [
+        1290,
+        680
+      ],
+      "face_dir": "right",
+      "interactions": {
+        "look_at": {
+          "text": "A stack of old CRT monitors, four deep. The top one still has a sticky note: 'WORKS FINE — DO NOT RECYCLE'. The second one says the same thing. So does the third."
+        },
+        "use": {
+          "text": "I can't do anything with a pile of old monitors."
+        },
+        "pick_up": {
+          "text": "They're older than I am and heavier."
+        }
+      }
+    },
+    {
+      "id": "energy_drinks",
+      "name": "energy drink pyramid",
+      "rect": [
+        505,
+        300,
+        85,
+        135
+      ],
+      "walk_to": [
+        547,
+        680
+      ],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": {
+          "text": "A carefully constructed pyramid of empty energy drink cans. Eight cans. This took effort. This took pride. A small laminated sign reads: 'DO NOT TOUCH — Chip'."
+        },
+        "use": {
+          "text": "I'm not touching Chip's pyramid. I have a sense of self-preservation."
+        },
+        "pick_up": {
+          "text": "The sign says do not touch. I believe the sign."
+        }
+      }
+    },
+    {
+      "id": "door_to_office_space",
+      "name": "door to office",
+      "rect": [
+        0,
+        0,
+        70,
+        768
+      ],
+      "walk_to": [
+        161,
+        680
+      ],
+      "face_dir": "left",
+      "interactions": {
+        "look_at": {
+          "text": "You head back to the office.",
+          "color": "narrator",
+          "effects": [
+            {
+              "type": "transition",
+              "room": "office_space",
+              "player_x": 1200,
+              "player_y": 680,
+              "player_dir": "left"
+            }
+          ]
+        },
+        "open": {
+          "text": "You head back to the office.",
+          "color": "narrator",
+          "effects": [
+            {
+              "type": "transition",
+              "room": "office_space",
+              "player_x": 1200,
+              "player_y": 680,
+              "player_dir": "left"
+            }
+          ]
+        },
+        "use": {
+          "text": "You head back to the office.",
+          "color": "narrator",
+          "effects": [
+            {
+              "type": "transition",
+              "room": "office_space",
+              "player_x": 1200,
+              "player_y": 680,
+              "player_dir": "left"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

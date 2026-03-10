@@ -22,8 +22,16 @@ Game.Verbs = (function () {
     Game.ActionLine.setObject2(null);
   }
 
-  function handleClick(gx, gy) {
+  function getActiveVerbs() {
     var verbs = cfg.VERBS;
+    if (Game.Room && Game.Room.isNoWalk && Game.Room.isNoWalk()) {
+      verbs = verbs.filter(function (v) { return v !== 'Walk to'; });
+    }
+    return verbs;
+  }
+
+  function handleClick(gx, gy) {
+    var verbs = getActiveVerbs();
     var panelX = cfg.VERB_PANEL_X;
     var panelY = cfg.BOTTOM_BAR_Y;
     var cellW = cfg.VERB_PANEL_WIDTH / 3;
@@ -46,7 +54,7 @@ Game.Verbs = (function () {
   }
 
   function handleHover(gx, gy) {
-    var verbs = cfg.VERBS;
+    var verbs = getActiveVerbs();
     var cellW = cfg.VERB_PANEL_WIDTH / 3;
     var cellH = cfg.BOTTOM_BAR_HEIGHT / 3;
 
@@ -64,7 +72,7 @@ Game.Verbs = (function () {
   }
 
   function draw(ctx) {
-    var verbs = cfg.VERBS;
+    var verbs = getActiveVerbs();
     var panelX = cfg.VERB_PANEL_X;
     var panelY = cfg.BOTTOM_BAR_Y;
     var cellW = cfg.VERB_PANEL_WIDTH / 3;

@@ -1,0 +1,27 @@
+{
+  "id": "elevator",
+  "character": "Elevator Panel",
+  "speaker_x": 1100,
+  "speaker_y": 380,
+  "start": "select_floor",
+  "nodes": {
+    "select_floor": {
+      "npc_text": "SELECT FLOOR. A sticky note reads: 'For HR, use 2-digit floor code.'",
+      "choices": [
+        {
+          "id": "floor_28",
+          "text": "Floor 28 — Human Resources",
+          "next": null,
+          "effects": [
+            { "type": "transition", "room": "hr_floor", "player_x": 1155, "player_y": 616, "player_dir": "left" }
+          ]
+        },
+        {
+          "id": "cancel",
+          "text": "Cancel.",
+          "next": null
+        }
+      ]
+    }
+  }
+}

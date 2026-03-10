@@ -1,0 +1,95 @@
+{
+  "id": "fifa_players",
+  "character": "Chip",
+  "speaker_x": 500,
+  "speaker_y": 560,
+  "start": "challenge",
+  "nodes": {
+    "challenge": {
+      "npc_text": "Right. Standard rules. First to five. No pausing. No commentary settings. No excuses.",
+      "choices": [
+        {
+          "id": "play_without_book",
+          "text": "Let's go.",
+          "condition": { "read_winning_ugly": false },
+          "next": "lose"
+        },
+        {
+          "id": "play_with_book",
+          "text": "Let's go. I've been reading up.",
+          "condition": { "read_winning_ugly": true },
+          "next": "pre_win"
+        },
+        {
+          "id": "cancel",
+          "text": "Actually, give me a minute.",
+          "next": null
+        }
+      ]
+    },
+    "lose": {
+      "npc_text": "5-0. Again. You played into every press, you tried to dribble through the box, and you used the same corner routine three times. Same result each time. I feel nothing.",
+      "choices": [
+        {
+          "id": "rematch",
+          "text": "Rematch.",
+          "next": "challenge"
+        },
+        {
+          "id": "leave",
+          "text": "I need to think about this.",
+          "next": null
+        }
+      ]
+    },
+    "pre_win": {
+      "npc_text": "Wait. You're... playing differently. You held the line, you pressed at 70%, you didn't panic when I equalised. What happened to you?",
+      "choices": [
+        {
+          "id": "reveal_book",
+          "text": "I did some research.",
+          "next": "win_book"
+        },
+        {
+          "id": "stay_vague",
+          "text": "I've been thinking about the game differently.",
+          "next": "win_vague"
+        }
+      ]
+    },
+    "win_book": {
+      "npc_text": "'Winning Ugly'? You read 'Winning Ugly'? That book is... okay that's actually a legitimate psychological framework. I — fine. You won. 3-5. The better tactician won today. I need to sit with this.",
+      "choices": [
+        {
+          "id": "claim_win",
+          "text": "I'll take it.",
+          "next": "post_win"
+        }
+      ]
+    },
+    "win_vague": {
+      "npc_text": "3-5. You actually won. I don't know what I just watched but it was structured. Like you had a plan and stuck to it. I respect that more than I want to admit.",
+      "choices": [
+        {
+          "id": "claim_win2",
+          "text": "Thanks. Good game.",
+          "next": "post_win"
+        }
+      ]
+    },
+    "post_win": {
+      "npc_text": "Look — you won fair. I'm... going to step out for a bit. The lab's yours. Don't touch the compile terminal.",
+      "choices": [
+        {
+          "id": "finish",
+          "text": "I'll be careful.",
+          "next": null,
+          "effects": [
+            { "type": "set_flag", "flag": "fifa_won", "value": true },
+            { "type": "set_flag", "flag": "chip_distracted", "value": true }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,238 @@
+{
+  "id": "lab",
+  "name": "CVNA Lab",
+  "background": "lab",
+  "backgrounds": [
+    {
+      "condition": { "fifa_won": true, "has_item": "usb_stick" },
+      "image": "lab_empty_nousb"
+    },
+    {
+      "condition": { "fifa_won": true },
+      "image": "lab_empty"
+    },
+    {
+      "condition": { "has_item": "usb_stick" },
+      "image": "lab_full_nousb"
+    },
+    {
+      "image": "lab_full"
+    }
+  ],
+  "walk_areas": [
+    {
+      "condition": { "fifa_won": true },
+      "area": [
+        [68, 620],
+        [1212, 620],
+        [1212, 760],
+        [68, 760]
+      ]
+    },
+    {
+      "area": [
+        [207, 620],
+        [466, 621],
+        [554, 761],
+        [68, 760]
+      ]
+    }
+  ],
+  "perspective": {
+    "min_scale": 1,
+    "max_scale": 1.15
+  },
+  "entry_points": {
+    "from_aisle": { "x": 200, "y": 700, "dir": "right" }
+  },
+  "hotspots": [
+    {
+      "id": "fifa_players",
+      "name": "FIFA players",
+      "rect": [515, 340, 439, 209],
+      "walk_to": [450, 700],
+      "face_dir": "right",
+      "hidden_if": { "fifa_won": true },
+      "dialogue": "fifa_players",
+      "interactions": {
+        "look_at": {
+          "text": "Two people locked in a FIFA match with the focus of professional athletes. Neither has looked up since I entered. The score is 2-2. The tension is real."
+        },
+        "talk_to": [
+          {
+            "effects": [
+              { "type": "dialogue", "dialogue": "fifa_players" }
+            ]
+          }
+        ],
+        "pick_up": {
+          "text": "They're not items. They're athletes."
+        }
+      }
+    },
+    {
+      "id": "fifa_setup",
+      "name": "FIFA setup",
+      "rect": [649, 245, 267, 145],
+      "walk_to": [782, 700],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": [
+          {
+            "condition": { "fifa_won": true },
+            "text": "The FIFA screen shows the final score. Your win. It still feels slightly unreal."
+          },
+          {
+            "text": "A large screen showing FIFA. Two controllers on the desk. Someone has taped a league table to the wall beside it. Chip's name is at the top in red marker. All other entries are crossed out."
+          }
+        ],
+        "use": [
+          {
+            "condition": { "fifa_won": true },
+            "text": "The game is over. I won. I don't need to play again."
+          },
+          {
+            "effects": [
+              { "type": "dialogue", "dialogue": "fifa_players" }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "lab_whiteboard",
+      "name": "whiteboard",
+      "rect": [940, 181, 379, 196],
+      "walk_to": [1152, 700],
+      "face_dir": "right",
+      "interactions": {
+        "look_at": [
+          {
+            "condition": { "floor_digit_2_known": true },
+            "text": "The whiteboard is covered in sprint velocity charts and a large org diagram. In the bottom corner: 'HR relocating to floor _8 — use new lift code'. You already noted the second digit."
+          },
+          {
+            "condition": { "fifa_won": true },
+            "text": "The whiteboard is dense with sprint velocity charts and a large org diagram that seems to have no top. At the bottom, in different handwriting: 'HR relocating to floor _8 — use new lift code'. Someone has wiped the first digit clean. But the second digit is clear: 8.",
+            "effects": [
+              { "type": "set_flag", "flag": "floor_digit_2_known", "value": true }
+            ]
+          },
+          {
+            "text": "I can't get to the whiteboard. The FIFA players are completely in the way."
+          }
+        ],
+        "use": {
+          "text": "I'm not writing on someone's sprint board."
+        }
+      }
+    },
+    {
+      "id": "usb_stick",
+      "name": "USB stick",
+      "rect": [18, 459, 54, 18],
+      "walk_to": [201, 700],
+      "face_dir": "left",
+      "hidden_if": { "has_item": "usb_stick" },
+      "interactions": {
+        "look_at": {
+          "text": "A USB stick sitting next to a workstation, labelled in small type: 'CVNA BUILD v4.1 — FINAL_FINAL_v2'. Someone's entire project, just sitting there."
+        },
+        "pick_up": [
+          {
+            "condition": { "has_item": "usb_stick" },
+            "text": "I already have the USB stick."
+          },
+          {
+            "text": "You pick up the USB stick. It's lightweight. Potentially important. You pocket it.",
+            "color": "narrator",
+            "effects": [
+              { "type": "add_item", "item": "usb_stick" },
+              { "type": "remove_hotspot", "id": "usb_stick" }
+            ]
+          }
+        ],
+        "use": {
+          "text": "I'd need a computer to use this."
+        }
+      }
+    },
+    {
+      "id": "lab_computers",
+      "name": "lab workstations",
+      "rect": [64, 297, 275, 154],
+      "walk_to": [201, 700],
+      "face_dir": "left",
+      "interactions": {
+        "look_at": {
+          "text": "Four workstations arranged in an L-shape. Only one is active, showing a terminal window mid-scroll. The others are sleeping. A sticky note on the active monitor reads: 'compile then go home'."
+        },
+        "use": {
+          "text": "These aren't my machines."
+        }
+      }
+    },
+    {
+      "id": "beanbag_area",
+      "name": "beanbag",
+      "rect": [475, 548, 605, 152],
+      "walk_to": [848, 700],
+      "face_dir": "right",
+      "hidden_if": { "fifa_won": true },
+      "interactions": {
+        "look_at": {
+          "text": "A cluster of beanbags in the corner, the kind that appear in 'collaborative spaces' brochures and are used by nobody. One has a laptop power cable draped over it. The cable goes nowhere."
+        },
+        "use": {
+          "text": "I'm not sitting in a beanbag right now. I have things to do."
+        },
+        "pick_up": {
+          "text": "The beanbag is too large and too formless to carry."
+        }
+      }
+    },
+    {
+      "id": "lab_mug",
+      "name": "coffee mug",
+      "rect": [1291, 415, 26, 28],
+      "walk_to": [1152, 700],
+      "face_dir": "right",
+      "hidden_if": { "fifa_won": true },
+      "interactions": {
+        "look_at": {
+          "text": "A small mug next to the whiteboard. It reads 'SPRINT CHAMPION'. The contents are cold. Victory has a shelf life."
+        },
+        "pick_up": {
+          "text": "Not mine to take."
+        },
+        "use": {
+          "text": "I'll leave it. It's someone's trophy."
+        }
+      }
+    },
+    {
+      "id": "exit_to_aisle",
+      "name": "door to aisle",
+      "rect": [361, 215, 57, 216],
+      "walk_to": [110, 700],
+      "face_dir": "left",
+      "interactions": {
+        "look_at": {
+          "text": "The door back to the office aisle."
+        },
+        "open": {
+          "text": "You head back to the aisle.",
+          "effects": [
+            { "type": "transition", "room": "aisle", "player_x": 350, "player_y": 700, "player_dir": "right" }
+          ]
+        },
+        "use": {
+          "text": "You head back to the aisle.",
+          "effects": [
+            { "type": "transition", "room": "aisle", "player_x": 350, "player_y": 700, "player_dir": "right" }
+          ]
+        }
+      }
+    }
+  ]
+}

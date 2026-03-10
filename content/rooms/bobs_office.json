@@ -1,0 +1,413 @@
+{
+  "id": "bobs_office",
+  "name": "Bob's Office",
+  "background": "bobs_office",
+  "walk_area": [
+    [229, 697],
+    [1094, 697],
+    [1356, 760],
+    [20, 760]
+  ],
+  "perspective": { "min_scale": 1.0, "max_scale": 1.2 },
+  "entry_points": {
+    "from_hr_floor": { "x": 1230, "y": 730, "dir": "left" }
+  },
+  "hotspots": [
+    {
+      "id": "bookshelf",
+      "name": "bookshelf",
+      "rect": [282, 208, 99, 429],
+      "walk_to": [332, 720],
+      "face_dir": "left",
+      "interactions": {
+        "look_at": {
+          "text": "A shelf of business books. The titles blur into one another: 'Radical Ownership', 'The Seven Habits', 'Who Moved My Cheese?' All spine-out, unchipped, unread. Props for a performance."
+        },
+        "use": {
+          "text": "I don't need to read any of these. I need to leave."
+        }
+      }
+    },
+    {
+      "id": "bob",
+      "name": "Bob",
+      "rect": [630, 297, 129, 157],
+      "walk_to": [695, 720],
+      "face_dir": "right",
+      "dialogue": "bob",
+      "interactions": {
+        "look_at": [
+          {
+            "condition": { "co_signed": true },
+            "text": "Bob looks like a man who has accepted his fate gracefully. He's waiting for the document.",
+            "color": "narrator"
+          },
+          {
+            "condition": { "agreement_signed": true },
+            "text": "Bob glances at your hand. He can see you have something. 'Counter-signature. L10 or above. Don't look at me — I'm only an L8.'",
+            "color": "narrator"
+          },
+          {
+            "condition": { "agreement_retrieved": true },
+            "text": "Bob is marginally calmer. 'You found it. Now sign it. You'll need a pen.'",
+            "color": "narrator"
+          },
+          {
+            "condition": { "usb_used": true },
+            "text": "Bob squeezes the stress ball. He's composed enough to be useful. 'Code's 2847. Cabinet's on your left.'",
+            "color": "narrator"
+          },
+          {
+            "condition": { "stress_ball_given": true },
+            "text": "Bob squeezes the stress ball rhythmically. He's visibly more composed. Something approaching human.",
+            "color": "narrator"
+          },
+          {
+            "text": "Bob. Senior Director, Amazon HR. He has the look of a man who has processed a hundred of these and still finds each one personally expensive.",
+            "color": "narrator"
+          }
+        ],
+        "talk_to": [
+          {
+            "condition": { "co_signed": true },
+            "effects": [
+              { "type": "say", "text": "Bob raises an eyebrow.", "color": "narrator" },
+              { "type": "say", "text": "You have the co-signed document?", "x": 637, "y": 415 },
+              { "type": "say", "text": "He extends his hand.", "color": "narrator" }
+            ]
+          },
+          {
+            "condition": { "agreement_signed": true },
+            "effects": [
+              { "type": "say", "text": "Signed — good. But you need an L10 or above counter-signature to make it binding. Through the standard process, that's three to five months.", "x": 637, "y": 415 },
+              { "type": "say", "text": "He pauses.", "color": "narrator" },
+              { "type": "say", "text": "Unless you happen to know someone very, very senior.", "x": 637, "y": 415 }
+            ]
+          },
+          {
+            "condition": { "agreement_retrieved": true },
+            "effects": [
+              { "type": "say", "text": "Sign it. You need a pen — there might be one in that package, if you can sort it out.", "x": 637, "y": 415 }
+            ]
+          },
+          {
+            "condition": { "usb_used": true },
+            "effects": [
+              { "type": "say", "text": "Cabinet code is 2847. That's my cost centre. Please don't tell anyone I told you that.", "x": 637, "y": 415 }
+            ]
+          },
+          {
+            "condition": { "stress_ball_given": true },
+            "effects": [
+              { "type": "say", "text": "The MSA is in the grey filing cabinet. The access code is my cost centre number. I can't remember it — it'll be on my computer, but the personnel system needs a USB access dongle. Security protocol.", "x": 637, "y": 415 }
+            ]
+          },
+          {
+            "effects": [
+              { "type": "say", "text": "I can't do anything right now. I'm too stressed to even look at a document. I need a moment.", "x": 637, "y": 415 },
+              { "type": "say", "text": "He doesn't elaborate on what kind of moment.", "color": "narrator" }
+            ]
+          }
+        ],
+        "pick_up": {
+          "text": "I'm not picking up Bob. Not even in a metaphorical sense."
+        },
+        "use": {
+          "text": "I should TALK TO Bob."
+        }
+      },
+      "combinations": [
+        {
+          "item": "stress_ball",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "Bob looks at it. Then at you. Then back at it. He takes it.", "color": "narrator" },
+            { "type": "say", "text": "Where did you get this?", "x": 637, "y": 415 },
+            { "type": "say", "text": "He squeezes it once. Some tension leaves his face.", "color": "narrator" },
+            { "type": "say", "text": "Fine. Sit down.", "x": 637, "y": 415 },
+            { "type": "remove_item", "item": "stress_ball" },
+            { "type": "set_flag", "flag": "stress_ball_given", "value": true }
+          ]
+        },
+        {
+          "item": "stress_ball",
+          "verb": "use",
+          "text": "Bob takes the stress ball. He squeezes it. Something in him unclenches slightly.",
+          "color": "narrator",
+          "effects": [
+            { "type": "remove_item", "item": "stress_ball" },
+            { "type": "set_flag", "flag": "stress_ball_given", "value": true }
+          ]
+        },
+        {
+          "item": "mystery_package",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "Bob takes it.", "color": "narrator" },
+            { "type": "say", "text": "Chen. They were let go on Tuesday. This has been sitting undelivered.", "x": 637, "y": 415 },
+            { "type": "say", "text": "He opens it. Pauses. Reaches inside.", "color": "narrator" },
+            { "type": "say", "text": "There's a pen in here. Decent one.", "x": 637, "y": 415 },
+            { "type": "say", "text": "He holds it out.", "color": "narrator" },
+            { "type": "say", "text": "Take it. You'll need it.", "x": 637, "y": 415 },
+            { "type": "remove_item", "item": "mystery_package" },
+            { "type": "set_flag", "flag": "mystery_package_given", "value": true },
+            { "type": "set_flag", "flag": "found_pen", "value": true },
+            { "type": "add_item", "item": "pen" }
+          ]
+        },
+        {
+          "item": "mystery_package",
+          "verb": "use",
+          "effects": [
+            { "type": "say", "text": "You set the package on Bob's desk. He looks at the label.", "color": "narrator" },
+            { "type": "say", "text": "Chen's. Let me deal with this.", "x": 637, "y": 415 },
+            { "type": "say", "text": "He opens it. There's a pen inside — a good one. He slides it across to you.", "color": "narrator" },
+            { "type": "say", "text": "Yours.", "x": 637, "y": 415 },
+            { "type": "remove_item", "item": "mystery_package" },
+            { "type": "set_flag", "flag": "mystery_package_given", "value": true },
+            { "type": "set_flag", "flag": "found_pen", "value": true },
+            { "type": "add_item", "item": "pen" }
+          ]
+        },
+        {
+          "item": "signed_agreement",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "Bob looks it over.", "color": "narrator" },
+            { "type": "say", "text": "You've signed it. Good. But to be binding, it needs a counter-signature from an L10 or above. Standard protocol. Through proper channels, we're talking three to five months.", "x": 637, "y": 415 },
+            { "type": "say", "text": "He hands it back.", "color": "narrator" },
+            { "type": "say", "text": "Unless you have access to someone at that level.", "x": 637, "y": 415 }
+          ]
+        },
+        {
+          "item": "signed_agreement",
+          "verb": "use",
+          "effects": [
+            { "type": "say", "text": "Bob glances at it.", "color": "narrator" },
+            { "type": "say", "text": "Signed. But it needs an L10 counter-signature. Three to five months the normal way.", "x": 637, "y": 415 },
+            { "type": "say", "text": "He shrugs.", "color": "narrator" },
+            { "type": "say", "text": "Or not.", "x": 637, "y": 415 }
+          ]
+        },
+        {
+          "item": "co_signed_agreement",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "Bob takes the document. He reads it — actually reads it — line by line. He reaches the bottom. He looks up.", "color": "narrator" },
+            { "type": "say", "text": "This is in order. Everything checks out.", "x": 637, "y": 415 },
+            { "type": "say", "text": "He initials the final page.", "color": "narrator" },
+            { "type": "say", "text": "Alex. You're free. I hope it's better out there than it was in here.", "x": 637, "y": 415 },
+            { "type": "remove_item", "item": "co_signed_agreement" },
+            { "type": "set_flag", "flag": "agreement_complete", "value": true },
+            { "type": "victory" }
+          ]
+        },
+        {
+          "item": "co_signed_agreement",
+          "verb": "use",
+          "effects": [
+            { "type": "say", "text": "You hand Bob the co-signed agreement. He reviews it carefully, nods, and adds his initials.", "color": "narrator" },
+            { "type": "say", "text": "You're done here, Alex. Good luck.", "x": 637, "y": 415 },
+            { "type": "remove_item", "item": "co_signed_agreement" },
+            { "type": "set_flag", "flag": "agreement_complete", "value": true },
+            { "type": "victory" }
+          ]
+        },
+        {
+          "item": "signed_agreement",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "It needs a co-signature. You know whose.", "x": 637, "y": 415 },
+            { "type": "say", "text": "He taps the business card column on the document.", "color": "narrator" },
+            { "type": "say", "text": "The credential has to be verified.", "x": 637, "y": 415 }
+          ]
+        },
+        {
+          "item": "separation_agreement",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You haven't signed it yet. And it needs to be co-signed. You know the process.", "x": 637, "y": 415 },
+            { "type": "say", "text": "He says this without irony.", "color": "narrator" }
+          ]
+        },
+        {
+          "item": "business_card",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "Bob looks at the Jeff Bezos business card for a long time.", "color": "narrator" },
+            { "type": "say", "text": "Where did you get this.", "x": 637, "y": 415 },
+            { "type": "say", "text": "It isn't a question. He doesn't take it.", "color": "narrator" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stress_ball_on_desk",
+      "name": "stress ball",
+      "rect": [607, 454, 40, 44],
+      "walk_to": [695, 720],
+      "face_dir": "left",
+      "hidden_if": { "stress_ball_given": true },
+      "interactions": {
+        "look_at": {
+          "text": "A small foam stress ball sitting on the desk. It's been squeezed so many times it has a permanent handprint impression. Someone needs it."
+        },
+        "pick_up": {
+          "text": "That's on Bob's desk. I'm not taking it while he's sitting right there."
+        },
+        "use": {
+          "text": "It's on Bob's desk. Not mine."
+        }
+      }
+    },
+    {
+      "id": "computer",
+      "name": "computer",
+      "rect": [476, 353, 132, 121],
+      "walk_to": [542, 720],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": [
+          {
+            "condition": { "usb_used": true },
+            "text": "The screen shows Bob's HR personnel files. You already got what you needed — cost centre 2847."
+          },
+          {
+            "condition": { "stress_ball_given": true },
+            "text": "Bob's HR system. The personnel files are locked behind a USB access protocol. There's a port on the front of the machine. If I had the right USB device, I could get Bob's cost centre number."
+          },
+          {
+            "text": "Bob's computer. The screen is on but faced away slightly. He'd notice if I touched it."
+          }
+        ],
+        "use": [
+          {
+            "condition": { "usb_used": true },
+            "text": "Already done. Cost centre 2847 — the cabinet code."
+          },
+          {
+            "condition": { "stress_ball_given": true },
+            "text": "I need to plug the USB access dongle into this."
+          },
+          {
+            "text": "Bob's not going to let me touch his computer right now."
+          }
+        ]
+      },
+      "combinations": [
+        {
+          "item": "usb_stick",
+          "verb": "use",
+          "condition": { "stress_ball_given": true },
+          "text": "You slot in the USB. The personnel system unlocks. You scan for Bob's cost centre. There it is: 2847. That's the filing cabinet code.",
+          "effects": [
+            { "type": "set_flag", "flag": "usb_used", "value": true }
+          ]
+        },
+        {
+          "item": "usb_stick",
+          "verb": "use",
+          "text": "Bob doesn't look up. 'Put that away.'"
+        }
+      ]
+    },
+    {
+      "id": "nameplate_bob",
+      "name": "nameplate",
+      "rect": [755, 458, 113, 35],
+      "walk_to": [812, 720],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": {
+          "text": "'BOB JOHNSON — Senior Director, HR'. The font is authoritative. The weight of it lands differently now that you're here in person."
+        },
+        "use": {
+          "text": "It's a nameplate. I just need to talk to the man it belongs to."
+        }
+      }
+    },
+    {
+      "id": "cupboard",
+      "name": "filing cabinet",
+      "rect": [118, 295, 158, 376],
+      "walk_to": [197, 720],
+      "face_dir": "left",
+      "interactions": {
+        "look_at": [
+          {
+            "condition": { "agreement_retrieved": true },
+            "text": "The filing cabinet, open and ransacked. You got what you came for."
+          },
+          {
+            "condition": { "usb_used": true },
+            "text": "A grey filing cabinet with a keypad lock. You know the code — 2847."
+          },
+          {
+            "text": "A grey filing cabinet with a keypad lock on the front. I'd need the access code to open it."
+          }
+        ],
+        "open": [
+          {
+            "condition": { "agreement_retrieved": true },
+            "text": "You've already retrieved the separation agreement."
+          },
+          {
+            "condition": { "filing_cabinet_open": true },
+            "text": "The cabinet is already open."
+          },
+          {
+            "condition": { "usb_used": true },
+            "text": "You tap in 2847. The lock clicks. Inside: stacked HR forms, a broken stapler, and at the very back, a thick sealed envelope labelled 'SEPARATION AGREEMENT — Alex'. You take it.",
+            "effects": [
+              { "type": "set_flag", "flag": "filing_cabinet_open", "value": true },
+              { "type": "set_flag", "flag": "agreement_retrieved", "value": true },
+              { "type": "add_item", "item": "separation_agreement" }
+            ]
+          },
+          {
+            "text": "There's a keypad lock on this. I need the access code."
+          }
+        ],
+        "close": [
+          {
+            "condition": { "filing_cabinet_open": true },
+            "text": "You push the cabinet shut.",
+            "effects": [
+              { "type": "set_flag", "flag": "filing_cabinet_open", "value": false }
+            ]
+          },
+          {
+            "text": "It's already closed."
+          }
+        ],
+        "use": {
+          "text": "I should OPEN it."
+        }
+      }
+    },
+    {
+      "id": "lobby_door",
+      "name": "door out",
+      "rect": [1022, 134, 127, 523],
+      "walk_to": [1230, 730],
+      "face_dir": "right",
+      "interactions": {
+        "look_at": {
+          "text": "The way out. Not yet."
+        },
+        "open": {
+          "text": "You head back to the HR floor.",
+          "effects": [
+            { "type": "transition", "room": "hr_floor", "player_x": 100, "player_y": 690, "player_dir": "right" }
+          ]
+        },
+        "use": {
+          "text": "You head back to the HR floor.",
+          "effects": [
+            { "type": "transition", "room": "hr_floor", "player_x": 100, "player_y": 690, "player_dir": "right" }
+          ]
+        }
+      }
+    }
+  ]
+}

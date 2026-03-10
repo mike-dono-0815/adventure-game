@@ -2,7 +2,7 @@ var Game = {};
 
 Game.Config = {
   // Logical game resolution
-  WIDTH: 1344,
+  WIDTH: 1376,
   HEIGHT: 1038,
 
   // Layout regions (y-coordinates)
@@ -19,7 +19,7 @@ Game.Config = {
 
   // Inventory panel (bottom-right)
   INVENTORY_X: 563,
-  INVENTORY_WIDTH: 781,
+  INVENTORY_WIDTH: 813,
 
   // Inventory item size
   ITEM_THUMB_SIZE: 98,
@@ -58,6 +58,7 @@ Game.Config = {
     TEXT_NPC: '#FEBD69',
     TEXT_PLAYER: '#7EC8E3',
     TEXT_PLAYER_CHOICE: '#7EC8E3',
+    TEXT_NARRATOR: '#c4c4c4',
     DIALOGUE_BG: 'rgba(19, 26, 34, 0.92)',
     SAVE_MENU_BG: 'rgba(35, 47, 62, 0.97)',
     FADE: '#000000',
@@ -66,7 +67,7 @@ Game.Config = {
   // Verbs
   VERBS: [
     'Open',    'Close',  'Push',
-    'Pull',    'Give',   'Pick up',
+    'Pull',    'Give',   'Take',
     'Talk to', 'Look at','Use'
   ],
 

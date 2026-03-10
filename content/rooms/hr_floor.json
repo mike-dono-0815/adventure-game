@@ -1,0 +1,72 @@
+{
+  "id": "hr_floor",
+  "name": "HR Floor",
+  "background": "hr_floor",
+  "walk_area": [
+    [68, 610], [1278, 610], [1278, 760], [68, 760]
+  ],
+  "perspective": { "min_scale": 1.0, "max_scale": 1.1 },
+  "entry_points": {
+    "from_bobs_office": { "x": 100, "y": 690, "dir": "right" }
+  },
+  "trigger_zones": [
+    {
+      "id": "stakeholder_encounter",
+      "rect": [68, 570, 650, 190],
+      "once": true,
+      "effects": [
+        { "type": "lock_input" },
+        { "type": "spawn_npc", "id": "stakeholder", "x": -80, "y": 680, "sprite": "stakeholder", "dualSheet": true, "dir": "right" },
+        { "type": "parallel", "effects": [
+          { "type": "walk_npc", "id": "stakeholder", "to_x": 560, "to_y": 680 },
+          { "type": "walk_player", "to_x": 780, "to_y": 680 }
+        ]},
+        { "type": "set_player_dir", "dir": "left" },
+        { "type": "wordfight", "intro_text": "What are you doing here?\nAre you even a real Amazonian?\nProve it — respond in the Amazon way,\nor I'll escort you out...", "on_loss_reset_trigger": "stakeholder_encounter", "on_loss_player_x": 780, "on_loss_player_y": 680 },
+        { "type": "remove_npc", "id": "stakeholder" },
+        { "type": "set_flag", "flag": "wordfight_won", "value": true },
+        { "type": "unlock_input" },
+        { "type": "transition", "room": "bobs_office", "player_x": 1230, "player_y": 730, "player_dir": "left" }
+      ]
+    }
+  ],
+  "hotspots": [
+    {
+      "id": "door_to_bobs_office",
+      "name": "Bob's Office",
+      "rect": [0, 0, 138, 768],
+      "walk_to": [150, 690],
+      "face_dir": "left",
+      "visible_if": { "wordfight_won": true },
+      "interactions": {
+        "look_at": { "text": "The door to Bob's office." },
+        "open": {
+          "text": "You head into Bob's office.",
+          "effects": [{ "type": "transition", "room": "bobs_office", "player_x": 1230, "player_y": 730, "player_dir": "left" }]
+        },
+        "use": {
+          "text": "You head into Bob's office.",
+          "effects": [{ "type": "transition", "room": "bobs_office", "player_x": 1230, "player_y": 730, "player_dir": "left" }]
+        }
+      }
+    },
+    {
+      "id": "elevator_back",
+      "name": "elevator",
+      "rect": [1238, 0, 138, 768],
+      "walk_to": [1200, 690],
+      "face_dir": "right",
+      "interactions": {
+        "look_at": { "text": "The elevator back down to the office floors." },
+        "open": {
+          "text": "You take the elevator back down.",
+          "effects": [{ "type": "transition", "room": "aisle", "player_x": 1040, "player_y": 700, "player_dir": "left" }]
+        },
+        "use": {
+          "text": "You take the elevator back down.",
+          "effects": [{ "type": "transition", "room": "aisle", "player_x": 1040, "player_y": 700, "player_dir": "left" }]
+        }
+      }
+    }
+  ]
+}

@@ -21,7 +21,8 @@ Game.Player = (function () {
   }
 
   function setDirection(dir) {
-    direction = dir;
+    if (dir === 'left' || dir === 'right') direction = dir;
+    // 'back', 'front', etc. have no sprite sheet — keep current direction
   }
 
   function walkTo(tx, ty, callback) {

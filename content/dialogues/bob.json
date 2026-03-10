@@ -2,111 +2,144 @@
   "id": "bob",
   "character": "Bob",
   "speaker_x": 637,
-  "speaker_y": 230,
+  "speaker_y": 415,
   "start": "greeting",
   "nodes": {
     "greeting": {
-      "npc_text": "Alex! Come in, come in. Have a seat. I know this isn't easy, but we'll get through it.",
+      "npc_text": "You got through. Good. Sit down.",
       "choices": [
         {
-          "id": "get_agreement",
-          "text": "Thanks Bob. I just want to get the separation agreement and get this over with.",
-          "next": "agreement_talk"
+          "id": "ask_agreement",
+          "text": "I need the separation agreement.",
+          "condition": { "stress_ball_given": false },
+          "next": "not_ready"
         },
         {
-          "id": "how_are_you",
-          "text": "How are you, Bob? You look tired.",
-          "next": "tired_talk",
-          "show_once": true
+          "id": "ask_agreement_calm",
+          "text": "I need the separation agreement.",
+          "condition": { "stress_ball_given": true },
+          "next": "ready_talk"
         },
         {
           "id": "exit",
-          "text": "I need a moment. I'll be right back.",
+          "text": "Give me a moment.",
           "next": null
         }
       ]
     },
-    "agreement_talk": {
-      "npc_text": "Right, the agreement. I have it all drawn up. But... I could really use a coffee first. The machine's right there but I've been swamped all day. Would you mind?",
+    "not_ready": {
+      "npc_text": "I have seventeen cases open right now. Yours will be processed. Through the process. Give me a reason to expedite it.",
       "choices": [
         {
-          "id": "sure_coffee",
-          "text": "Sure, I'll make you a coffee.",
-          "next": "coffee_thanks",
-          "effects": [
-            { "type": "set_flag", "flag": "bob_wants_coffee", "value": true },
-            { "type": "set_flag", "flag": "talked_to_bob", "value": true }
-          ]
+          "id": "push",
+          "text": "What would help?",
+          "next": "what_helps"
         },
         {
-          "id": "no_coffee",
-          "text": "Can't you just give me the agreement now?",
-          "next": "insist_coffee"
-        },
-        {
-          "id": "exit2",
-          "text": "Let me think about it.",
-          "next": null,
-          "effects": [
-            { "type": "set_flag", "flag": "talked_to_bob", "value": true }
-          ]
-        }
-      ]
-    },
-    "coffee_thanks": {
-      "npc_text": "You're a saint. The coffee machine is on the small table over there. I take mine black, no sugar.",
-      "choices": [
-        {
-          "id": "on_it",
-          "text": "One black coffee, coming right up.",
+          "id": "leave",
+          "text": "I'll come back.",
           "next": null
         }
       ]
     },
-    "insist_coffee": {
-      "npc_text": "Look, I've been here since 6 AM reviewing your case. A little caffeine would really help me focus on making sure everything's in order. You want this done right, don't you?",
+    "what_helps": {
+      "npc_text": "I've been in back-to-back performance reviews since 7 AM. I've signed fourteen separation agreements today. My hands are cramping. My patience is negative. What helps is someone who doesn't make my day harder.",
       "choices": [
         {
-          "id": "fine_coffee",
-          "text": "Fine, I'll get you a coffee.",
-          "next": "coffee_thanks",
-          "effects": [
-            { "type": "set_flag", "flag": "bob_wants_coffee", "value": true },
-            { "type": "set_flag", "flag": "talked_to_bob", "value": true }
-          ]
-        },
-        {
-          "id": "leave_for_now",
-          "text": "I'll think about it.",
-          "next": null,
-          "effects": [
-            { "type": "set_flag", "flag": "talked_to_bob", "value": true }
-          ]
-        }
-      ]
-    },
-    "tired_talk": {
-      "npc_text": "Ha, you can tell? I've been pulling long hours. Divorce season, you know — if there is such a thing. But enough about me. You're here about the agreement.",
-      "choices": [
-        {
-          "id": "agreement_now",
-          "text": "Yes. Let's get to it.",
-          "next": "agreement_talk"
+          "id": "hint",
+          "text": "Is there anything I can actually do?",
+          "next": "stress_hint"
         },
         {
           "id": "sorry",
-          "text": "Sorry to add to your workload.",
-          "next": "no_worries"
+          "text": "Sorry. I'll leave you to it.",
+          "next": null
         }
       ]
     },
-    "no_worries": {
-      "npc_text": "Don't be. This is what I do, and honestly, your case is one of the more amicable ones. Let's get you sorted.",
+    "stress_hint": {
+      "npc_text": "I have seventeen open cases and no functioning executive function. I can't process paperwork in this state. Someone needs to do something about the ambient stress level in this room before I can help anyone.",
       "choices": [
         {
-          "id": "ready",
-          "text": "I'm ready. What do I need to do?",
-          "next": "agreement_talk"
+          "id": "on_it",
+          "text": "I'll see what I can do.",
+          "next": null
+        }
+      ]
+    },
+    "ready_talk": {
+      "npc_text": "Right. Your MSA. It should be in the grey filing cabinet — the one on your left. The access code is my cost centre number. I can't remember it off the top of my head, but it'll be on my computer. Except the personnel system needs a USB access dongle to open it. Security. You know how it is.",
+      "choices": [
+        {
+          "id": "ask_usb",
+          "text": "Where would I find an authorised USB device?",
+          "next": "usb_hint"
+        },
+        {
+          "id": "ask_package",
+          "text": "Before the file — there's an Amazon package downstairs addressed to someone named Chen.",
+          "condition": { "mystery_package_given": false },
+          "next": "package_mention"
+        },
+        {
+          "id": "leave_ready",
+          "text": "I'll figure it out.",
+          "next": null
+        }
+      ]
+    },
+    "usb_hint": {
+      "npc_text": "The CVNA lab would have one. They use token-bearing devices for their build deployments. Someone down there will have what you need.",
+      "choices": [
+        {
+          "id": "understood",
+          "text": "Got it.",
+          "next": null
+        }
+      ]
+    },
+    "package_mention": {
+      "npc_text": "Chen? They were let go Tuesday. That package has been sitting undelivered in the system. You have it?",
+      "choices": [
+        {
+          "id": "give_package",
+          "text": "I have it right here.",
+          "next": null,
+          "effects": [
+            { "type": "remove_item", "item": "mystery_package" },
+            { "type": "set_flag", "flag": "mystery_package_given", "value": true },
+            { "type": "set_flag", "flag": "found_pen", "value": true },
+            { "type": "add_item", "item": "pen" },
+            { "type": "say", "text": "Bob opens the package. A pause.", "color": "narrator" },
+            { "type": "say", "text": "There's a pen in here. Nice one.", "x": 637, "y": 415 },
+            { "type": "say", "text": "He slides it across to you.", "color": "narrator" },
+            { "type": "say", "text": "Take it. You'll need it to sign the agreement.", "x": 637, "y": 415 }
+          ]
+        },
+        {
+          "id": "not_yet",
+          "text": "Not yet. I'll bring it when I have it.",
+          "next": null
+        }
+      ]
+    },
+    "agreement_sign_prompt": {
+      "npc_text": "You have the document. Sign it. And it needs co-signing — executive credentials on the second page. You know what that means.",
+      "choices": [
+        {
+          "id": "understood_sign",
+          "text": "Understood.",
+          "next": null
+        }
+      ]
+    },
+    "co_sign_prompt": {
+      "npc_text": "The co-signed version. Hand it over and we're done.",
+      "choices": [
+        {
+          "id": "ready_to_give",
+          "text": "Right here.",
+          "next": null
         }
       ]
     }
