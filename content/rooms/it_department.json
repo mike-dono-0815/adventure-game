@@ -111,13 +111,13 @@
           "effects": [
             { "type": "say", "text": "Chip's eyes lock onto the headphones.", "color": "narrator" },
             { "type": "say", "text": "Are those— those are the Sony WH-1000XM5s. I've been looking for those for three months.", "x": 640, "y": 530 },
+            { "type": "set_flag", "flag": "chip_distracted", "value": true },
             { "type": "say", "text": "He grabs them without ceremony and puts them on. His expression shifts immediately.", "color": "narrator" },
             { "type": "say", "text": "Oh. Oh that's... these are leagues better than mine.", "x": 640, "y": 530 },
             { "type": "say", "text": "He yanks his old headphones off the monitor and drops them straight in the bin.", "color": "narrator" },
             { "type": "say", "text": "These are staying on forever.", "x": 640, "y": 530 },
             { "type": "say", "text": "Eyes forward, head nodding slightly. You no longer exist to him.", "color": "narrator" },
-            { "type": "remove_item", "item": "headphones" },
-            { "type": "set_flag", "flag": "chip_distracted", "value": true }
+            { "type": "remove_item", "item": "headphones" }
           ]
         },
         {
@@ -126,11 +126,11 @@
           "effects": [
             { "type": "say", "text": "You hold out the headphones. Chip clocks them instantly.", "color": "narrator" },
             { "type": "say", "text": "Those are mine.", "x": 640, "y": 530 },
+            { "type": "set_flag", "flag": "chip_distracted", "value": true },
             { "type": "say", "text": "He takes them, puts them on, and freezes.", "color": "narrator" },
             { "type": "say", "text": "Wait. These are the XM5s. My old ones are garbage compared to these.", "x": 640, "y": 530 },
             { "type": "say", "text": "He pulls his old headphones off the hook and tosses them in the bin without looking. The world outside his monitors ceases to matter.", "color": "narrator" },
-            { "type": "remove_item", "item": "headphones" },
-            { "type": "set_flag", "flag": "chip_distracted", "value": true }
+            { "type": "remove_item", "item": "headphones" }
           ]
         }
       ]
@@ -156,7 +156,7 @@
               "chip_distracted": true,
               "lab_door_tried": true
             },
-            "text": "Four monitors. Left: a build terminal, logs scrolling. Second: Phone Tool — the employee directory. I scan straight for the cost center column. There it is: CVNA lab — 2847. Third: support tickets, 47 unread. Far right: a budget spreadsheet. I have what I came for.",
+            "text": "Four monitors. Left: a build terminal, logs scrolling. Second: Phone Tool — the employee directory. I scan straight for the cost center column. There it is: Computer Vision North America (CVNA) lab — 2847. Third: support tickets, 47 unread. Far right: a budget spreadsheet. I have what I came for.",
             "color": "narrator",
             "effects": [
               { "type": "set_flag", "flag": "knows_lab_code", "value": true }

@@ -67,34 +67,43 @@ Game.Dialogue = (function () {
 
   function buildChoices(node) {
     choices = [];
-    if (!node.choices) {
-      end();
-      return;
+
+    function doChoices() {
+      if (!node.choices) {
+        if (node.next) { goToNode(node.next); } else { end(); }
+        return;
+      }
+
+      for (var i = 0; i < node.choices.length; i++) {
+        var ch = node.choices[i];
+
+        if (ch.condition && !Game.State.evaluate(ch.condition)) continue;
+        if (ch.show_once && Game.State.hasSeen(dialogueId, ch.id || ('c' + i))) continue;
+
+        choices.push({
+          index: i,
+          id:     ch.id || ('c' + i),
+          text:   ch.text,
+          next:   ch.next,
+          effects: ch.effects,
+        });
+      }
+
+      if (choices.length === 0 || node.allow_exit) {
+        choices.push({
+          index:   -1,
+          id:      '_exit',
+          text:    'End conversation',
+          next:    null,
+          effects: null,
+        });
+      }
     }
 
-    for (var i = 0; i < node.choices.length; i++) {
-      var ch = node.choices[i];
-
-      if (ch.condition && !Game.State.evaluate(ch.condition)) continue;
-      if (ch.show_once && Game.State.hasSeen(dialogueId, ch.id || ('c' + i))) continue;
-
-      choices.push({
-        index: i,
-        id:     ch.id || ('c' + i),
-        text:   ch.text,
-        next:   ch.next,
-        effects: ch.effects,
-      });
-    }
-
-    if (choices.length === 0 || node.allow_exit) {
-      choices.push({
-        index:   -1,
-        id:      '_exit',
-        text:    'End conversation',
-        next:    null,
-        effects: null,
-      });
+    if (node.effects) {
+      Game.Effects.execute(node.effects, doChoices);
+    } else {
+      doChoices();
     }
   }
 

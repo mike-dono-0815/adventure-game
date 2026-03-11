@@ -14,7 +14,7 @@
       "label": "Office Kitchen",
       "description": "Start in the kitchen. Fridge closed, egg available.",
       "room": "kitchen",
-      "player_x": 600,
+      "player_x": 400,
       "player_y": 680,
       "player_dir": "right",
       "flags": {
@@ -114,8 +114,8 @@
       "label": "Bob's Office — start of end puzzle",
       "description": "In Bob's office. Stress ball, mystery package, and USB stick in hand.",
       "room": "bobs_office",
-      "player_x": 300,
-      "player_y": 600,
+      "player_x": 800,
+      "player_y": 730,
       "player_dir": "right",
       "flags": {
         "alarm_triggered": true,
@@ -129,8 +129,8 @@
       "label": "Bob's Office — near win",
       "description": "All pre-requisites done. Just need to co-sign and give to Bob.",
       "room": "bobs_office",
-      "player_x": 300,
-      "player_y": 600,
+      "player_x": 800,
+      "player_y": 730,
       "player_dir": "right",
       "flags": {
         "alarm_triggered": true,

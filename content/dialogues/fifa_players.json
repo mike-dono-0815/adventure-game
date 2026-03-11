@@ -6,7 +6,7 @@
   "start": "challenge",
   "nodes": {
     "challenge": {
-      "npc_text": "Right. Standard rules. First to five. No pausing. No commentary settings. No excuses.",
+      "npc_text": "Sure. Standard rules. 5 minutes. No substitutes. No pausing. And definitely no noodling. No excuses.",
       "choices": [
         {
           "id": "play_without_book",
@@ -78,7 +78,7 @@
       ]
     },
     "post_win": {
-      "npc_text": "Look — you won fair. I'm... going to step out for a bit. The lab's yours. Don't touch the compile terminal.",
+      "npc_text": "Look — you won fair. We are going to step out for a bit. The lab's yours. Don't touch the compile terminal. And if I would be you, I would not touch the specimen...",
       "choices": [
         {
           "id": "finish",

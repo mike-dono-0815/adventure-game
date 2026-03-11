@@ -121,6 +121,12 @@ Game.Input = (function () {
       return;
     }
 
+    // Credits crawl absorbs all clicks
+    if (Game.Credits.isActive()) {
+      Game.Credits.handleClick();
+      return;
+    }
+
     // TitleCard overlay absorbs all clicks
     if (Game.TitleCard.isActive()) {
       Game.TitleCard.handleClick();

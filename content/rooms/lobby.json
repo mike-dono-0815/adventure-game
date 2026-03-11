@@ -90,7 +90,7 @@
       ],
       "interactions": {
         "look_at": {
-          "text": "A security monitor showing two feeds: the lobby entrance, and the IT department — extension 204. Looks quiet in there."
+          "text": "A security monitor showing two feeds: the lobby entrance, and the IT department. Looks quiet in there."
         },
         "use": {
           "text": "I'm not a security guard. I just need to get inside."
@@ -250,14 +250,21 @@
         "look_at": {
           "text": "A 'Barista Pro' coffee machine with a display panel. Several drink options are available."
         },
-        "use": {
-          "effects": [
-            {
-              "type": "dialogue",
-              "dialogue": "coffee_machine"
-            }
-          ]
-        },
+        "use": [
+          {
+            "condition": { "coffee_machine_used": false },
+            "effects": [
+              { "type": "say", "text": "I'm not after a coffee myself. But the receptionist looks like she could really use one.", "color": "narrator" },
+              { "type": "set_flag", "flag": "coffee_machine_used", "value": true },
+              { "type": "dialogue", "dialogue": "coffee_machine" }
+            ]
+          },
+          {
+            "effects": [
+              { "type": "dialogue", "dialogue": "coffee_machine" }
+            ]
+          }
+        ],
         "talk_to": {
           "text": "The machine hums indifferently. I should USE it to order a drink."
         },

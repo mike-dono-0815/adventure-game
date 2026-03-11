@@ -175,7 +175,16 @@ Game.Wordfight = (function () {
                 pick(WIN_STATEMENTS),
                 stakeholderX, Game.Actors.getHeadY('stakeholder'),
                 Game.Config.COLORS.TEXT_NPC,
-                function () { walkStakeholderOff(function () { state = 'win'; }); }
+                function () {
+                  walkStakeholderOff(function () {
+                    var cb = endCallback;
+                    Game.ActionLine.clearOverride();
+                    active      = false;
+                    endCallback = null;
+                    state       = 'idle';
+                    if (cb) cb();
+                  });
+                }
               );
             } else {
               nextDuel();

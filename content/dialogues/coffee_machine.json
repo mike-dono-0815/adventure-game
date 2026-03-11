@@ -6,7 +6,7 @@
   "start": "menu",
   "nodes": {
     "menu": {
-      "npc_text": "The machine's display blinks: SELECT YOUR DRINK. A sticky note on the side reads: 'likes it frothy! cap'",
+      "narrator_text": "The machine's display blinks: SELECT YOUR DRINK.",
       "choices": [
         {
           "id": "americano",
@@ -17,7 +17,7 @@
           "id": "cappuccino",
           "text": "Cappuccino",
           "next": "correct_cappuccino",
-          "condition": { "not_has_item": "cappuccino_cup" },
+          "condition": { "karen_told_cappuccino": true, "not_has_item": "cappuccino_cup" },
           "effects": [
             { "type": "add_item", "item": "cappuccino_cup" }
           ]
@@ -26,12 +26,7 @@
           "id": "cappuccino_have",
           "text": "Cappuccino (already have one)",
           "next": "already_have",
-          "condition": { "has_item": "cappuccino_cup" }
-        },
-        {
-          "id": "latte",
-          "text": "Latte",
-          "next": "wrong_latte"
+          "condition": { "karen_told_cappuccino": true, "has_item": "cappuccino_cup" }
         },
         {
           "id": "espresso",
@@ -76,21 +71,6 @@
         {
           "id": "give_up_1",
           "text": "Maybe I should think harder about this.",
-          "next": null
-        }
-      ]
-    },
-    "wrong_latte": {
-      "narrator_text": "The machine whirs and produces a milky latte. You wave it hopefully in the receptionist's direction. She glances over. 'Hmm. A latte. It's fine, I suppose, but... something's missing. Still too tired.' You spill it on the counter. Typical.",
-      "choices": [
-        {
-          "id": "try_again_2",
-          "text": "Try a different drink.",
-          "next": "menu"
-        },
-        {
-          "id": "give_up_2",
-          "text": "I need to think about this more.",
           "next": null
         }
       ]

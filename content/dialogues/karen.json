@@ -6,21 +6,6 @@
   "start": "greeting",
   "start_repeat": "greeting_return",
   "nodes": {
-    "greeting_return": {
-      "npc_text": "Still no badge printer paper, I'm afraid. Is there something else I can help you with?",
-      "choices": [
-        {
-          "id": "meeting_2",
-          "text": "I have a meeting inside. Surely I can just pop through?",
-          "next": "no_badge"
-        },
-        {
-          "id": "exit_return",
-          "text": "Never mind.",
-          "next": null
-        }
-      ]
-    },
     "greeting": {
       "npc_text": "Good morning. I'm afraid all visitors require a valid badge to enter the building.",
       "choices": [
@@ -33,7 +18,7 @@
           "id": "tired",
           "text": "You look exhausted. Long morning?",
           "next": "tired_response",
-          "show_once": true
+          "condition": { "karen_told_cappuccino": false }
         },
         {
           "id": "badge_printer",
@@ -54,6 +39,21 @@
         }
       ]
     },
+    "greeting_return": {
+      "npc_text": "Still no badge printer paper, I'm afraid. Is there something else I can help you with?",
+      "choices": [
+        {
+          "id": "meeting_2",
+          "text": "I have a meeting inside. Surely I can just pop through?",
+          "next": "no_badge"
+        },
+        {
+          "id": "exit_return",
+          "text": "Never mind.",
+          "next": null
+        }
+      ]
+    },
     "main_options": {
       "choices": [
         {
@@ -65,7 +65,7 @@
           "id": "tired",
           "text": "You look exhausted. Long morning?",
           "next": "tired_response",
-          "show_once": true
+          "condition": { "karen_told_cappuccino": false }
         },
         {
           "id": "badge_printer",
@@ -88,21 +88,15 @@
     },
     "no_badge": {
       "npc_text": "No badge, no entry. Our printer is out of paper and IT hasn't responded in three days, so I cannot issue a temporary pass. I'm sorry.",
-      "choices": [
-        {
-          "id": "back_1",
-          "text": "There has to be another way in...",
-          "next": "main_options"
-        }
-      ]
+      "next": "main_options"
     },
     "tired_response": {
-      "npc_text": "Absolutely shattered, honestly. I haven't left this desk in four hours. I'm running on empty. Coffee would help, but I can't abandon my post.",
+      "npc_text": "I am absolutely shattered. Four hours at this desk without a break. I haven't even had a coffee.",
       "choices": [
         {
-          "id": "coffee_hint",
-          "text": "There's a coffee machine right over there.",
-          "next": "coffee_machine_response"
+          "id": "coffee_question",
+          "text": "What coffee do you like?",
+          "next": "coffee_preference"
         },
         {
           "id": "sympathise",
@@ -111,25 +105,27 @@
         }
       ]
     },
-    "coffee_machine_response": {
-      "npc_text": "Don't I know it. I'd kill for a cappuccino right now. There's just something about that frothy milk balance that hits differently. But I simply cannot leave the desk unattended.",
+    "coffee_preference": {
+      "npc_text": "Oh — cappuccino, every time. And here's the thing: that machine over there actually makes one, if you know how. Nobody reads the manual, but if you hold the Milk Froth button and tap Double Espresso twice — it unlocks a hidden menu. Perfect cappuccino. I discovered it completely by accident. I'd love one right now but I cannot leave this desk unattended.",
+      "effects": [
+        { "type": "set_flag", "flag": "karen_told_cappuccino", "value": true }
+      ],
       "choices": [
         {
-          "id": "understood",
-          "text": "Understood. I'll leave you to it.",
+          "id": "ill_try",
+          "text": "Leave it with me.",
+          "next": null
+        },
+        {
+          "id": "noted",
+          "text": "Good to know.",
           "next": null
         }
       ]
     },
     "badge_printer_response": {
       "npc_text": "Out of paper. I logged a ticket with IT on Monday. It's Thursday. I've had better luck communicating with the ficus in the corner.",
-      "choices": [
-        {
-          "id": "back_2",
-          "text": "Classic.",
-          "next": "main_options"
-        }
-      ]
+      "next": "main_options"
     },
     "emergency_response": {
       "npc_text": "Fire protocol is very clear. All staff must escort visitors through to the designated assembly area — which happens to be inside the building, past this door. Why do you ask?",
@@ -143,13 +139,7 @@
     },
     "suspicious": {
       "npc_text": "Right. Well. Let's hope it doesn't come to that. Is there anything else I can help you with?",
-      "choices": [
-        {
-          "id": "back_3",
-          "text": "No, I'm good. Thanks.",
-          "next": "main_options"
-        }
-      ]
+      "next": "main_options"
     }
   }
 }

@@ -162,7 +162,7 @@ Game.Effects = (function () {
 
       case 'victory':
         Game.State.set('game_won', true);
-        Game.Renderer.showVictory();
+        Game.Credits.start(function () { Game.Renderer.showVictory(); });
         done();
         break;
 

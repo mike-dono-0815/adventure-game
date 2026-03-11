@@ -10,7 +10,7 @@
       "choices": [
         {
           "id": "ask_access",
-          "text": "I need access to the CVNA lab.",
+          "text": "I need access to the lab.",
           "next": "access"
         },
         {

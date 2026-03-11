@@ -91,6 +91,7 @@ Game.Renderer = (function () {
     Game.Dialogue.update(dt);
     Game.Wordfight.update(dt);
     Game.TitleCard.update(dt);
+    Game.Credits.update(dt);
     // FakeDeath has no per-frame update — driven entirely by clicks
   }
 
@@ -122,7 +123,9 @@ Game.Renderer = (function () {
     Game.ActionLine.draw(ctx);
 
     // Bottom bar
-    if (Game.Wordfight.isActive()) {
+    if (Game.Credits.isActive()) {
+      drawCreditsBar(ctx);
+    } else if (Game.Wordfight.isActive()) {
       Game.Wordfight.draw(ctx);
     } else if (Game.Dialogue.isActive()) {
       Game.Dialogue.draw(ctx);
@@ -148,6 +151,11 @@ Game.Renderer = (function () {
     if (fadeAlpha > 0) {
       ctx.fillStyle = 'rgba(0,0,0,' + fadeAlpha + ')';
       ctx.fillRect(0, 0, cfg.WIDTH, cfg.HEIGHT);
+    }
+
+    // Credits crawl (precedes victory screen)
+    if (Game.Credits.isActive()) {
+      Game.Credits.draw(ctx);
     }
 
     // Victory screen
@@ -183,6 +191,35 @@ Game.Renderer = (function () {
     ctx.fillText(name, tx, ty);
   }
 
+  function drawCreditsBar(ctx) {
+    var cfg = Game.Config;
+
+    // Action line bar
+    ctx.fillStyle = cfg.COLORS.ACTION_LINE_BG;
+    ctx.fillRect(0, cfg.ACTION_LINE_Y, cfg.WIDTH, cfg.ACTION_LINE_HEIGHT);
+
+    // Bottom bar background
+    ctx.fillStyle = cfg.COLORS.BOTTOM_BAR_BG;
+    ctx.fillRect(0, cfg.BOTTOM_BAR_Y, cfg.WIDTH, cfg.BOTTOM_BAR_HEIGHT);
+
+    var lines = [
+      'Please read the running credits.',
+      'A lot of people were involved in making this game.',
+      'Like, a suspicious number of people.',
+      'All of them gave everything.',
+    ];
+    ctx.font = 'italic 22px ' + cfg.FONT_FAMILY;
+    ctx.textAlign = 'center';
+    var cx = cfg.WIDTH / 2;
+    var startY = cfg.BOTTOM_BAR_Y + 60;
+    for (var i = 0; i < lines.length; i++) {
+      var alpha = i < 2 ? 0.9 : 0.5;
+      ctx.fillStyle = 'rgba(255,255,255,' + alpha + ')';
+      ctx.fillText(lines[i], cx, startY + i * 36);
+    }
+    ctx.textAlign = 'left';
+  }
+
   function drawVictory(ctx) {
     var cfg = Game.Config;
     var endImg = Game.Loader.getImage('bg_end');
@@ -207,7 +244,7 @@ Game.Renderer = (function () {
       'Six weeks later. A beach somewhere between Barbados and not-Amazon.',
       'The agreement is framed on the wall of a rented villa. Bob sent a postcard.',
       'Chip won the FIFA league. HR relocated to floor 28. Nobody noticed you left.',
-      'You order another coconut drink and watch the horizon. It is, somehow, enough.',
+      'You order another Pina Colada and watch the horizon. It is, somehow, enough.',
     ];
     ctx.fillStyle = cfg.COLORS.TEXT_DEFAULT;
     ctx.font = cfg.FONT_SIZE + 'px ' + cfg.FONT_FAMILY;
@@ -221,9 +258,8 @@ Game.Renderer = (function () {
 
     ctx.fillStyle = cfg.COLORS.VERB_HOVER;
     ctx.font = 'bold 32px ' + cfg.FONT_FAMILY;
-    ctx.textAlign = 'right';
-    ctx.fillText('THE END', cfg.WIDTH - 60, cfg.BOTTOM_BAR_Y + cfg.BOTTOM_BAR_HEIGHT - 28);
     ctx.textAlign = 'left';
+    ctx.fillText('THE END', 60, cfg.BOTTOM_BAR_Y + cfg.BOTTOM_BAR_HEIGHT - 28);
   }
 
   return {

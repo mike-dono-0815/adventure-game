@@ -10,7 +10,7 @@
   ],
   "perspective": { "min_scale": 1.0, "max_scale": 1.2 },
   "entry_points": {
-    "from_hr_floor": { "x": 1060, "y": 730, "dir": "left" }
+    "from_hr_floor": { "x": 800, "y": 730, "dir": "left" }
   },
   "hotspots": [
     {
@@ -32,7 +32,7 @@
       "id": "bob",
       "name": "Bob",
       "rect": [630, 297, 129, 157],
-      "walk_to": [695, 720],
+      "walk_to": [545, 720],
       "face_dir": "right",
       "dialogue": "bob",
       "interactions": {
@@ -54,7 +54,7 @@
           },
           {
             "condition": { "usb_used": true },
-            "text": "Bob squeezes the stress ball. He's composed enough to be useful. 'Code's 2847. Cabinet's on your left.'",
+            "text": "Bob squeezes the stress ball. He's composed enough to be useful. 'Code's 5391. Cabinet's on your left.'",
             "color": "narrator"
           },
           {
@@ -87,13 +87,13 @@
           {
             "condition": { "agreement_retrieved": true },
             "effects": [
-              { "type": "say", "text": "Sign it. You need a pen — there might be one in that package, if you can sort it out.", "x": 637, "y": 297 }
+              { "type": "say", "text": "Sign it. You might need a pen...", "x": 637, "y": 297 }
             ]
           },
           {
             "condition": { "usb_used": true },
             "effects": [
-              { "type": "say", "text": "Cabinet code is 2847. That's my cost centre. Please don't tell anyone I told you that.", "x": 637, "y": 297 }
+              { "type": "say", "text": "Cabinet code is 5391. That's my cost centre. Please don't tell anyone I told you that.", "x": 637, "y": 297 }
             ]
           },
           {
@@ -104,6 +104,7 @@
           },
           {
             "effects": [
+              { "type": "say", "text": "Hi. I'm Alex. I'm here to sign my MSA — my separation agreement. I was told you have the paperwork.", "color": "player" },
               { "type": "say", "text": "I can't do anything right now. I'm too stressed to even look at a document. I need a moment.", "x": 637, "y": 297 },
               { "type": "say", "text": "He doesn't elaborate on what kind of moment.", "color": "narrator" }
             ]
@@ -199,6 +200,12 @@
             { "type": "say", "text": "Alex. You're free. I hope it's better out there than it was in here.", "x": 637, "y": 297 },
             { "type": "remove_item", "item": "co_signed_agreement" },
             { "type": "set_flag", "flag": "agreement_complete", "value": true },
+            { "type": "show_title_card", "title": "Free.", "lines": [
+              "The MSA is signed. Counter-signed. Witnessed. Filed in triplicate.",
+              "You are no longer an Amazonian. You are no longer a headcount.",
+              "You are, once again, just a customer.",
+              "Congratulations. Well deserved."
+            ]},
             { "type": "victory" }
           ]
         },
@@ -210,6 +217,12 @@
             { "type": "say", "text": "You're done here, Alex. Good luck.", "x": 637, "y": 297 },
             { "type": "remove_item", "item": "co_signed_agreement" },
             { "type": "set_flag", "flag": "agreement_complete", "value": true },
+            { "type": "show_title_card", "title": "Free.", "lines": [
+              "The MSA is signed. Counter-signed. Witnessed. Filed in triplicate.",
+              "You are no longer an Amazonian. You are no longer a headcount.",
+              "You are, once again, just a person.",
+              "Congratulations. Go outside."
+            ]},
             { "type": "victory" }
           ]
         },
@@ -270,7 +283,7 @@
         "look_at": [
           {
             "condition": { "usb_used": true },
-            "text": "The screen shows Bob's HR personnel files. You already got what you needed — cost centre 2847."
+            "text": "The screen shows Bob's HR personnel files. You already got what you needed — cost centre 5391."
           },
           {
             "condition": { "stress_ball_given": true },
@@ -283,7 +296,7 @@
         "use": [
           {
             "condition": { "usb_used": true },
-            "text": "Already done. Cost centre 2847 — the cabinet code."
+            "text": "Already done. Cost centre 5391 — the cabinet code."
           },
           {
             "condition": { "stress_ball_given": true },
@@ -299,7 +312,7 @@
           "item": "usb_stick",
           "verb": "use",
           "condition": { "stress_ball_given": true },
-          "text": "You slot in the USB. The personnel system unlocks. You scan for Bob's cost centre. There it is: 2847. That's the filing cabinet code.",
+          "text": "You slot in the USB. The personnel system unlocks. You scan for Bob's cost centre. There it is: 5391. That's the filing cabinet code.",
           "effects": [
             { "type": "set_flag", "flag": "usb_used", "value": true }
           ]
@@ -340,7 +353,7 @@
           },
           {
             "condition": { "usb_used": true },
-            "text": "A grey filing cabinet with a keypad lock. You know the code — 2847."
+            "text": "A grey filing cabinet with a keypad lock. You know the code — 5391."
           },
           {
             "text": "A grey filing cabinet with a keypad lock on the front. I'd need the access code to open it."
@@ -357,7 +370,7 @@
           },
           {
             "condition": { "usb_used": true },
-            "text": "You tap in 2847. The lock clicks. Inside: stacked HR forms, a broken stapler, and at the very back, a thick sealed envelope labelled 'SEPARATION AGREEMENT — Alex'. You take it.",
+            "text": "You tap in 5391. The lock clicks. Inside: stacked HR forms, a broken stapler, and at the very back, a thick sealed envelope labelled 'SEPARATION AGREEMENT — Alex'. You take it.",
             "effects": [
               { "type": "set_flag", "flag": "filing_cabinet_open", "value": true },
               { "type": "set_flag", "flag": "agreement_retrieved", "value": true },

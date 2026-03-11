@@ -78,7 +78,16 @@
         },
         "talk_to": [
           {
+            "condition": { "fifa_challenged": false },
             "effects": [
+              { "type": "say", "text": "Hi! I'd like to play a round.", "color": "player" },
+              { "type": "set_flag", "flag": "fifa_challenged", "value": true },
+              { "type": "dialogue", "dialogue": "fifa_players" }
+            ]
+          },
+          {
+            "effects": [
+              { "type": "say", "text": "Hi! I'd like to do another round.", "color": "player" },
               { "type": "dialogue", "dialogue": "fifa_players" }
             ]
           }
@@ -110,7 +119,16 @@
             "text": "The game is over. I won. I don't need to play again."
           },
           {
+            "condition": { "fifa_challenged": false },
             "effects": [
+              { "type": "say", "text": "Hi! I'd like to play a round.", "color": "player" },
+              { "type": "set_flag", "flag": "fifa_challenged", "value": true },
+              { "type": "dialogue", "dialogue": "fifa_players" }
+            ]
+          },
+          {
+            "effects": [
+              { "type": "say", "text": "Hi! I'd like to do another round.", "color": "player" },
               { "type": "dialogue", "dialogue": "fifa_players" }
             ]
           }
@@ -199,7 +217,7 @@
       "hidden_if": { "fifa_won": true },
       "interactions": {
         "look_at": {
-          "text": "A cluster of beanbags in the corner, the kind that appear in 'collaborative spaces' brochures and are used by nobody. One has a laptop power cable draped over it. The cable goes nowhere."
+          "text": "Two beanbags, the kind that appear in 'collaborative spaces' brochures and are usually used by nobody."
         },
         "use": {
           "text": "I'm not sitting in a beanbag right now. I have things to do."
@@ -217,15 +235,33 @@
       "face_dir": "right",
       "hidden_if": { "fifa_won": true },
       "interactions": {
-        "look_at": {
-          "text": "A small plastic cup on the bench. There is something in it. It has a label. I am not going to read the label."
-        },
-        "pick_up": {
-          "text": "Absolutely not."
-        },
-        "use": {
-          "text": "I don't know what that is and I intend to keep it that way."
-        }
+        "look_at": [
+          {
+            "condition": { "fifa_won": true },
+            "text": "A small plastic cup on the bench. There is something in it. It has a label. I am not going to read the label."
+          },
+          {
+            "text": "I can't get to it. The FIFA players are completely in the way."
+          }
+        ],
+        "pick_up": [
+          {
+            "condition": { "fifa_won": true },
+            "text": "Absolutely not."
+          },
+          {
+            "text": "I can't even get close. The FIFA players are blocking everything over there."
+          }
+        ],
+        "use": [
+          {
+            "condition": { "fifa_won": true },
+            "text": "I don't know what that is and I intend to keep it that way."
+          },
+          {
+            "text": "I can't reach it. The FIFA players are in the way."
+          }
+        ]
       }
     },
     {
