@@ -4,7 +4,9 @@
   "background": "kitchen",
   "backgrounds": [
     {
-      "condition": { "egg_exploded": true },
+      "condition": {
+        "egg_exploded": true
+      },
       "image": "kitchen_egg"
     },
     {
@@ -12,38 +14,69 @@
     }
   ],
   "walk_area": [
-    [354, 580], [1356, 580], [1356, 750], [354, 750]
+    [
+      354,
+      580
+    ],
+    [
+      1273,
+      579
+    ],
+    [
+      1275,
+      750
+    ],
+    [
+      354,
+      750
+    ]
   ],
-  "perspective": { "min_scale": 1.0, "max_scale": 1.15 },
+  "perspective": {
+    "min_scale": 1,
+    "max_scale": 1.15
+  },
   "entry_points": {
-    "from_office_space": { "x": 400, "y": 680, "dir": "right" }
+    "from_office_space": {
+      "x": 400,
+      "y": 680,
+      "dir": "right"
+    }
   },
   "trigger_zones": [
     {
       "id": "exit_bottom_office",
-      "rect": [538, 730, 300, 30],
+      "rect": [
+        538,
+        730,
+        300,
+        30
+      ],
       "effects": [
-        { "type": "transition", "room": "office_space", "player_x": 688, "player_y": 680, "player_dir": "right" }
+        {
+          "type": "transition",
+          "room": "office_space",
+          "player_x": 688,
+          "player_y": 680,
+          "player_dir": "right"
+        }
       ]
     }
   ],
-  "characters": [
-    {
-      "name": "HR Person",
-      "key": "hr",
-      "dir": "left",
-      "x": 835,
-      "y": 700,
-      "visible_if": { "hr_person_entered": true },
-      "hidden_if": { "hr_person_left": true }
-    }
-  ],
+  "characters": [],
   "hotspots": [
     {
       "id": "coffee_machine_kitchen",
       "name": "coffee machine",
-      "rect": [70, 275, 150, 150],
-      "walk_to": [145, 680],
+      "rect": [
+        70,
+        275,
+        150,
+        150
+      ],
+      "walk_to": [
+        145,
+        680
+      ],
       "face_dir": "left",
       "interactions": {
         "look_at": {
@@ -51,14 +84,19 @@
         },
         "use": [
           {
-            "condition": { "has_item": "terrible_filter_coffee" },
+            "condition": {
+              "has_item": "terrible_filter_coffee"
+            },
             "text": "I already have a cup of terrible coffee. Let's not compound the problem."
           },
           {
             "text": "You press the largest button. The machine groans, shudders, and fills a paper cup with something the colour of dishwater. You take it.",
             "color": "narrator",
             "effects": [
-              { "type": "add_item", "item": "terrible_filter_coffee" }
+              {
+                "type": "add_item",
+                "item": "terrible_filter_coffee"
+              }
             ]
           }
         ],
@@ -70,20 +108,42 @@
     {
       "id": "kettle",
       "name": "electric kettle",
-      "rect": [730, 280, 60, 75],
-      "walk_to": [760, 680],
+      "rect": [
+        730,
+        280,
+        60,
+        75
+      ],
+      "walk_to": [
+        760,
+        680
+      ],
       "face_dir": "back",
       "interactions": {
-        "look_at": { "text": "A kettle with a ring of limescale around the inside. Someone has taped a sign to it: 'BOIL TWICE — Karen'. Nobody knows why." },
-        "use":     { "text": "I don't need hot water right now." },
-        "pick_up": { "text": "It's plugged in and full of water. Not a good carry." }
+        "look_at": {
+          "text": "A kettle with a ring of limescale around the inside. Someone has taped a sign to it: 'BOIL TWICE — Karen'. Nobody knows why."
+        },
+        "use": {
+          "text": "I don't need hot water right now."
+        },
+        "pick_up": {
+          "text": "It's plugged in and full of water. Not a good carry."
+        }
       }
     },
     {
       "id": "fridge",
       "name": "fridge",
-      "rect": [1055, 140, 300, 380],
-      "walk_to": [1205, 680],
+      "rect": [
+        1055,
+        140,
+        300,
+        380
+      ],
+      "walk_to": [
+        1205,
+        680
+      ],
       "face_dir": "right",
       "interactions": {
         "look_at": {
@@ -91,72 +151,121 @@
         },
         "open": [
           {
-            "condition": { "fridge_open": true },
+            "condition": {
+              "fridge_open": true
+            },
             "text": "The fridge is already open. A wave of cold and mild existential dread flows out."
           },
           {
             "text": "You pull open the fridge. Inside: a sad desk salad, a container labelled 'Karen's lunch', and a single egg — frozen solid. Someone had this fridge set to arctic. You pocket the egg.",
             "color": "narrator",
             "effects": [
-              { "type": "set_flag", "flag": "fridge_open", "value": true },
-              { "type": "add_item", "item": "frozen_egg" }
+              {
+                "type": "set_flag",
+                "flag": "fridge_open",
+                "value": true
+              },
+              {
+                "type": "add_item",
+                "item": "frozen_egg"
+              }
             ]
           }
         ],
         "close": [
           {
-            "condition": { "fridge_open": true },
+            "condition": {
+              "fridge_open": true
+            },
             "text": "You push the fridge shut.",
             "effects": [
-              { "type": "set_flag", "flag": "fridge_open", "value": false }
+              {
+                "type": "set_flag",
+                "flag": "fridge_open",
+                "value": false
+              }
             ]
           },
           {
             "text": "It's already closed."
           }
         ],
-        "use": { "text": "I should OPEN the fridge." }
+        "use": {
+          "text": "I should OPEN the fridge."
+        }
       }
     },
     {
       "id": "frozen_egg",
       "name": "frozen egg",
-      "rect": [1201, 377, 59, 42],
-      "walk_to": [1205, 680],
+      "rect": [
+        1201,
+        377,
+        59,
+        42
+      ],
+      "walk_to": [
+        1205,
+        680
+      ],
       "face_dir": "right",
-      "visible_if": { "fridge_open": true },
-      "hidden_if": { "has_item": "frozen_egg" },
+      "visible_if": {
+        "fridge_open": true
+      },
+      "hidden_if": {
+        "has_item": "frozen_egg"
+      },
       "interactions": {
         "look_at": {
           "text": "A white egg glazed with frost crystals. It's completely frozen. I need to thaw it before I can do anything with it."
         },
         "pick_up": [
           {
-            "condition": { "has_item": "frozen_egg" },
+            "condition": {
+              "has_item": "frozen_egg"
+            },
             "text": "I already have the egg."
           },
           {
             "text": "You take the frozen egg. It's cold enough to burn. You transfer it quickly to your bag.",
             "color": "narrator",
             "effects": [
-              { "type": "add_item", "item": "frozen_egg" },
-              { "type": "remove_hotspot", "id": "frozen_egg" }
+              {
+                "type": "add_item",
+                "item": "frozen_egg"
+              },
+              {
+                "type": "remove_hotspot",
+                "id": "frozen_egg"
+              }
             ]
           }
         ],
-        "use": { "text": "I should PICK UP the egg first." }
+        "use": {
+          "text": "I should PICK UP the egg first."
+        }
       }
     },
     {
       "id": "microwave",
       "name": "microwave",
-      "rect": [420, 270, 150, 90],
-      "walk_to": [495, 680],
+      "rect": [
+        420,
+        270,
+        150,
+        90
+      ],
+      "walk_to": [
+        495,
+        680
+      ],
       "face_dir": "back",
       "interactions": {
         "look_at": [
           {
-            "condition": { "egg_exploded": true },
+            "condition": {
+              "egg_exploded": true
+            },
             "text": "The microwave is a crime scene. The door hangs open. The interior is... difficult to describe. There is egg everywhere. There will always be egg everywhere now."
           },
           {
@@ -165,7 +274,9 @@
         ],
         "use": [
           {
-            "condition": { "egg_exploded": true },
+            "condition": {
+              "egg_exploded": true
+            },
             "text": "The microwave is out of commission. Permanently and comprehensively."
           },
           {
@@ -174,7 +285,9 @@
         ],
         "open": [
           {
-            "condition": { "egg_exploded": true },
+            "condition": {
+              "egg_exploded": true
+            },
             "text": "It's already open. In every sense."
           },
           {
@@ -187,17 +300,72 @@
           "item": "thawed_egg",
           "verb": "use",
           "text": "You place the egg in the microwave and press START. It begins to spin. The machine hums. Then rattles. Then shakes. Then goes very, very quiet for one second.",
+          "color": "narrator",
           "effects": [
-            { "type": "say", "text": "BOOM. The microwave door blows open. The kitchen fills with the smell of existential dread and sulphur.", "x": 625, "y": 280, "color": "#ff6644" },
-            { "type": "say", "text": "Thirty seconds later, the door swings open.", "x": 625, "y": 280 },
-            { "type": "set_flag", "flag": "egg_exploded", "value": true },
-            { "type": "remove_item", "item": "thawed_egg" },
-            { "type": "lock_input" },
-            { "type": "spawn_npc", "id": "hr_actor", "x": 1420, "y": 700, "sprite": "hr", "dualSheet": true, "dir": "left" },
-            { "type": "walk_npc", "id": "hr_actor", "to_x": 835, "to_y": 700 },
-            { "type": "set_flag", "flag": "hr_person_entered", "value": true },
-            { "type": "remove_npc", "id": "hr_actor" },
-            { "type": "unlock_input" }
+            {
+              "type": "set_flag",
+              "flag": "egg_exploded",
+              "value": true
+            },
+            {
+              "type": "say",
+              "text": "BOOM. The microwave door blows open. The kitchen fills with the smell of existential dread and sulphur.",
+              "x": 625,
+              "y": 280,
+              "color": "#ff6644"
+            },
+            {
+              "type": "say",
+              "text": "Thirty seconds later, the door swings open.",
+              "x": 625,
+              "y": 280,
+              "color": "narrator"
+            },
+            {
+              "type": "remove_item",
+              "item": "thawed_egg"
+            },
+            {
+              "type": "lock_input"
+            },
+            {
+              "type": "spawn_npc",
+              "id": "hr_actor",
+              "x": 1420,
+              "y": 700,
+              "sprite": "hr",
+              "dualSheet": true,
+              "dir": "left"
+            },
+            {
+              "type": "walk_npc",
+              "id": "hr_actor",
+              "to_x": 914,
+              "to_y": 523
+            },
+            {
+              "type": "set_flag",
+              "flag": "hr_person_entered",
+              "value": true
+            },
+            {
+              "type": "start_rant",
+              "id": "hr_actor",
+              "texts": [
+                "WHO DID THIS.",
+                "This is a POLICY VIOLATION.",
+                "I will find out who did this.",
+                "HR Case — OPENED.",
+                "This kitchen is a CRIME SCENE.",
+                "Someone is getting a final warning.",
+                "I will not be ignored."
+              ],
+              "interval": 1.8,
+              "speed": 0.168
+            },
+            {
+              "type": "unlock_input"
+            }
           ]
         },
         {
@@ -211,62 +379,153 @@
     {
       "id": "counter",
       "name": "kitchen counter",
-      "rect": [390, 375, 440, 125],
-      "walk_to": [610, 680],
+      "rect": [
+        390,
+        375,
+        440,
+        125
+      ],
+      "walk_to": [
+        610,
+        680
+      ],
       "face_dir": "back",
       "interactions": {
-        "look_at": { "text": "A long kitchen counter. On it: a kettle, a bowl of fruit that has seen better weeks, a dish rack with two mugs and infinite passive regret." },
-        "use":     { "text": "I don't need anything from the counter right now." }
+        "look_at": {
+          "text": "A long kitchen counter. On it: a kettle, a bowl of fruit that has seen better weeks, a dish rack with two mugs and infinite passive regret."
+        },
+        "use": {
+          "text": "I don't need anything from the counter right now."
+        }
       }
     },
     {
       "id": "whiteboard_kitchen",
       "name": "whiteboard",
-      "rect": [40, 90, 290, 185],
-      "walk_to": [185, 680],
+      "rect": [
+        40,
+        90,
+        290,
+        185
+      ],
+      "walk_to": [
+        185,
+        680
+      ],
       "face_dir": "left",
       "interactions": {
-        "look_at": { "text": "A small whiteboard next to the coffee machine. It reads: 'DAYS SINCE LAST KITCHEN INCIDENT: 0'. The number has been erased and rewritten so many times the surface is grey." },
-        "use":     { "text": "I am not the person who maintains the incident board. I may be the person who resets it, though." }
+        "look_at": {
+          "text": "A small whiteboard next to the coffee machine. It reads: 'DAYS SINCE LAST KITCHEN INCIDENT: 0'. The number has been erased and rewritten so many times the surface is grey."
+        },
+        "use": {
+          "text": "I am not the person who maintains the incident board. I may be the person who resets it, though."
+        }
       }
     },
     {
       "id": "hr_person",
       "name": "HR Person",
-      "rect": [791, 264, 102, 407],
-      "walk_to": [700, 700],
+      "rect": [
+        860,
+        200,
+        120,
+        350
+      ],
+      "walk_to": [
+        800,
+        580
+      ],
       "face_dir": "right",
-      "visible_if": { "hr_person_entered": true },
-      "hidden_if": { "hr_person_left": true },
+      "visible_if": {
+        "hr_person_entered": true
+      },
+      "hidden_if": {
+        "hr_person_left": true
+      },
       "interactions": {
         "look_at": [
           {
-            "condition": { "floor_digit_1_known": true },
+            "condition": {
+              "floor_digit_1_known": true
+            },
             "text": "Brisk, lanyard-heavy, thousand-yard stare. Their business card is still clipped to the lanyard. 'Amazon HR — Floor 2_'. The second digit is smudged with what might be egg."
           },
           {
             "text": "Brisk, lanyard-heavy, the thousand-yard stare of someone who processes terminations before breakfast. Their business card is clipped to their lanyard: 'Amazon HR — Floor 2_'. The second digit is smudged with what might be egg.",
             "effects": [
-              { "type": "set_flag", "flag": "floor_digit_1_known", "value": true }
+              {
+                "type": "set_flag",
+                "flag": "floor_digit_1_known",
+                "value": true
+              }
             ]
           }
         ],
         "talk_to": [
           {
-            "condition": { "floor_digit_1_known": true },
-            "effects": [
-              { "type": "say", "text": "I have nothing to say to you without a union rep present.", "x": 835, "y": 330 }
-            ]
+            "condition": {
+              "accused_by_hr": true
+            },
+            "text": "That's obviously not going to help.",
+            "color": "narrator"
           },
           {
             "effects": [
-              { "type": "say", "text": "I have nothing to say to you without a union rep present.", "x": 835, "y": 330 },
-              { "type": "say", "text": "They give you a withering look.", "color": "narrator" }
+              { "type": "pause_rant", "id": "hr_actor" },
+              {
+                "type": "say",
+                "text": "Don't.",
+                "x": 914,
+                "y": 98
+              },
+              {
+                "type": "say",
+                "text": "She holds up one finger. A single, devastating finger.",
+                "color": "narrator"
+              },
+              {
+                "type": "say",
+                "text": "I don't have proof. Yet. But I know.",
+                "x": 914,
+                "y": 98
+              },
+              {
+                "type": "say",
+                "text": "She gestures at the microwave. Then at you. Then back at the microwave.",
+                "color": "narrator"
+              },
+              {
+                "type": "say",
+                "text": "Something happened in this kitchen. Something that will be in a report. A detailed report.",
+                "x": 914,
+                "y": 98
+              },
+              {
+                "type": "say",
+                "text": "She writes something in a small notebook. She doesn't show you what.",
+                "color": "narrator"
+              },
+              {
+                "type": "say",
+                "text": "I'm watching you.",
+                "x": 914,
+                "y": 98
+              },
+              {
+                "type": "set_flag",
+                "flag": "accused_by_hr",
+                "value": true
+              },
+              { "type": "resume_rant", "id": "hr_actor" }
             ]
           }
         ],
-        "pick_up": { "text": "Pretty sure that's illegal." },
-        "give":    { "text": "They don't want anything from me." }
+        "pick_up": {
+          "text": "Pretty sure that's illegal."
+        },
+        "give": {
+          "text": "They don't want anything from me."
+        }
       },
       "combinations": [
         {
@@ -284,13 +543,45 @@
     {
       "id": "exit_to_office_bottom",
       "name": "Office",
-      "rect": [438, 700, 500, 68],
-      "walk_to": [688, 740],
+      "rect": [
+        271,
+        701,
+        871,
+        67
+      ],
+      "walk_to": [
+        688,
+        740
+      ],
       "face_dir": "back",
       "interactions": {
-        "look_at": { "text": "The way back to the main office floor." },
-        "open": { "text": "You head back to the office.", "effects": [{ "type": "transition", "room": "office_space", "player_x": 688, "player_y": 680, "player_dir": "right" }] },
-        "use":  { "text": "You head back to the office.", "effects": [{ "type": "transition", "room": "office_space", "player_x": 688, "player_y": 680, "player_dir": "right" }] }
+        "look_at": {
+          "text": "The way back to the main office floor."
+        },
+        "open": {
+          "text": "You head back to the office.",
+          "effects": [
+            {
+              "type": "transition",
+              "room": "office_space",
+              "player_x": 688,
+              "player_y": 680,
+              "player_dir": "right"
+            }
+          ]
+        },
+        "use": {
+          "text": "You head back to the office.",
+          "effects": [
+            {
+              "type": "transition",
+              "room": "office_space",
+              "player_x": 688,
+              "player_y": 680,
+              "player_dir": "right"
+            }
+          ]
+        }
       }
     }
   ]

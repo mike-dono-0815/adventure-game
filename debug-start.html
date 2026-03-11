@@ -37,8 +37,8 @@
 <hr class="divider">
 
 <div class="normal-start">
-  <span class="normal-label">Normal game start (lobby)</span>
-  <a class="btn btn-normal" href="index.html">Play from start</a>
+  <span class="normal-label">Start Screen (title with Start / Options)</span>
+  <a class="btn btn-normal" href="index.html?debug=1">Launch</a>
 </div>
 
 <script>
@@ -69,7 +69,7 @@
             '<div class="card-desc">' + (s.description || '') + '</div>' +
             '<div class="card-meta">room: ' + s.room + ' &nbsp;|&nbsp; flags: ' + flags + '<br>inventory: ' + inv + '</div>' +
           '</div>' +
-          '<a class="btn" href="index.html?scenario=' + encodeURIComponent(key) + '">Launch</a>';
+          '<a class="btn" href="index.html?scenario=' + encodeURIComponent(key) + '&debug=1">Launch</a>';
         container.appendChild(card);
       });
     })

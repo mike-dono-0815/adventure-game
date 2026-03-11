@@ -55,6 +55,8 @@ Game.Effects = (function () {
         break;
 
       case 'transition':
+        Game.Player.cancelWalk();
+        Game.Interaction.finishInteraction();
         Game.Renderer.fadeOut(function () {
           Game.Room.load(effect.room, function () {
             if (effect.player_x !== undefined) {
@@ -129,6 +131,25 @@ Game.Effects = (function () {
       case 'remove_npc':
         Game.Actors.remove(effect.id);
         done();
+        break;
+
+      case 'start_rant':
+        Game.Actors.startRant(effect.id, effect.texts, effect.interval, effect.speed);
+        done();
+        break;
+
+      case 'pause_rant':
+        Game.Actors.pauseRant(effect.id);
+        done();
+        break;
+
+      case 'resume_rant':
+        Game.Actors.resumeRant(effect.id);
+        done();
+        break;
+
+      case 'show_title_card':
+        Game.TitleCard.show({ title: effect.title, lines: effect.lines || [] }, done);
         break;
 
       case 'wordfight':

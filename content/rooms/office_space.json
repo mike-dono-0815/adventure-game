@@ -40,7 +40,7 @@
       "id": "exit_right",
       "rect": [1306, 576, 50, 174],
       "effects": [
-        { "type": "transition", "room": "it_department", "player_x": 150, "player_y": 680, "player_dir": "right" }
+        { "type": "transition", "room": "it_department", "player_x": 280, "player_y": 680, "player_dir": "right" }
       ]
     },
     {
@@ -84,8 +84,8 @@
       "face_dir": "right",
       "interactions": {
         "look_at": { "text": "The door to IT. A sign: 'Knock before entering. No, really. We mean it.'" },
-        "open": { "text": "You push open the IT department door.", "color": "narrator", "effects": [{ "type": "transition", "room": "it_department", "player_x": 150, "player_y": 680, "player_dir": "right" }] },
-        "use":  { "text": "You push open the IT department door.", "color": "narrator", "effects": [{ "type": "transition", "room": "it_department", "player_x": 150, "player_y": 680, "player_dir": "right" }] }
+        "open": { "text": "You push open the IT department door.", "color": "narrator", "effects": [{ "type": "transition", "room": "it_department", "player_x": 280, "player_y": 680, "player_dir": "right" }] },
+        "use":  { "text": "You push open the IT department door.", "color": "narrator", "effects": [{ "type": "transition", "room": "it_department", "player_x": 280, "player_y": 680, "player_dir": "right" }] }
       }
     },
     {

@@ -7,7 +7,7 @@
     { "image": "aisle" }
   ],
   "walk_area": [
-    [451, 622], [955, 622], [1115, 750], [261, 750]
+    [436, 664], [953, 662], [1115, 750], [261, 750]
   ],
   "trigger_zones": [
     {
@@ -26,9 +26,34 @@
   },
   "hotspots": [
     {
+      "id": "lab_sign",
+      "name": "lab sign",
+      "rect": [60, 252, 118, 100],
+      "walk_to": [350, 700],
+      "face_dir": "left",
+      "interactions": {
+        "look_at": [
+          {
+            "condition": { "lab_door_tried": true },
+            "text": "Computer Vision North America. I still can't decide if that's funny or just bureaucracy. Either way, I need their cost center."
+          },
+          {
+            "text": "A mounted plaque beside the door. 'Computer Vision North America — CVNA Lab'. North America. I'm fairly sure I'm in Germany. Nobody told North America we're in Germany. Or possibly they did and North America does not care. Either way — I need the cost center for this team.",
+            "color": "narrator",
+            "effects": [
+              { "type": "set_flag", "flag": "lab_door_tried", "value": true }
+            ]
+          }
+        ],
+        "use": {
+          "text": "It's a sign. I can only look at it."
+        }
+      }
+    },
+    {
       "id": "lab_door",
       "name": "lab door",
-      "rect": [56, 119, 318, 580],
+      "rect": [178, 119, 196, 581],
       "walk_to": [350, 700],
       "face_dir": "left",
       "interactions": {
@@ -101,10 +126,14 @@
           },
           {
             "condition": { "floor_digit_1_known": true },
-            "text": "The floor panel is blank. I know HR is on a floor starting with 2, but I still need the second digit. It must be somewhere in the lab."
+            "text": "The floor panel is blank. I know the first digit — HR is on a floor starting with 2. I still need the second digit."
           },
           {
-            "text": "The floor panel is blank. I need to find out which floor HR is on before I can use this."
+            "condition": { "floor_digit_2_known": true },
+            "text": "The floor panel is blank. I know the second digit — HR's floor ends in 8. I still need the first digit."
+          },
+          {
+            "text": "The floor panel is blank. I have no idea which floor HR is on."
           }
         ],
         "open": [
@@ -116,10 +145,14 @@
           },
           {
             "condition": { "floor_digit_1_known": true },
-            "text": "The floor panel is blank. I know HR is on a floor starting with 2, but I still need the second digit. It must be somewhere in the lab."
+            "text": "The floor panel is blank. I know the first digit — HR is on a floor starting with 2. I still need the second digit."
           },
           {
-            "text": "The floor panel is blank. I need to find out which floor HR is on before I can use this."
+            "condition": { "floor_digit_2_known": true },
+            "text": "The floor panel is blank. I know the second digit — HR's floor ends in 8. I still need the first digit."
+          },
+          {
+            "text": "The floor panel is blank. I have no idea which floor HR is on."
           }
         ],
         "push": {
@@ -185,7 +218,7 @@
     {
       "id": "exit_to_office",
       "name": "Office",
-      "rect": [0, 700, 1376, 68],
+      "rect": [275, 697, 880, 71],
       "walk_to": [640, 740],
       "face_dir": "back",
       "interactions": {

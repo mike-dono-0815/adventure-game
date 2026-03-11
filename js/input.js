@@ -99,6 +99,9 @@ Game.Input = (function () {
   }
 
   function onClick(e) {
+    // Ignore all clicks until the game loop is running (title screen)
+    if (!Game.Renderer.isStarted()) return;
+
     // Suppress click if the debug editor just finished a drag
     if (Game.DebugEditor.consumedDrag()) return;
 
@@ -115,6 +118,12 @@ Game.Input = (function () {
     // FakeDeath overlay absorbs all clicks (before lock/busy checks)
     if (Game.FakeDeath.isActive()) {
       Game.FakeDeath.handleClick(gx, gy);
+      return;
+    }
+
+    // TitleCard overlay absorbs all clicks
+    if (Game.TitleCard.isActive()) {
+      Game.TitleCard.handleClick();
       return;
     }
 

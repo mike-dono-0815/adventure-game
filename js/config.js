@@ -58,7 +58,7 @@ Game.Config = {
     TEXT_NPC: '#FEBD69',
     TEXT_PLAYER: '#7EC8E3',
     TEXT_PLAYER_CHOICE: '#7EC8E3',
-    TEXT_NARRATOR: '#c4c4c4',
+    TEXT_NARRATOR: '#c9a0e8',
     DIALOGUE_BG: 'rgba(19, 26, 34, 0.92)',
     SAVE_MENU_BG: 'rgba(35, 47, 62, 0.97)',
     FADE: '#000000',

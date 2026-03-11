@@ -212,7 +212,7 @@ Game.Loader = (function () {
 
     var imageFiles = [
       // Backgrounds (existing)
-      { key: 'bg_title',         url: 'assets/backgrounds/TitlePage.jpg' },
+      { key: 'bg_title',         url: 'assets/backgrounds/Start2.png' },
       { key: 'bg_lobby',       url: 'assets/backgrounds/Reception.png' },
       { key: 'bg_bobs_office', url: 'assets/backgrounds/BobsOffice.png' },
       { key: 'bg_hr_floor',    url: 'assets/backgrounds/office.png' },
@@ -240,7 +240,7 @@ Game.Loader = (function () {
       { key: 'player',      rightUrl: 'assets/characters/User_Right.png',        leftUrl: 'assets/characters/User_Left.png' },
       { key: 'stakeholder', rightUrl: 'assets/characters/StakeHolder_Right.png', leftUrl: 'assets/characters/StakeHolder_Left.png' },
       { key: 'girl',        rightUrl: 'assets/characters/Girl_Right.png',        leftUrl: 'assets/characters/Girl_Left.png' },
-      { key: 'hr',          rightUrl: 'assets/characters/HR_Right.png',          leftUrl: 'assets/characters/HR_Left.png' },
+      { key: 'hr',          rightUrl: 'assets/characters/HRM_Right.png',         leftUrl: 'assets/characters/HRM_Left.png' },
     ];
 
     // 2 images per dualSheet character

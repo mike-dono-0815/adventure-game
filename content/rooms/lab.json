@@ -32,19 +32,37 @@
     {
       "area": [
         [207, 620],
-        [466, 621],
-        [554, 761],
+        [409, 622],
+        [321, 758],
         [68, 760]
       ]
     }
   ],
   "perspective": {
-    "min_scale": 1,
-    "max_scale": 1.15
+    "min_scale": 1.15,
+    "max_scale": 1.3225
   },
   "entry_points": {
     "from_aisle": { "x": 200, "y": 700, "dir": "right" }
   },
+  "trigger_zones": [
+    {
+      "id": "lab_empty_intro",
+      "rect": [0, 0, 1376, 768],
+      "once": true,
+      "condition": { "fifa_won": true },
+      "effects": [
+        {
+          "type": "show_title_card",
+          "title": "Back to Work",
+          "lines": [
+            "Ten hours of continuous FIFA is apparently enough.",
+            "Someone needs to tell Chip there is a new rising star."
+          ]
+        }
+      ]
+    }
+  ],
   "hotspots": [
     {
       "id": "fifa_players",
@@ -193,20 +211,20 @@
     },
     {
       "id": "lab_mug",
-      "name": "coffee mug",
+      "name": "specimen cup",
       "rect": [1291, 415, 26, 28],
       "walk_to": [1152, 700],
       "face_dir": "right",
       "hidden_if": { "fifa_won": true },
       "interactions": {
         "look_at": {
-          "text": "A small mug next to the whiteboard. It reads 'SPRINT CHAMPION'. The contents are cold. Victory has a shelf life."
+          "text": "A small plastic cup on the bench. There is something in it. It has a label. I am not going to read the label."
         },
         "pick_up": {
-          "text": "Not mine to take."
+          "text": "Absolutely not."
         },
         "use": {
-          "text": "I'll leave it. It's someone's trophy."
+          "text": "I don't know what that is and I intend to keep it that way."
         }
       }
     },
@@ -214,7 +232,7 @@
       "id": "exit_to_aisle",
       "name": "door to aisle",
       "rect": [361, 215, 57, 216],
-      "walk_to": [110, 700],
+      "walk_to": [389, 700],
       "face_dir": "left",
       "interactions": {
         "look_at": {
@@ -222,12 +240,14 @@
         },
         "open": {
           "text": "You head back to the aisle.",
+          "color": "narrator",
           "effects": [
             { "type": "transition", "room": "aisle", "player_x": 350, "player_y": 700, "player_dir": "right" }
           ]
         },
         "use": {
           "text": "You head back to the aisle.",
+          "color": "narrator",
           "effects": [
             { "type": "transition", "room": "aisle", "player_x": 350, "player_y": 700, "player_dir": "right" }
           ]

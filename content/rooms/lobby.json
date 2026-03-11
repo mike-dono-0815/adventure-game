@@ -180,18 +180,23 @@
             },
             "effects": [
               { "type": "say", "text": "You grab the handle and pull hard. RIIIIING! The alarm blares throughout the building, emergency lights flashing red. The receptionist leaps to her feet.", "color": "narrator" },
-              { "type": "say", "text": "Oh for— EVERYONE OUT! I— ...ugh. Fire protocol: I have to escort all visitors inside immediately.", "x": 880, "y": 400 },
+              { "type": "say", "text": "Oh for— EVERYONE OUT! I— ...ugh. Fire protocol: I have to escort all visitors inside immediately.", "x": 909, "y": 323 },
               { "type": "say", "text": "She fixes you with a withering look.", "color": "narrator" },
-              { "type": "say", "text": "Congratulations. You're officially a fire hazard. Come in.", "x": 880, "y": 400 },
+              { "type": "say", "text": "Congratulations. You're officially a fire hazard. Come in.", "x": 909, "y": 323 },
               { "type": "set_flag", "flag": "alarm_triggered", "value": true },
               { "type": "add_item", "item": "visitor_badge" },
+              { "type": "show_title_card", "title": "Inside", "lines": [
+                "The receptionist escorts you in. Fire protocol, apparently.",
+                "She hands you a visitor badge — handwritten, slightly damp.",
+                "You are now, technically, authorised."
+              ]},
               { "type": "transition", "room": "office_space", "player_x": 1200, "player_y": 680, "player_dir": "left" }
             ]
           },
           {
             "effects": [
               { "type": "say", "text": "You reach toward the alarm...", "color": "narrator" },
-              { "type": "say", "text": "Hey! Hands off that! Tampering with safety equipment is grounds for immediate termination.", "x": 880, "y": 400 }
+              { "type": "say", "text": "Hey! Hands off that! Tampering with safety equipment is grounds for immediate termination.", "x": 909, "y": 323 }
             ]
           }
         ],
@@ -209,18 +214,23 @@
             },
             "effects": [
               { "type": "say", "text": "You grab the handle and pull hard. RIIIIING! The alarm blares throughout the building, emergency lights flashing red. The receptionist leaps to her feet.", "color": "narrator" },
-              { "type": "say", "text": "Oh for— EVERYONE OUT! I— ...ugh. Fire protocol: I have to escort all visitors inside immediately.", "x": 880, "y": 400 },
+              { "type": "say", "text": "Oh for— EVERYONE OUT! I— ...ugh. Fire protocol: I have to escort all visitors inside immediately.", "x": 909, "y": 323 },
               { "type": "say", "text": "She fixes you with a withering look.", "color": "narrator" },
-              { "type": "say", "text": "Congratulations. You're officially a fire hazard. Come in.", "x": 880, "y": 400 },
+              { "type": "say", "text": "Congratulations. You're officially a fire hazard. Come in.", "x": 909, "y": 323 },
               { "type": "set_flag", "flag": "alarm_triggered", "value": true },
               { "type": "add_item", "item": "visitor_badge" },
+              { "type": "show_title_card", "title": "Inside", "lines": [
+                "The receptionist escorts you in. Fire protocol, apparently.",
+                "She hands you a visitor badge — handwritten, slightly damp.",
+                "You are now, technically, authorised."
+              ]},
               { "type": "transition", "room": "office_space", "player_x": 1200, "player_y": 680, "player_dir": "left" }
             ]
           },
           {
             "effects": [
               { "type": "say", "text": "You reach toward the alarm...", "color": "narrator" },
-              { "type": "say", "text": "Hey! Hands off that! Tampering with safety equipment is grounds for immediate termination.", "x": 880, "y": 400 }
+              { "type": "say", "text": "Hey! Hands off that! Tampering with safety equipment is grounds for immediate termination.", "x": 909, "y": 323 }
             ]
           }
         ]
@@ -356,7 +366,7 @@
             },
             "effects": [
               { "type": "say", "text": "She waves a hand.", "color": "narrator" },
-              { "type": "say", "text": "Mm. Busy sipping. Give me a moment.", "x": 880, "y": 400 }
+              { "type": "say", "text": "Mm. Busy sipping. Give me a moment.", "x": 909, "y": 323 }
             ]
           }
         ],
@@ -377,14 +387,14 @@
             {
               "type": "say",
               "text": "\"Ah... finally. The perfect caffeine balance.\"",
-              "x": 688,
-              "y": 360
+              "x": 909,
+              "y": 323
             },
             {
               "type": "say",
               "text": "\"Okay. I can handle a small distraction now.\"",
-              "x": 688,
-              "y": 360
+              "x": 909,
+              "y": 323
             },
             {
               "type": "set_flag",
@@ -406,14 +416,14 @@
             {
               "type": "say",
               "text": "\"Ah... finally. The perfect caffeine balance.\"",
-              "x": 688,
-              "y": 360
+              "x": 909,
+              "y": 323
             },
             {
               "type": "say",
               "text": "\"Okay. I can handle a small distraction now.\"",
-              "x": 688,
-              "y": 360
+              "x": 909,
+              "y": 323
             },
             {
               "type": "set_flag",
@@ -435,14 +445,14 @@
             {
               "type": "say",
               "text": "\"...Jeff Bezos. CEO Amazon.\" She looks up slowly.",
-              "x": 688,
-              "y": 360
+              "x": 909,
+              "y": 323
             },
             {
               "type": "say",
               "text": "\"I'm going to need a little more than a business card to believe you're Jeff Bezos.\"",
-              "x": 688,
-              "y": 360
+              "x": 909,
+              "y": 323
             }
           ]
         },
@@ -455,14 +465,14 @@
             {
               "type": "say",
               "text": "\"...Jeff Bezos. CEO Amazon.\" She looks up slowly.",
-              "x": 688,
-              "y": 360
+              "x": 909,
+              "y": 323
             },
             {
               "type": "say",
               "text": "\"I'm going to need a little more than a business card to believe you're Jeff Bezos.\"",
-              "x": 688,
-              "y": 360
+              "x": 909,
+              "y": 323
             }
           ]
         },
@@ -475,14 +485,14 @@
             {
               "type": "say",
               "text": "\"A stress ball? How thoughtful.\"",
-              "x": 688,
-              "y": 360
+              "x": 909,
+              "y": 323
             },
             {
               "type": "say",
               "text": "\"Working at Amazon is never stressful. This will go straight to lost property.\"",
-              "x": 688,
-              "y": 360
+              "x": 909,
+              "y": 323
             }
           ]
         },
@@ -495,14 +505,14 @@
             {
               "type": "say",
               "text": "\"A stress ball? How thoughtful.\"",
-              "x": 688,
-              "y": 360
+              "x": 909,
+              "y": 323
             },
             {
               "type": "say",
               "text": "\"Working at Amazon is never stressful. This will go straight to lost property.\"",
-              "x": 688,
-              "y": 360
+              "x": 909,
+              "y": 323
             }
           ]
         }

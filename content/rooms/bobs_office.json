@@ -3,14 +3,14 @@
   "name": "Bob's Office",
   "background": "bobs_office",
   "walk_area": [
-    [229, 697],
-    [1094, 697],
-    [1356, 760],
-    [20, 760]
+    [352, 697],
+    [1041, 697],
+    [1092, 752],
+    [278, 752]
   ],
   "perspective": { "min_scale": 1.0, "max_scale": 1.2 },
   "entry_points": {
-    "from_hr_floor": { "x": 1230, "y": 730, "dir": "left" }
+    "from_hr_floor": { "x": 1060, "y": 730, "dir": "left" }
   },
   "hotspots": [
     {
@@ -72,39 +72,39 @@
             "condition": { "co_signed": true },
             "effects": [
               { "type": "say", "text": "Bob raises an eyebrow.", "color": "narrator" },
-              { "type": "say", "text": "You have the co-signed document?", "x": 637, "y": 415 },
+              { "type": "say", "text": "You have the co-signed document?", "x": 637, "y": 297 },
               { "type": "say", "text": "He extends his hand.", "color": "narrator" }
             ]
           },
           {
             "condition": { "agreement_signed": true },
             "effects": [
-              { "type": "say", "text": "Signed — good. But you need an L10 or above counter-signature to make it binding. Through the standard process, that's three to five months.", "x": 637, "y": 415 },
+              { "type": "say", "text": "Signed — good. But you need an L10 or above counter-signature to make it binding. Through the standard process, that's three to five months.", "x": 637, "y": 297 },
               { "type": "say", "text": "He pauses.", "color": "narrator" },
-              { "type": "say", "text": "Unless you happen to know someone very, very senior.", "x": 637, "y": 415 }
+              { "type": "say", "text": "Unless you happen to know someone very, very senior.", "x": 637, "y": 297 }
             ]
           },
           {
             "condition": { "agreement_retrieved": true },
             "effects": [
-              { "type": "say", "text": "Sign it. You need a pen — there might be one in that package, if you can sort it out.", "x": 637, "y": 415 }
+              { "type": "say", "text": "Sign it. You need a pen — there might be one in that package, if you can sort it out.", "x": 637, "y": 297 }
             ]
           },
           {
             "condition": { "usb_used": true },
             "effects": [
-              { "type": "say", "text": "Cabinet code is 2847. That's my cost centre. Please don't tell anyone I told you that.", "x": 637, "y": 415 }
+              { "type": "say", "text": "Cabinet code is 2847. That's my cost centre. Please don't tell anyone I told you that.", "x": 637, "y": 297 }
             ]
           },
           {
             "condition": { "stress_ball_given": true },
             "effects": [
-              { "type": "say", "text": "The MSA is in the grey filing cabinet. The access code is my cost centre number. I can't remember it — it'll be on my computer, but the personnel system needs a USB access dongle. Security protocol.", "x": 637, "y": 415 }
+              { "type": "say", "text": "The MSA is in the grey filing cabinet. The access code is my cost centre number. I can't remember it — it'll be on my computer, but the personnel system needs a USB access dongle. Security protocol.", "x": 637, "y": 297 }
             ]
           },
           {
             "effects": [
-              { "type": "say", "text": "I can't do anything right now. I'm too stressed to even look at a document. I need a moment.", "x": 637, "y": 415 },
+              { "type": "say", "text": "I can't do anything right now. I'm too stressed to even look at a document. I need a moment.", "x": 637, "y": 297 },
               { "type": "say", "text": "He doesn't elaborate on what kind of moment.", "color": "narrator" }
             ]
           }
@@ -122,9 +122,9 @@
           "verb": "give",
           "effects": [
             { "type": "say", "text": "Bob looks at it. Then at you. Then back at it. He takes it.", "color": "narrator" },
-            { "type": "say", "text": "Where did you get this?", "x": 637, "y": 415 },
+            { "type": "say", "text": "Where did you get this?", "x": 637, "y": 297 },
             { "type": "say", "text": "He squeezes it once. Some tension leaves his face.", "color": "narrator" },
-            { "type": "say", "text": "Fine. Sit down.", "x": 637, "y": 415 },
+            { "type": "say", "text": "Fine! Feeling better - what again is it that you want?", "x": 637, "y": 297 },
             { "type": "remove_item", "item": "stress_ball" },
             { "type": "set_flag", "flag": "stress_ball_given", "value": true }
           ]
@@ -144,11 +144,11 @@
           "verb": "give",
           "effects": [
             { "type": "say", "text": "Bob takes it.", "color": "narrator" },
-            { "type": "say", "text": "Chen. They were let go on Tuesday. This has been sitting undelivered.", "x": 637, "y": 415 },
+            { "type": "say", "text": "Chen. They were let go on Tuesday. This has been sitting undelivered.", "x": 637, "y": 297 },
             { "type": "say", "text": "He opens it. Pauses. Reaches inside.", "color": "narrator" },
-            { "type": "say", "text": "There's a pen in here. Decent one.", "x": 637, "y": 415 },
+            { "type": "say", "text": "There's a pen in here. Decent one.", "x": 637, "y": 297 },
             { "type": "say", "text": "He holds it out.", "color": "narrator" },
-            { "type": "say", "text": "Take it. You'll need it.", "x": 637, "y": 415 },
+            { "type": "say", "text": "Take it. You'll need it.", "x": 637, "y": 297 },
             { "type": "remove_item", "item": "mystery_package" },
             { "type": "set_flag", "flag": "mystery_package_given", "value": true },
             { "type": "set_flag", "flag": "found_pen", "value": true },
@@ -160,9 +160,9 @@
           "verb": "use",
           "effects": [
             { "type": "say", "text": "You set the package on Bob's desk. He looks at the label.", "color": "narrator" },
-            { "type": "say", "text": "Chen's. Let me deal with this.", "x": 637, "y": 415 },
+            { "type": "say", "text": "Chen's. Let me deal with this.", "x": 637, "y": 297 },
             { "type": "say", "text": "He opens it. There's a pen inside — a good one. He slides it across to you.", "color": "narrator" },
-            { "type": "say", "text": "Yours.", "x": 637, "y": 415 },
+            { "type": "say", "text": "Yours.", "x": 637, "y": 297 },
             { "type": "remove_item", "item": "mystery_package" },
             { "type": "set_flag", "flag": "mystery_package_given", "value": true },
             { "type": "set_flag", "flag": "found_pen", "value": true },
@@ -174,9 +174,9 @@
           "verb": "give",
           "effects": [
             { "type": "say", "text": "Bob looks it over.", "color": "narrator" },
-            { "type": "say", "text": "You've signed it. Good. But to be binding, it needs a counter-signature from an L10 or above. Standard protocol. Through proper channels, we're talking three to five months.", "x": 637, "y": 415 },
+            { "type": "say", "text": "You've signed it. Good. But to be binding, it needs a counter-signature from an L10 or above. Standard protocol. Through proper channels, we're talking three to five months.", "x": 637, "y": 297 },
             { "type": "say", "text": "He hands it back.", "color": "narrator" },
-            { "type": "say", "text": "Unless you have access to someone at that level.", "x": 637, "y": 415 }
+            { "type": "say", "text": "Unless you have access to someone at that level.", "x": 637, "y": 297 }
           ]
         },
         {
@@ -184,9 +184,9 @@
           "verb": "use",
           "effects": [
             { "type": "say", "text": "Bob glances at it.", "color": "narrator" },
-            { "type": "say", "text": "Signed. But it needs an L10 counter-signature. Three to five months the normal way.", "x": 637, "y": 415 },
+            { "type": "say", "text": "Signed. But it needs an L10 counter-signature. Three to five months the normal way.", "x": 637, "y": 297 },
             { "type": "say", "text": "He shrugs.", "color": "narrator" },
-            { "type": "say", "text": "Or not.", "x": 637, "y": 415 }
+            { "type": "say", "text": "Or not.", "x": 637, "y": 297 }
           ]
         },
         {
@@ -194,9 +194,9 @@
           "verb": "give",
           "effects": [
             { "type": "say", "text": "Bob takes the document. He reads it — actually reads it — line by line. He reaches the bottom. He looks up.", "color": "narrator" },
-            { "type": "say", "text": "This is in order. Everything checks out.", "x": 637, "y": 415 },
+            { "type": "say", "text": "This is in order. Everything checks out.", "x": 637, "y": 297 },
             { "type": "say", "text": "He initials the final page.", "color": "narrator" },
-            { "type": "say", "text": "Alex. You're free. I hope it's better out there than it was in here.", "x": 637, "y": 415 },
+            { "type": "say", "text": "Alex. You're free. I hope it's better out there than it was in here.", "x": 637, "y": 297 },
             { "type": "remove_item", "item": "co_signed_agreement" },
             { "type": "set_flag", "flag": "agreement_complete", "value": true },
             { "type": "victory" }
@@ -207,7 +207,7 @@
           "verb": "use",
           "effects": [
             { "type": "say", "text": "You hand Bob the co-signed agreement. He reviews it carefully, nods, and adds his initials.", "color": "narrator" },
-            { "type": "say", "text": "You're done here, Alex. Good luck.", "x": 637, "y": 415 },
+            { "type": "say", "text": "You're done here, Alex. Good luck.", "x": 637, "y": 297 },
             { "type": "remove_item", "item": "co_signed_agreement" },
             { "type": "set_flag", "flag": "agreement_complete", "value": true },
             { "type": "victory" }
@@ -217,16 +217,16 @@
           "item": "signed_agreement",
           "verb": "give",
           "effects": [
-            { "type": "say", "text": "It needs a co-signature. You know whose.", "x": 637, "y": 415 },
+            { "type": "say", "text": "It needs a co-signature. You know whose.", "x": 637, "y": 297 },
             { "type": "say", "text": "He taps the business card column on the document.", "color": "narrator" },
-            { "type": "say", "text": "The credential has to be verified.", "x": 637, "y": 415 }
+            { "type": "say", "text": "The credential has to be verified.", "x": 637, "y": 297 }
           ]
         },
         {
           "item": "separation_agreement",
           "verb": "give",
           "effects": [
-            { "type": "say", "text": "You haven't signed it yet. And it needs to be co-signed. You know the process.", "x": 637, "y": 415 },
+            { "type": "say", "text": "You haven't signed it yet. And it needs to be co-signed. You know the process.", "x": 637, "y": 297 },
             { "type": "say", "text": "He says this without irony.", "color": "narrator" }
           ]
         },
@@ -235,7 +235,7 @@
           "verb": "give",
           "effects": [
             { "type": "say", "text": "Bob looks at the Jeff Bezos business card for a long time.", "color": "narrator" },
-            { "type": "say", "text": "Where did you get this.", "x": 637, "y": 415 },
+            { "type": "say", "text": "Where did you get this.", "x": 637, "y": 297 },
             { "type": "say", "text": "It isn't a question. He doesn't take it.", "color": "narrator" }
           ]
         }
@@ -388,8 +388,8 @@
     {
       "id": "lobby_door",
       "name": "door out",
-      "rect": [1022, 134, 127, 523],
-      "walk_to": [1230, 730],
+      "rect": [1029, 134, 120, 474],
+      "walk_to": [1060, 730],
       "face_dir": "right",
       "interactions": {
         "look_at": {

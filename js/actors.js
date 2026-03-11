@@ -19,7 +19,39 @@ Game.Actors = (function () {
       animFrame:      0,
       animTimer:      0,
       arriveCallback: null,
+      // rant mode
+      ranting:        false,
+      rantTexts:      [],
+      rantIndex:      0,
+      rantTimer:      0,
+      rantInterval:   2.0,
+      rantTalkPhase:  0,
+      rantTalkTimer:  0,
+      rantTalkSpeed:  0.07,
     });
+  }
+
+  function pauseRant(id) {
+    var actor = find(id);
+    if (actor) actor.ranting = false;
+  }
+
+  function resumeRant(id) {
+    var actor = find(id);
+    if (actor && actor.rantTexts && actor.rantTexts.length) actor.ranting = true;
+  }
+
+  function startRant(id, texts, interval, speed) {
+    var actor = find(id);
+    if (!actor) return;
+    actor.ranting       = true;
+    actor.rantTexts     = texts || [];
+    actor.rantIndex     = 0;
+    actor.rantTimer     = 0;
+    actor.rantInterval  = interval || 2.0;
+    actor.rantTalkSpeed = speed || 0.07;
+    actor.rantTalkPhase = 1;
+    actor.rantTalkTimer = 0;
   }
 
   function walkTo(id, tx, ty, callback) {
@@ -113,6 +145,22 @@ Game.Actors = (function () {
         actor.animFrame = (actor.animFrame + 1) % 2;
       }
     }
+
+    // Rant mode — independent of walking
+    for (var j = 0; j < actors.length; j++) {
+      var ra = actors[j];
+      if (!ra.ranting) continue;
+      ra.rantTimer += dt;
+      if (ra.rantTimer >= ra.rantInterval) {
+        ra.rantTimer = 0;
+        ra.rantIndex = (ra.rantIndex + 1) % ra.rantTexts.length;
+      }
+      ra.rantTalkTimer += dt;
+      if (ra.rantTalkTimer >= ra.rantTalkSpeed) {
+        ra.rantTalkTimer = 0;
+        ra.rantTalkPhase = 1 - ra.rantTalkPhase;
+      }
+    }
   }
 
   function draw(ctx) {
@@ -125,7 +173,9 @@ Game.Actors = (function () {
     for (var i = 0; i < actors.length; i++) {
       var actor    = actors[i];
       var npcColor = Game.Config.COLORS.TEXT_NPC;
-      var isTalking = (actor.multiFile || actor.dualSheet) && Game.TextBox.getTalkPhase() === 1 && Game.TextBox.getSpeakerColor() === npcColor;
+      var isTalking = actor.ranting
+        ? actor.rantTalkPhase === 1
+        : (actor.multiFile || actor.dualSheet) && Game.TextBox.getTalkPhase() === 1 && Game.TextBox.getSpeakerColor() === npcColor;
 
       var ph = baseH;
       if (perspective && walkArea) {
@@ -171,10 +221,34 @@ Game.Actors = (function () {
 
       ctx.drawImage(sprite, drawX, drawY, pw, ph);
     }
+
+    // Draw rant text above ranting actors
+    for (var r = 0; r < actors.length; r++) {
+      var ra = actors[r];
+      if (!ra.ranting || !ra.rantTexts.length) continue;
+      var line = ra.rantTexts[ra.rantIndex];
+      var cfg  = Game.Config;
+      ctx.save();
+      ctx.font = cfg.FONT_SIZE + 'px ' + cfg.FONT_FAMILY;
+      ctx.textAlign = 'center';
+      var tw   = ctx.measureText(line).width;
+      var pad  = 10;
+      var tx   = Math.max(tw / 2 + pad, Math.min(ra.x, cfg.WIDTH - tw / 2 - pad));
+      var ty   = ra.y - baseH - 20;
+      if (ty < cfg.FONT_SIZE + pad) ty = cfg.FONT_SIZE + pad;
+      ctx.fillStyle = 'rgba(0,0,0,0.78)';
+      ctx.fillRect(tx - tw / 2 - pad, ty - cfg.FONT_SIZE - pad, tw + pad * 2, cfg.FONT_SIZE + pad * 2);
+      ctx.fillStyle = npcColor;
+      ctx.fillText(line, tx, ty);
+      ctx.restore();
+    }
   }
 
   return {
     spawn:        spawn,
+    startRant:    startRant,
+    pauseRant:    pauseRant,
+    resumeRant:   resumeRant,
     walkTo:       walkTo,
     setDirection: setDirection,
     remove:       remove,

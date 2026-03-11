@@ -107,6 +107,7 @@ Game.Room = (function () {
       var zone = roomData.trigger_zones[i];
       var key  = currentRoom + '::' + zone.id;
       if (zone.once && firedTriggers[key]) continue;
+      if (zone.condition && !Game.State.evaluate(zone.condition)) continue;
       var r = zone.rect;
       if (px >= r[0] && px <= r[0] + r[2] && py >= r[1] && py <= r[1] + r[3]) {
         if (zone.once) firedTriggers[key] = true;

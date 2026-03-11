@@ -18,6 +18,7 @@ Game.Player = (function () {
     y = ny;
     targetPath = [];
     walking = false;
+    arriveCallback = null;
   }
 
   function setDirection(dir) {

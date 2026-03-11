@@ -20,6 +20,8 @@
         ]},
         { "type": "set_player_dir", "dir": "left" },
         { "type": "wordfight", "intro_text": "What are you doing here?\nAre you even a real Amazonian?\nProve it — respond in the Amazon way,\nor I'll escort you out...", "on_loss_reset_trigger": "stakeholder_encounter", "on_loss_player_x": 780, "on_loss_player_y": 680 },
+        { "type": "walk_player", "to_x": 688, "to_y": 680 },
+        { "type": "say", "text": "Wow. I know my principles.", "color": "player" },
         { "type": "remove_npc", "id": "stakeholder" },
         { "type": "unlock_input" },
         { "type": "transition", "room": "office", "player_x": 1155, "player_y": 616, "player_dir": "left" }

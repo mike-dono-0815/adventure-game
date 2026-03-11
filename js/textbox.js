@@ -4,10 +4,10 @@ Game.TextBox = (function () {
   var blockCallback = null;
   var talkPhase    = 0;
   var talkTimer    = 0;
-  var talkInterval = 0.25;
+  var talkInterval = 0.50;
 
   function randomTalkInterval() {
-    return 0.10 + Math.random() * 0.30; // 0.10 – 0.40 s
+    return 0.20 + Math.random() * 0.60; // 0.20 – 0.80 s
   }
 
   function show(text, x, y, color, duration, callback) {

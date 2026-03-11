@@ -7,6 +7,7 @@ Game.Renderer = (function () {
   var fadeDirection = 0; // 0=none, 1=fading out, -1=fading in
   var fadeCallback = null;
   var victoryShown = false;
+  var started = false;
 
   function init() {
     canvas = document.getElementById('gameCanvas');
@@ -61,8 +62,11 @@ Game.Renderer = (function () {
   }
 
   function start() {
+    started = true;
     requestAnimationFrame(loop);
   }
+
+  function isStarted() { return started; }
 
   function update(dt) {
     // Fade
@@ -86,6 +90,7 @@ Game.Renderer = (function () {
     Game.TextBox.update(dt);
     Game.Dialogue.update(dt);
     Game.Wordfight.update(dt);
+    Game.TitleCard.update(dt);
     // FakeDeath has no per-frame update — driven entirely by clicks
   }
 
@@ -128,6 +133,11 @@ Game.Renderer = (function () {
 
     // Hotspot tooltip near cursor
     drawTooltip(ctx);
+
+    // TitleCard — full-screen overlay
+    if (Game.TitleCard.isActive()) {
+      Game.TitleCard.draw(ctx);
+    }
 
     // FakeDeath — full-screen overlay, drawn above everything except save menu
     if (Game.FakeDeath.isActive()) {
@@ -219,6 +229,7 @@ Game.Renderer = (function () {
   return {
     init: init,
     start: start,
+    isStarted: isStarted,
     getScale: getScale,
     getOffset: getOffset,
     fadeOut: fadeOut,

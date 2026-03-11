@@ -16,10 +16,42 @@ Game.ActionLine = (function () {
   function getObject1() { return object1; }
   function getObject2() { return object2; }
 
+  function isExitHotspot(id) {
+    var hotspots = Game.Room.getHotspots();
+    for (var i = 0; i < hotspots.length; i++) {
+      var h = hotspots[i];
+      if (h.id !== id) continue;
+      if (h.exit) return true;
+      if (!h.interactions) return false;
+      for (var vb in h.interactions) {
+        if (responseHasTransition(h.interactions[vb])) return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
+  function responseHasTransition(resp) {
+    if (!resp) return false;
+    if (Array.isArray(resp)) {
+      for (var i = 0; i < resp.length; i++) {
+        if (responseHasTransition(resp[i])) return true;
+      }
+      return false;
+    }
+    if (resp.effects) {
+      for (var j = 0; j < resp.effects.length; j++) {
+        if (resp.effects[j].type === 'transition') return true;
+      }
+    }
+    return false;
+  }
+
   function getText() {
     if (overrideText) return overrideText;
     var parts = [];
-    var v = verb || (hoverTarget ? 'Look at' : Game.Config.DEFAULT_VERB);
+    var hoverVerb = (hoverTarget && !verb) ? (isExitHotspot(hoverTarget) ? 'Walk to' : 'Look at') : null;
+    var v = verb || hoverVerb || Game.Config.DEFAULT_VERB;
     parts.push(v);
 
     if (object1) {
