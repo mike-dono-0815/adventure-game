@@ -229,6 +229,7 @@ Game.Loader = (function () {
       { key: 'bg_lab_empty_nousb',  url: 'assets/backgrounds/LabEmpty_NoUSB.png' },
       { key: 'bg_it_department_headphones', url: 'assets/backgrounds/ITDepartment_HeadPhones.jpg' },
       { key: 'bg_end',              url: 'assets/backgrounds/EndPage.jpg' },
+      { key: 'bg_bobs_office_talk', url: 'assets/backgrounds/BobOffice2.jpg' },
       // Item sprite sheets (2x2 grid, 4 items each)
       { key: 'items_sheet_01', url: 'assets/items/Objects_01.png' },
       { key: 'items_sheet_02', url: 'assets/items/Objects_02.png' },

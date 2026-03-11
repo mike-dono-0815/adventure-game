@@ -2,6 +2,7 @@
   "id": "bobs_office",
   "name": "Bob's Office",
   "background": "bobs_office",
+  "talk_background": "bobs_office_talk",
   "walk_area": [
     [352, 697],
     [1041, 697],
@@ -313,6 +314,7 @@
           "verb": "use",
           "condition": { "stress_ball_given": true },
           "text": "You slot in the USB. The personnel system unlocks. You scan for Bob's cost centre. There it is: 5391. That's the filing cabinet code.",
+          "color": "narrator",
           "effects": [
             { "type": "set_flag", "flag": "usb_used", "value": true }
           ]

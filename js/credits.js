@@ -164,12 +164,10 @@ Game.Credits = (function () {
     if (!active) return;
     scrollY += SPEED * dt;
     if (!done && scrollY >= totalH) {
-      done = true;
-      setTimeout(function () {
-        active = false;
-        Game.Input.unlock();
-        if (callback) { var cb = callback; callback = null; cb(); }
-      }, 1200);
+      done   = true;
+      active = false;
+      Game.Input.unlock();
+      if (callback) { var cb = callback; callback = null; cb(); }
     }
   }
 

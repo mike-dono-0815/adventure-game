@@ -152,6 +152,12 @@ Game.Room = (function () {
         }
       }
     }
+    // Animate talk background: alternate when NPC is speaking
+    if (roomData.talk_background &&
+        Game.TextBox.getSpeakerColor() === Game.Config.COLORS.TEXT_NPC &&
+        Game.TextBox.getTalkPhase() === 1) {
+      bgKey = 'bg_' + roomData.talk_background;
+    }
     var bg = Game.Loader.getImage(bgKey);
     if (bg) {
       ctx.drawImage(bg, 0, 0, Game.Config.WIDTH, Game.Config.VIEWPORT_HEIGHT);

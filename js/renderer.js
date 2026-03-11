@@ -240,6 +240,17 @@ Game.Renderer = (function () {
     ctx.fillStyle = cfg.COLORS.BOTTOM_BAR_BG;
     ctx.fillRect(0, cfg.BOTTOM_BAR_Y, cfg.WIDTH, cfg.BOTTOM_BAR_HEIGHT);
 
+    // "The End" across the image
+    ctx.font      = 'italic bold 160px Georgia, "Times New Roman", serif';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(0,0,0,0.45)';
+    ctx.fillText('The End', cfg.WIDTH / 2 + 4, cfg.VIEWPORT_HEIGHT / 2 + 60 + 4);
+    ctx.fillStyle = '#FEBD69';
+    ctx.shadowColor = 'rgba(255,153,0,0.7)';
+    ctx.shadowBlur  = 40;
+    ctx.fillText('The End', cfg.WIDTH / 2, cfg.VIEWPORT_HEIGHT / 2 + 60);
+    ctx.shadowBlur  = 0;
+
     var endLines = [
       'Six weeks later. A beach somewhere between Barbados and not-Amazon.',
       'The agreement is framed on the wall of a rented villa. Bob sent a postcard.',
