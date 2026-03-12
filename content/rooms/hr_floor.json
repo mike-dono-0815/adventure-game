@@ -25,8 +25,10 @@
         { "type": "wordfight", "intro_text": "What are you doing here?\nAre you even a real Amazonian?\nProve it — respond in the Amazon way,\nor I'll escort you out...", "on_loss_reset_trigger": "stakeholder_encounter", "on_loss_player_x": 780, "on_loss_player_y": 680 },
         { "type": "remove_npc", "id": "stakeholder" },
         { "type": "set_flag", "flag": "wordfight_won", "value": true },
-        { "type": "unlock_input" },
-        { "type": "transition", "room": "bobs_office", "player_x": 1230, "player_y": 730, "player_dir": "left" }
+        { "type": "walk_player", "to_x": 688, "to_y": 680 },
+        { "type": "set_player_dir", "dir": "right" },
+        { "type": "say", "text": "Phew. I can't believe that just worked. 'Disagree and Commit' came out of me like a reflex. I've been here too long. Or exactly long enough. Either way — Bob's office is right there.", "color": "player" },
+        { "type": "unlock_input" }
       ]
     }
   ],
@@ -34,25 +36,46 @@
     {
       "id": "door_to_bobs_office",
       "name": "Bob's Office",
+      "cursor": "exit",
       "rect": [0, 0, 138, 768],
       "walk_to": [150, 690],
       "face_dir": "left",
-      "visible_if": { "wordfight_won": true },
       "interactions": {
         "look_at": { "text": "The door to Bob's office." },
-        "open": {
-          "text": "You head into Bob's office.",
-          "effects": [{ "type": "transition", "room": "bobs_office", "player_x": 1230, "player_y": 730, "player_dir": "left" }]
+        "open": [
+          {
+            "condition": { "wordfight_won": true },
+            "text": "You head into Bob's office.",
+            "effects": [{ "type": "transition", "room": "bobs_office", "player_x": 980, "player_y": 758, "player_dir": "left" }]
+          },
+          { "text": "It's not the right moment to go in there." }
+        ],
+        "use": [
+          {
+            "condition": { "wordfight_won": true },
+            "text": "You head into Bob's office.",
+            "effects": [{ "type": "transition", "room": "bobs_office", "player_x": 980, "player_y": 758, "player_dir": "left" }]
+          },
+          { "text": "It's not the right moment to go in there." }
+        ]
+      }
+    },
+    {
+      "id": "hr_open_office",
+      "name": "open office",
+      "rect": [144, 10, 943, 538],
+      "walk_to": [688, 690],
+      "interactions": {
+        "look_at": {
+          "text": "Spacious desks. Actual ergonomic chairs. A coffee machine that isn't broken. Plants — living ones. Someone has clearly negotiated a different relationship with this company. You find yourself wondering who exactly works up here, and whether they know what's happening on the floors below."
         },
-        "use": {
-          "text": "You head into Bob's office.",
-          "effects": [{ "type": "transition", "room": "bobs_office", "player_x": 1230, "player_y": 730, "player_dir": "left" }]
-        }
+        "use": { "text": "It's a nice office. I'm not going to use it." }
       }
     },
     {
       "id": "elevator_back",
       "name": "elevator",
+      "cursor": "exit",
       "rect": [1238, 0, 138, 768],
       "walk_to": [1200, 690],
       "face_dir": "right",

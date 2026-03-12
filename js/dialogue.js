@@ -86,6 +86,7 @@ Game.Dialogue = (function () {
           text:   ch.text,
           next:   ch.next,
           effects: ch.effects,
+          suppress_echo: ch.suppress_echo || false,
         });
       }
 
@@ -136,8 +137,8 @@ Game.Dialogue = (function () {
       }
     }
 
-    // Show player reply above player in walk rooms; skip for synthetic exit choice
-    if (!Game.Room.isNoWalk() && choice.id !== '_exit') {
+    // Show player reply above player in walk rooms; skip for synthetic exit choice or suppress_echo
+    if (!Game.Room.isNoWalk() && choice.id !== '_exit' && !choice.suppress_echo) {
       var px = Game.Player.getX();
       var py = Game.Player.getHeadY();
       Game.TextBox.showBlocking(choice.text, px, py,

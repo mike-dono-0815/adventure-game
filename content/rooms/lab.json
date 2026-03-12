@@ -32,7 +32,7 @@
     {
       "area": [
         [207, 620],
-        [409, 622],
+        [369, 620],
         [321, 758],
         [68, 760]
       ]
@@ -233,7 +233,6 @@
       "rect": [1291, 415, 26, 28],
       "walk_to": [1152, 700],
       "face_dir": "right",
-      "hidden_if": { "fifa_won": true },
       "interactions": {
         "look_at": [
           {
@@ -267,6 +266,7 @@
     {
       "id": "exit_to_aisle",
       "name": "door to aisle",
+      "cursor": "exit",
       "rect": [361, 215, 57, 216],
       "walk_to": [389, 700],
       "face_dir": "left",

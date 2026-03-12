@@ -351,7 +351,7 @@
     {
       "item1": "business_card",
       "item2": "signed_agreement",
-      "text": "You flip open the business card. Jeff Bezos — CEO Amazon. You sign his name on the co-signature line with quiet confidence. It's probably fine.",
+      "text": "You check the business card and see an orginally looking signature of Jeff Bezos. You sign his name on the co-signature line with quiet confidence. It's probably fine.",
       "color": "narrator",
       "effects": [
         { "type": "remove_item", "item": "business_card" },

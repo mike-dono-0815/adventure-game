@@ -35,7 +35,20 @@ Game.Renderer = (function () {
   function getScale() { return scale; }
   function getOffset() { return { x: offsetX, y: offsetY }; }
 
+  // Pre-fill the black overlay (e.g. after a title card fade-out) so the next
+  // fadeOut fires its callback immediately without a visible room flash.
+  function setBlack() {
+    fadeAlpha = 1;
+    fadeDirection = 0;
+  }
+
   function fadeOut(callback) {
+    if (fadeAlpha >= 1) {
+      // Already black — fire callback immediately, no animation needed
+      fadeDirection = 0;
+      if (callback) callback();
+      return;
+    }
     fadeDirection = 1;
     fadeAlpha = 0;
     fadeCallback = callback;
@@ -279,6 +292,7 @@ Game.Renderer = (function () {
     isStarted: isStarted,
     getScale: getScale,
     getOffset: getOffset,
+    setBlack: setBlack,
     fadeOut: fadeOut,
     fadeIn: fadeIn,
     showVictory: showVictory,

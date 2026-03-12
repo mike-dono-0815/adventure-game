@@ -202,9 +202,9 @@ Game.Main = (function () {
 
         // Story description
         var storyLines = [
-          'You are Alex. After months of corporate drift inside Amazon\'s peculiar environment,',
-          'you\'ve finally gained clarity: it is enough. You need Bob in HR to co-sign your Mutual Separation',
-          'Agreement - your ticket out. There\'s just one problem: you lost your badge,',
+          'You are Alex, an Applied Scientist. After months of corporate drift inside Amazon\'s peculiar environment,',
+          'you\'ve finally gained clarity: it is enough. You need Bob in HR to give you your Mutual Separation',
+          'Agreement - your ticket out - so you can sign it and walk free. There\'s just one problem: you lost your badge,',
           'and you have no idea where to find Bob - but you are willing to find out and optimistically enter your office.',
         ];
         ctx.fillStyle = cfg.COLORS.TEXT_DEFAULT;

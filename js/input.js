@@ -32,6 +32,67 @@ Game.Input = (function () {
     Game.DebugEditor.onMouseUp(gp.x, gp.y);
   }
 
+  function updateHover(gx, gy) {
+    var cfg = Game.Config;
+    cursorStyle = 'default';
+
+    if (Game.SaveLoad.isOpen()) {
+      Game.SaveLoad.handleHover(gx, gy);
+      return;
+    }
+
+    if (Game.Wordfight.isActive()) {
+      Game.Wordfight.handleHover(gx, gy);
+      cursorStyle = Game.Wordfight.getCursorStyle();
+      return;
+    }
+
+    if (Game.Dialogue.isActive()) {
+      Game.Dialogue.handleHover(gx, gy);
+      return;
+    }
+
+    // Suppress hover during locked cutscenes (e.g. title card transitions)
+    if (locked) {
+      Game.ActionLine.setHoverTarget(null);
+      cursorStyle = 'default';
+      return;
+    }
+
+    // Suppress hover feedback during any talking
+    if (isTalking()) return;
+
+    // Verb panel hover
+    if (gy >= cfg.BOTTOM_BAR_Y && gx < cfg.VERB_PANEL_WIDTH) {
+      Game.Verbs.handleHover(gx, gy);
+      Game.ActionLine.setHoverTarget(null);
+      return;
+    }
+
+    // Inventory hover
+    if (gy >= cfg.BOTTOM_BAR_Y && gx >= cfg.INVENTORY_X) {
+      var item = Game.Inventory.handleHover(gx, gy);
+      if (item) {
+        Game.ActionLine.setHoverTarget(item);
+        cursorStyle = 'pointer';
+      } else {
+        Game.ActionLine.setHoverTarget(null);
+      }
+      return;
+    }
+
+    // Viewport hover — check hotspots
+    if (gy < cfg.VIEWPORT_HEIGHT) {
+      var hs = Game.Room.getHotspotAt(gx, gy);
+      if (hs) {
+        Game.ActionLine.setHoverTarget(hs.id);
+        cursorStyle = hs.cursor === 'exit' ? 'move' : 'pointer';
+      } else {
+        Game.ActionLine.setHoverTarget(null);
+      }
+    }
+  }
+
   function onMouseMove(e) {
     mouseX = e.offsetX;
     mouseY = e.offsetY;
@@ -46,56 +107,7 @@ Game.Input = (function () {
       return;
     }
 
-    // Route hover
-    var cfg = Game.Config;
-    cursorStyle = 'default';
-
-    if (Game.SaveLoad.isOpen()) {
-      Game.SaveLoad.handleHover(gameX, gameY);
-      return;
-    }
-
-    if (Game.Wordfight.isActive()) {
-      Game.Wordfight.handleHover(gameX, gameY);
-      cursorStyle = Game.Wordfight.getCursorStyle();
-      return;
-    }
-
-    if (Game.Dialogue.isActive()) {
-      Game.Dialogue.handleHover(gameX, gameY);
-      return;
-    }
-
-    // Verb panel hover
-    if (gameY >= cfg.BOTTOM_BAR_Y && gameX < cfg.VERB_PANEL_WIDTH) {
-      Game.Verbs.handleHover(gameX, gameY);
-      Game.ActionLine.setHoverTarget(null);
-      return;
-    }
-
-    // Inventory hover
-    if (gameY >= cfg.BOTTOM_BAR_Y && gameX >= cfg.INVENTORY_X) {
-      var item = Game.Inventory.handleHover(gameX, gameY);
-      if (item) {
-        var info = Game.Inventory.getItemInfo(item);
-        Game.ActionLine.setHoverTarget(item);
-        cursorStyle = 'pointer';
-      } else {
-        Game.ActionLine.setHoverTarget(null);
-      }
-      return;
-    }
-
-    // Viewport hover — check hotspots
-    if (gameY < cfg.VIEWPORT_HEIGHT) {
-      var hs = Game.Room.getHotspotAt(gameX, gameY);
-      if (hs) {
-        Game.ActionLine.setHoverTarget(hs.id);
-        cursorStyle = 'pointer';
-      } else {
-        Game.ActionLine.setHoverTarget(null);
-      }
-    }
+    updateHover(gameX, gameY);
   }
 
   function onClick(e) {
@@ -136,6 +148,7 @@ Game.Input = (function () {
     // Text box dismiss
     if (Game.TextBox.isBlocking()) {
       Game.TextBox.dismiss();
+      updateHover(gx, gy);
       return;
     }
 
@@ -250,7 +263,14 @@ Game.Input = (function () {
   function lock()   { locked = true; }
   function unlock() { locked = false; }
 
-  function getCursorStyle() { return cursorStyle; }
+  function isTalking() {
+    return Game.TextBox.isBlocking() || Game.Dialogue.isActive();
+  }
+
+  function getCursorStyle() {
+    if (Game.TextBox.isBlocking()) return 'wait';
+    return cursorStyle;
+  }
   function getGamePos() { return { x: gameX, y: gameY }; }
 
   return {

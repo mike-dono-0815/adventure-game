@@ -30,7 +30,9 @@
           "id": "enter_lab",
           "text": "Enter the lab.",
           "next": null,
+          "suppress_echo": true,
           "effects": [
+            { "type": "say", "text": "Alex steps inside.", "color": "narrator" },
             { "type": "transition", "room": "lab", "player_x": 200, "player_y": 700, "player_dir": "right" }
           ]
         }

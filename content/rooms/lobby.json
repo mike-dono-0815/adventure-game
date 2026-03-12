@@ -179,7 +179,7 @@
               "receptionist_has_coffee": true
             },
             "effects": [
-              { "type": "say", "text": "You grab the handle and pull hard. RIIIIING! The alarm blares throughout the building, emergency lights flashing red. The receptionist leaps to her feet.", "color": "narrator" },
+              { "type": "say", "text": "You grab the handle and pull hard. RIIIIING! The alarm blares throughout the building, emergency lights flashing red. The receptionist seems to be annoyed.", "color": "narrator" },
               { "type": "say", "text": "Oh for— EVERYONE OUT! I— ...ugh. Fire protocol: I have to escort all visitors inside immediately.", "x": 909, "y": 323 },
               { "type": "say", "text": "She fixes you with a withering look.", "color": "narrator" },
               { "type": "say", "text": "Congratulations. You're officially a fire hazard. Come in.", "x": 909, "y": 323 },
@@ -276,6 +276,7 @@
     {
       "id": "entrance_door",
       "name": "authorized personnel door",
+      "cursor": "exit",
       "rect": [
         87,
         124,

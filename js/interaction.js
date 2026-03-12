@@ -3,13 +3,24 @@ Game.Interaction = (function () {
 
   function isBusy() { return busy; }
 
+  function autoFace(hotspot) {
+    // Only respect explicit left/right face_dir; ignore "back" since the player
+    // now always stands to the side and should face toward the object.
+    if (hotspot.face_dir === 'left' || hotspot.face_dir === 'right') {
+      Game.Player.setDirection(hotspot.face_dir);
+    } else if (hotspot.cursor !== 'exit') {
+      var c = Game.Room.getHotspotCenter(hotspot);
+      Game.Player.setDirection(Game.Player.getX() < c.x ? 'right' : 'left');
+    }
+  }
+
   // Execute verb on a hotspot
   function executeOnHotspot(verb, hotspot) {
     if (busy) return;
     busy = true;
 
     function doExecute() {
-      if (hotspot.face_dir) Game.Player.setDirection(hotspot.face_dir);
+      autoFace(hotspot);
 
       var response = findResponse(verb, hotspot);
       if (response) {
@@ -98,7 +109,7 @@ Game.Interaction = (function () {
     busy = true;
 
     function doExecute() {
-      if (hotspot.face_dir) Game.Player.setDirection(hotspot.face_dir);
+      autoFace(hotspot);
 
       var response = findCombinationResponse(verb, itemId, hotspot.id);
       if (!response) response = findCombinationResponse(verb, hotspot.id, itemId);

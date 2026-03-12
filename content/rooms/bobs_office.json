@@ -4,25 +4,25 @@
   "background": "bobs_office",
   "talk_background": "bobs_office_talk",
   "walk_area": [
-    [352, 697],
-    [1041, 697],
-    [1092, 752],
-    [278, 752]
+    [278, 756],
+    [1092, 756],
+    [1092, 760],
+    [278, 760]
   ],
-  "perspective": { "min_scale": 1.0, "max_scale": 1.2 },
+  "perspective": { "min_scale": 1.15, "max_scale": 1.15 },
   "entry_points": {
-    "from_hr_floor": { "x": 800, "y": 730, "dir": "left" }
+    "from_hr_floor": { "x": 980, "y": 750, "dir": "left" }
   },
   "hotspots": [
     {
       "id": "bookshelf",
       "name": "bookshelf",
       "rect": [282, 208, 99, 429],
-      "walk_to": [332, 720],
+      "walk_to": [332, 758],
       "face_dir": "left",
       "interactions": {
         "look_at": {
-          "text": "A shelf of business books. The titles blur into one another: 'Radical Ownership', 'The Seven Habits', 'Who Moved My Cheese?' All spine-out, unchipped, unread. Props for a performance."
+          "text": "A shelf of business books. The titles blur into one another: 'Radical Ownership', 'The Seven Habits', 'EMotional Intelligence?' All spine-out, unchipped, unread. Props for a performance. But there is one sicking out: 'Leadership in the Age of AI' by Michael Donoser - looks like a Bestseller."
         },
         "use": {
           "text": "I don't need to read any of these. I need to leave."
@@ -33,7 +33,7 @@
       "id": "bob",
       "name": "Bob",
       "rect": [630, 297, 129, 157],
-      "walk_to": [545, 720],
+      "walk_to": [545, 758],
       "face_dir": "right",
       "dialogue": "bob",
       "interactions": {
@@ -259,7 +259,7 @@
       "id": "stress_ball_on_desk",
       "name": "stress ball",
       "rect": [607, 454, 40, 44],
-      "walk_to": [695, 720],
+      "walk_to": [695, 758],
       "face_dir": "left",
       "hidden_if": { "stress_ball_given": true },
       "interactions": {
@@ -278,7 +278,7 @@
       "id": "computer",
       "name": "computer",
       "rect": [476, 353, 132, 121],
-      "walk_to": [542, 720],
+      "walk_to": [542, 758],
       "face_dir": "back",
       "interactions": {
         "look_at": [
@@ -330,7 +330,7 @@
       "id": "nameplate_bob",
       "name": "nameplate",
       "rect": [755, 458, 113, 35],
-      "walk_to": [812, 720],
+      "walk_to": [812, 758],
       "face_dir": "back",
       "interactions": {
         "look_at": {
@@ -345,7 +345,7 @@
       "id": "cupboard",
       "name": "filing cabinet",
       "rect": [118, 295, 158, 376],
-      "walk_to": [197, 720],
+      "walk_to": [320, 758],
       "face_dir": "left",
       "interactions": {
         "look_at": [
@@ -403,8 +403,9 @@
     {
       "id": "lobby_door",
       "name": "door out",
+      "cursor": "exit",
       "rect": [1029, 134, 120, 474],
-      "walk_to": [1060, 730],
+      "walk_to": [1050, 758],
       "face_dir": "right",
       "interactions": {
         "look_at": {

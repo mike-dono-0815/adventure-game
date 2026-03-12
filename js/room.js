@@ -117,13 +117,10 @@ Game.Room = (function () {
     }
   }
 
-  function getWalkToPoint(hotspot) {
-    if (hotspot.walk_to) return { x: hotspot.walk_to[0], y: hotspot.walk_to[1] };
-    // Center of rect
+  function getHotspotCenter(hotspot) {
     if (hotspot.rect) {
       return { x: hotspot.rect[0] + hotspot.rect[2] / 2, y: hotspot.rect[1] + hotspot.rect[3] / 2 };
     }
-    // Center of polygon
     if (hotspot.polygon) {
       var sx = 0, sy = 0;
       for (var i = 0; i < hotspot.polygon.length; i++) {
@@ -133,6 +130,36 @@ Game.Room = (function () {
       return { x: sx / hotspot.polygon.length, y: sy / hotspot.polygon.length };
     }
     return { x: Game.Player.getX(), y: Game.Player.getY() };
+  }
+
+  var SIDE_OFFSET = 70; // px to stand beside an object
+
+  function getWalkToPoint(hotspot) {
+    // Exit hotspots: use walk_to as-is (floor position, no offset needed)
+    if (hotspot.cursor === 'exit') {
+      return hotspot.walk_to
+        ? { x: hotspot.walk_to[0], y: hotspot.walk_to[1] }
+        : getHotspotCenter(hotspot);
+    }
+
+    // All other hotspots: stand to one side so the player faces the object.
+    // Use walk_to x as the base when defined (it was manually placed in a valid
+    // spot); fall back to hotspot edge only when there is no walk_to.
+    var c = getHotspotCenter(hotspot);
+    var halfW = hotspot.rect ? hotspot.rect[2] / 2 : 0;
+    var baseX, baseY;
+    if (hotspot.walk_to) {
+      baseX = hotspot.walk_to[0];
+      baseY = hotspot.walk_to[1];
+    } else {
+      baseY = c.y;
+      baseX = c.x + (c.x < Game.Config.WIDTH / 2 ? halfW : -halfW);
+    }
+    if (c.x < Game.Config.WIDTH / 2) {
+      return { x: baseX + SIDE_OFFSET, y: baseY }; // stand right, face left
+    } else {
+      return { x: baseX - SIDE_OFFSET, y: baseY }; // stand left, face right
+    }
   }
 
   function draw(ctx) {
@@ -376,6 +403,7 @@ Game.Room = (function () {
     getPerspective: getPerspective,
     checkTriggers: checkTriggers,
     getWalkToPoint: getWalkToPoint,
+    getHotspotCenter: getHotspotCenter,
     removeHotspot: removeHotspot,
     showHotspot: showHotspot,
     resetTrigger: resetTrigger,

@@ -543,6 +543,7 @@
     {
       "id": "exit_to_office_bottom",
       "name": "Office",
+      "cursor": "exit",
       "rect": [
         271,
         701,

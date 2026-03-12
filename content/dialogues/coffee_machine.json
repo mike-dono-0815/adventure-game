@@ -6,7 +6,6 @@
   "start": "menu",
   "nodes": {
     "menu": {
-      "narrator_text": "The machine's display blinks: SELECT YOUR DRINK.",
       "choices": [
         {
           "id": "americano",

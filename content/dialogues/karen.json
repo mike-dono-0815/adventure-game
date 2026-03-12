@@ -87,7 +87,7 @@
       ]
     },
     "no_badge": {
-      "npc_text": "No badge, no entry. Our printer is out of paper and IT hasn't responded in three days, so I cannot issue a temporary pass. I'm sorry.",
+      "npc_text": "No badge, no entry. Our printer is out of paper and IT hasn't responded in three days, so I cannot issue a temporary badge. I'm sorry.",
       "next": "main_options"
     },
     "tired_response": {

@@ -369,6 +369,7 @@
     {
       "id": "lobby_door",
       "name": "door out",
+      "cursor": "exit",
       "rect": [1226, 0, 150, 768],
       "walk_to": [1200, 680],
       "face_dir": "right",

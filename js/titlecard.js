@@ -38,6 +38,7 @@ Game.TitleCard = (function () {
         active    = false;
         fadingOut = false;
         Game.Input.unlock();
+        Game.Renderer.setBlack(); // hand off black screen to renderer seamlessly
         var cb = callback;
         callback = null;
         if (cb) cb();
@@ -58,13 +59,19 @@ Game.TitleCard = (function () {
 
     var cfg = Game.Config;
     var a   = alpha();
+    // During fade-out keep the scrim fully opaque so the lobby doesn't flash
+    // before the next transition takes over; only fade the content.
+    var scrimA   = fadingOut ? 1 : a;
+    var contentA = a;
 
     ctx.save();
-    ctx.globalAlpha = a;
 
-    // Dark scrim
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.82)';
+    // Dark scrim — fully black during fade-out so nothing bleeds through
+    ctx.globalAlpha = scrimA;
+    ctx.fillStyle = fadingOut ? '#000000' : 'rgba(0, 0, 0, 0.82)';
     ctx.fillRect(0, 0, cfg.WIDTH, cfg.VIEWPORT_HEIGHT);
+
+    ctx.globalAlpha = contentA;
 
     var cx = cfg.WIDTH / 2;
     var cy = cfg.VIEWPORT_HEIGHT / 2;
@@ -75,10 +82,10 @@ Game.TitleCard = (function () {
     var ruleY2 = cy + 56 + (lines.length - 1) * 32;
     ctx.strokeStyle = '#FEBD69';
     ctx.lineWidth   = 1.5;
-    ctx.globalAlpha = a * 0.6;
+    ctx.globalAlpha = contentA * 0.6;
     ctx.beginPath(); ctx.moveTo(cx - ruleW / 2, ruleY1); ctx.lineTo(cx + ruleW / 2, ruleY1); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(cx - ruleW / 2, ruleY2); ctx.lineTo(cx + ruleW / 2, ruleY2); ctx.stroke();
-    ctx.globalAlpha = a;
+    ctx.globalAlpha = contentA;
 
     // Title
     ctx.textAlign    = 'center';
