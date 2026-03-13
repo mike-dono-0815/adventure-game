@@ -48,12 +48,14 @@ Game.Wordfight = (function () {
       reset_trigger: effect.on_loss_reset_trigger || null,
       player_x:      effect.on_loss_player_x !== undefined ? effect.on_loss_player_x : 900,
       player_y:      effect.on_loss_player_y !== undefined ? effect.on_loss_player_y : PLAYER_Y,
+      set_flag:      effect.on_loss_set_flag || null,
     };
 
     playerX      = Game.Player.getX();
     stakeholderX = Game.Actors.getX('stakeholder');
 
-    introText  = effect.intro_text || '';
+    var isRetry = effect.retry_flag && Game.State.check(effect.retry_flag);
+    introText  = (isRetry && effect.intro_text_retry) ? effect.intro_text_retry : (effect.intro_text || '');
     titleSeen  = false;
     Game.ActionLine.setOverride('Talking to Amazonian');
 
@@ -304,6 +306,9 @@ Game.Wordfight = (function () {
     Game.Input.unlock();
     if (lossOptions && lossOptions.reset_trigger) {
       Game.Room.resetTrigger(lossOptions.reset_trigger);
+    }
+    if (lossOptions && lossOptions.set_flag) {
+      Game.State.set(lossOptions.set_flag, true);
     }
     active      = false;
     endCallback = null;

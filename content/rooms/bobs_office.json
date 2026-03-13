@@ -261,7 +261,6 @@
       "rect": [607, 454, 40, 44],
       "walk_to": [695, 758],
       "face_dir": "left",
-      "hidden_if": { "stress_ball_given": true },
       "interactions": {
         "look_at": {
           "text": "A small foam stress ball sitting on the desk. It's been squeezed so many times it has a permanent handprint impression. Someone needs it."

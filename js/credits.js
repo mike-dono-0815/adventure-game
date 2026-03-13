@@ -172,15 +172,7 @@ Game.Credits = (function () {
   }
 
   function handleClick() {
-    if (!active) return;
-    if (done) {
-      // Credits already finished scrolling — go straight to callback
-      active = false;
-      Game.Input.unlock();
-      if (callback) { var cb = callback; callback = null; cb(); }
-      return;
-    }
-    scrollY = totalH + 1;
+    // Clicks are ignored during credits — players must watch the full scroll
   }
 
   function draw(ctx) {
@@ -269,13 +261,6 @@ Game.Credits = (function () {
 
     ctx.restore();
 
-    // Skip hint
-    if (!done) {
-      ctx.font      = '16px ' + cfg.FONT_FAMILY;
-      ctx.textAlign = 'center';
-      ctx.fillStyle = 'rgba(255,255,255,0.25)';
-      ctx.fillText('click to skip', cx, cfg.VIEWPORT_HEIGHT - 16);
-    }
   }
 
   function isActive() { return active; }

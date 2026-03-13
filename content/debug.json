@@ -7,7 +7,9 @@
       "player_x": 672,
       "player_y": 710,
       "player_dir": "right",
-      "flags": {},
+      "flags": {
+        "karen_told_cappuccino": true
+      },
       "inventory": ["business_card", "stress_ball"]
     },
     "kitchen": {
@@ -55,7 +57,8 @@
       "player_dir": "right",
       "flags": {
         "alarm_triggered": true,
-        "headphones_taken": true
+        "headphones_taken": true,
+        "lab_door_tried": true
       },
       "inventory": ["business_card", "stress_ball", "headphones"]
     },
@@ -70,9 +73,11 @@
         "alarm_triggered": true,
         "chip_distracted": true,
         "knows_lab_code": true,
-        "lab_unlocked": true
+        "lab_unlocked": true,
+        "lab_door_tried": true,
+        "package_taken": true
       },
-      "inventory": ["business_card", "stress_ball", "headphones", "winning_ugly"]
+      "inventory": ["business_card", "stress_ball", "winning_ugly", "mystery_package"]
     },
     "lab_ready_to_win": {
       "label": "Lab — ready to beat FIFA",
@@ -106,9 +111,10 @@
         "alarm_triggered": true,
         "fifa_won": true,
         "floor_digit_1_known": true,
-        "floor_digit_2_known": true
+        "floor_digit_2_known": true,
+        "package_taken": true
       },
-      "inventory": ["business_card", "stress_ball", "mystery_package"]
+      "inventory": ["business_card", "stress_ball", "mystery_package", "usb_stick"]
     },
     "bobs_office": {
       "label": "Bob's Office — start of end puzzle",

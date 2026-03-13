@@ -392,7 +392,7 @@
       "face_dir": "back",
       "interactions": {
         "look_at": {
-          "text": "A long kitchen counter. On it: a kettle, a bowl of fruit that has seen better weeks, a dish rack with two mugs and infinite passive regret."
+          "text": "A long kitchen counter. On it: a kettle and a microwave. Impressive equipment for a company kitchen..."
         },
         "use": {
           "text": "I don't need anything from the counter right now."

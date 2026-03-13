@@ -103,6 +103,7 @@ Game.Renderer = (function () {
     Game.TextBox.update(dt);
     Game.Dialogue.update(dt);
     Game.Wordfight.update(dt);
+    Game.FifaResult.update(dt);
     Game.TitleCard.update(dt);
     Game.Credits.update(dt);
     // FakeDeath has no per-frame update — driven entirely by clicks
@@ -153,6 +154,11 @@ Game.Renderer = (function () {
     // TitleCard — full-screen overlay
     if (Game.TitleCard.isActive()) {
       Game.TitleCard.draw(ctx);
+    }
+
+    // FifaResult — full-screen overlay
+    if (Game.FifaResult.isActive()) {
+      Game.FifaResult.draw(ctx);
     }
 
     // FakeDeath — full-screen overlay, drawn above everything except save menu

@@ -218,7 +218,7 @@ Game.Main = (function () {
         // Hover highlight — thick border on hovered button
         if (tdHoverBtn && titleState !== 'options') {
           var hb = tdHoverBtn;
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
+          ctx.strokeStyle = '#FF9900';
           ctx.lineWidth   = 4;
           ctx.strokeRect(hb[0], hb[1], hb[2], hb[3]);
         }

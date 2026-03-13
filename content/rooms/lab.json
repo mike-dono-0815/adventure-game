@@ -59,7 +59,8 @@
             "Ten hours of continuous FIFA is apparently enough.",
             "Someone needs to tell Chip there is a new rising star."
           ]
-        }
+        },
+        { "type": "fade_in" }
       ]
     }
   ],

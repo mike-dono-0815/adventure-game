@@ -11,7 +11,13 @@
         {
           "id": "ask_access",
           "text": "I need access to the lab.",
-          "next": "access"
+          "next": "access",
+          "condition": { "lab_door_tried": true }
+        },
+        {
+          "id": "ask_hr",
+          "text": "I'm trying to find HR. Any idea where they are?",
+          "next": "hr_response"
         },
         {
           "id": "ask_about_fifa",
@@ -55,6 +61,16 @@
         }
       ]
     },
+    "hr_response": {
+      "npc_text": "HR? HR has never once contacted IT voluntarily. They don't know we exist. I don't know they exist. It's a mutual arrangement. So no, I have no idea where they are.",
+      "choices": [
+        {
+          "id": "hr_thanks",
+          "text": "Right. Thanks anyway.",
+          "next": null
+        }
+      ]
+    },
     "fifa_bait": {
       "npc_text": "...did you just bring up FIFA while I'm actively working?",
       "choices": [
@@ -86,7 +102,7 @@
       ]
     },
     "fifa_noise": {
-      "npc_text": "My headphones. I left them somewhere in the office weeks ago. Without them I can hear literally everything — the printer, the fridge hum, Karen's sighing. It's not a productive environment.",
+      "npc_text": "Better headphones. Mine just suck - I can hear literally everything — the printer, the fridge hum, the receptionist's sighing. It's not a productive environment.",
       "choices": [
         {
           "id": "noted",

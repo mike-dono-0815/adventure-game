@@ -40,14 +40,7 @@
       ]
     },
     "correct_cappuccino": {
-      "narrator_text": "The machine hisses, steams, and gurgles. A perfect cappuccino materialises — frothy milk, dusted with cinnamon. It smells incredible.",
-      "choices": [
-        {
-          "id": "take_it",
-          "text": "Take the cappuccino.",
-          "next": null
-        }
-      ]
+      "narrator_text": "The machine hisses, steams, and gurgles. A perfect cappuccino materialises — frothy milk, dusted with cinnamon. It smells incredible. You take it."
     },
     "already_have": {
       "narrator_text": "You already have a cappuccino. Maybe go give it to someone who needs it.",

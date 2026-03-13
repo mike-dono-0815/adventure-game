@@ -127,6 +127,12 @@ Game.Input = (function () {
       return;
     }
 
+    // FifaResult overlay absorbs all clicks
+    if (Game.FifaResult.isActive()) {
+      Game.FifaResult.handleClick();
+      return;
+    }
+
     // FakeDeath overlay absorbs all clicks (before lock/busy checks)
     if (Game.FakeDeath.isActive()) {
       Game.FakeDeath.handleClick(gx, gy);

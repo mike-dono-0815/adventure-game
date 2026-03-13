@@ -22,7 +22,7 @@
           { "type": "walk_player", "to_x": 780, "to_y": 680 }
         ]},
         { "type": "set_player_dir", "dir": "left" },
-        { "type": "wordfight", "intro_text": "What are you doing here?\nAre you even a real Amazonian?\nProve it — respond in the Amazon way,\nor I'll escort you out...", "on_loss_reset_trigger": "stakeholder_encounter", "on_loss_player_x": 780, "on_loss_player_y": 680 },
+        { "type": "wordfight", "intro_text": "What are you doing here?\nAre you even a real Amazonian?\nProve it — respond in the Amazon way,\nor I'll escort you out...", "intro_text_retry": "Oh. You again. You want to try this a second time?\nFine. Maybe you were just tired.\nLet's see if you actually know your Leadership Principles.", "retry_flag": "wordfight_lost", "on_loss_reset_trigger": "stakeholder_encounter", "on_loss_set_flag": "wordfight_lost", "on_loss_player_x": 780, "on_loss_player_y": 680 },
         { "type": "remove_npc", "id": "stakeholder" },
         { "type": "set_flag", "flag": "wordfight_won", "value": true },
         { "type": "walk_player", "to_x": 688, "to_y": 680 },
@@ -35,7 +35,7 @@
   "hotspots": [
     {
       "id": "door_to_bobs_office",
-      "name": "Bob's Office",
+      "name": "Door to Bob's Office",
       "cursor": "exit",
       "rect": [0, 0, 138, 768],
       "walk_to": [150, 690],
@@ -67,14 +67,14 @@
       "walk_to": [688, 690],
       "interactions": {
         "look_at": {
-          "text": "Spacious desks. Actual ergonomic chairs. A coffee machine that isn't broken. Plants — living ones. Someone has clearly negotiated a different relationship with this company. You find yourself wondering who exactly works up here, and whether they know what's happening on the floors below."
+          "text": "Spacious desks. Actual ergonomic chairs. A coffee machine that isn't broken. Plants — living ones. Someone has clearly negotiated well here. You find yourself wondering who exactly works up here, and whether they know what's happening on the floors below."
         },
         "use": { "text": "It's a nice office. I'm not going to use it." }
       }
     },
     {
       "id": "elevator_back",
-      "name": "elevator",
+      "name": "Elevator Door",
       "cursor": "exit",
       "rect": [1238, 0, 138, 768],
       "walk_to": [1200, 690],

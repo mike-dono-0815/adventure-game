@@ -152,6 +152,14 @@ Game.Effects = (function () {
         Game.TitleCard.show({ title: effect.title, lines: effect.lines || [] }, done);
         break;
 
+      case 'fade_in':
+        Game.Renderer.fadeIn(done);
+        break;
+
+      case 'fifa_result':
+        Game.FifaResult.show({ outcome: effect.outcome }, done);
+        break;
+
       case 'wordfight':
         Game.Wordfight.start(effect, done);
         break;

@@ -8,7 +8,10 @@
       "icon": "🪪",
       "interactions": {
         "look_at": {
-          "text": "An old business card. 'Jeff Bezos — CEO Amazon.' I turn it over. On the back, in a flowing hand, there's a signature — Jeff Bezos. Looks genuine. An L10+ signature on a piece of card. That might actually be worth something."
+          "text": "An old business card. 'Jeff Bezos — CEO Amazon.' I turn it over. On the back, in a flowing hand, there's a signature — Jeff Bezos. Looks genuine. An L10+ signature on a piece of card. That might actually be worth something.",
+          "effects": [
+            { "type": "set_flag", "flag": "card_back_seen", "value": true }
+          ]
         },
         "use": {
           "text": "There's no one left to hand this to."
@@ -351,13 +354,19 @@
     {
       "item1": "business_card",
       "item2": "signed_agreement",
-      "text": "You check the business card and see an orginally looking signature of Jeff Bezos. You sign his name on the co-signature line with quiet confidence. It's probably fine.",
+      "condition": { "card_back_seen": true },
+      "text": "You remember — there's Jeff's signature on the back of this card. You carefully copy it onto the co-signature line with quiet confidence. It's probably fine.",
       "color": "narrator",
       "effects": [
         { "type": "remove_item", "item": "business_card" },
         { "type": "replace_item", "old_item": "signed_agreement", "new_item": "co_signed_agreement" },
         { "type": "set_flag", "flag": "co_signed", "value": true }
       ]
+    },
+    {
+      "item1": "business_card",
+      "item2": "signed_agreement",
+      "text": "Not sure how I should combine these two."
     },
     {
       "item1": "visitor_badge",

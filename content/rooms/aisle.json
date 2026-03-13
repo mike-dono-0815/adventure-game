@@ -34,13 +34,14 @@
       "interactions": {
         "look_at": [
           {
-            "condition": { "lab_door_tried": true },
+            "condition": { "lab_sign_read": true },
             "text": "Computer Vision North America. I still can't decide if that's funny or just bureaucracy. Either way, I need their cost center."
           },
           {
             "text": "A mounted plaque beside the door. 'Computer Vision North America — CVNA Lab' - use cost center to enter. North America. I'm fairly sure I'm in Germany. Nobody told North America we're in Germany. Or possibly they did and North America does not care. Either way — I need the cost center for this team.",
             "color": "narrator",
             "effects": [
+              { "type": "set_flag", "flag": "lab_sign_read", "value": true },
               { "type": "set_flag", "flag": "lab_door_tried", "value": true }
             ]
           }

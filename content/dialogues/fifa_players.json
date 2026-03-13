@@ -1,8 +1,8 @@
 {
   "id": "fifa_players",
   "character": "Chip",
-  "speaker_x": 500,
-  "speaker_y": 560,
+  "speaker_x": 735,
+  "speaker_y": 320,
   "start": "challenge",
   "nodes": {
     "challenge": {
@@ -12,13 +12,19 @@
           "id": "play_without_book",
           "text": "Let's go.",
           "condition": { "read_winning_ugly": false },
-          "next": "lose"
+          "next": "lose",
+          "effects": [
+            { "type": "fifa_result", "outcome": "loss" }
+          ]
         },
         {
           "id": "play_with_book",
           "text": "Let's go. I've been reading up.",
           "condition": { "read_winning_ugly": true },
-          "next": "pre_win"
+          "next": "pre_win",
+          "effects": [
+            { "type": "fifa_result", "outcome": "win" }
+          ]
         },
         {
           "id": "cancel",
@@ -28,7 +34,7 @@
       ]
     },
     "lose": {
-      "npc_text": "5-0. Again. You played into every press, you tried to dribble through the box, and you used the same corner routine three times. Same result each time. I feel nothing.",
+      "npc_text": "Tactically, that was a masterclass in what not to do. You pressed too high, dribbled into the box, and ran the same corner routine until it stopped being a mistake and started being a choice. I have notes. Do you want the notes?",
       "choices": [
         {
           "id": "rematch",
@@ -43,7 +49,7 @@
       ]
     },
     "pre_win": {
-      "npc_text": "Wait. You're... playing differently. You held the line, you pressed at 70%, you didn't panic when I equalised. What happened to you?",
+      "npc_text": "Wait. You're... playing differently. You held the line, you pressed at 70%, you didn't panic at all. What happened to you?",
       "choices": [
         {
           "id": "reveal_book",
@@ -58,7 +64,7 @@
       ]
     },
     "win_book": {
-      "npc_text": "'Winning Ugly'? You read 'Winning Ugly'? That book is... okay that's actually a legitimate psychological framework. I — fine. You won. 3-5. The better tactician won today. I need to sit with this.",
+      "npc_text": "'Winning Ugly'? You read 'Winning Ugly'? That book is... okay that's actually a legitimate psychological framework. I — fine. You won. The better tactician won today. I need to sit with this.",
       "choices": [
         {
           "id": "claim_win",
@@ -68,7 +74,7 @@
       ]
     },
     "win_vague": {
-      "npc_text": "3-5. You actually won. I don't know what I just watched but it was structured. Like you had a plan and stuck to it. I respect that more than I want to admit.",
+      "npc_text": "You actually won. I don't know what I just watched but it was structured. Like you had a plan and stuck to it. I respect that more than I want to admit.",
       "choices": [
         {
           "id": "claim_win2",
