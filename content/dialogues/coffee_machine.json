@@ -53,7 +53,7 @@
       ]
     },
     "wrong_americano": {
-      "narrator_text": "The machine clunks and dispenses a very black, very bitter americano. You hold it up towards the receptionist. She sniffs the air and her nose wrinkles. 'I appreciate the gesture, but that's not quite right... still too tired.' The cup slips from your hand. Coffee everywhere.",
+      "narrator_text": "The machine clunks and dispenses something so black it seems to absorb light. You present it to the receptionist with quiet confidence. She sniffs it. Her face does something complicated. 'I appreciate the thought. But that's not it. Still too tired, actually — ' The cup slips from your hand. Coffee everywhere.",
       "choices": [
         {
           "id": "try_again_1",
@@ -68,7 +68,7 @@
       ]
     },
     "wrong_espresso": {
-      "narrator_text": "The machine vibrates violently and spits out a tiny, intense espresso. You hold it towards the receptionist. She squints at it. 'That's... a lot of intensity for one cup. I need something with more balance. Nice try though.' The espresso cup tips over. It was only two sips anyway.",
+      "narrator_text": "The machine vibrates, gurgles, and presents a tiny, furious espresso. You offer it across the desk. She regards it like it's issued a personal challenge. 'That's... very committed of the machine. I need something with more milk. And less existential dread.' The cup tips over. It was barely two sips anyway.",
       "choices": [
         {
           "id": "try_again_3",

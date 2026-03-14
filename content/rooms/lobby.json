@@ -69,7 +69,7 @@
       ],
       "interactions": {
         "look_at": {
-          "text": "An emergency procedure poster. Step 4 catches my eye: 'Staff must escort visitors inside in fire event.' Interesting policy."
+          "text": "An emergency procedure poster. Twelve steps total. I read step four twice: 'In the event of fire, all staff must escort any visitors present through to the designated interior assembly point.' So the fire safety protocol requires letting me inside. Interesting. Very interesting."
         },
         "use": {
           "text": "The poster is fixed to the wall. I can read it though."
@@ -108,7 +108,7 @@
       ],
       "interactions": {
         "look_at": {
-          "text": "A visitor badge printer blinking a red error light. The display reads: OUT OF PAPER. Typical IT response time: three days and counting."
+          "text": "A visitor badge printer flashing a red error light. OUT OF PAPER. A sticky note below it reads: 'LOGGED WITH IT - DO NOT TOUCH'. A second sticky note reads: 'SERIOUSLY'. Three days and counting."
         },
         "use": {
           "text": "The printer just blinks its red light at me. OUT OF PAPER. Not helpful."
@@ -165,7 +165,7 @@
       ],
       "interactions": {
         "look_at": {
-          "text": "A wall-mounted fire alarm pull station. A label reads: 'Pull to Activate'. Another label reads: 'Do not tamper with safety equipment'."
+          "text": "A wall-mounted fire alarm. One label reads: 'PULL TO ACTIVATE'. Another reads: 'DO NOT TAMPER WITH SAFETY EQUIPMENT'. These seem mutually exclusive. I choose to believe they are not."
         },
         "use": [
           {
@@ -445,6 +445,53 @@
           ]
         },
         {
+          "item": "terrible_filter_coffee",
+          "verb": "give",
+          "text": "You slide the cup across the desk hopefully.",
+          "color": "narrator",
+          "effects": [
+            { "type": "say", "text": "She looks at it. She looks at you.", "color": "narrator" },
+            { "type": "say", "text": "\"That's... from the kitchen machine, isn't it.\"", "x": 909, "y": 323 },
+            { "type": "say", "text": "\"I can tell by the colour. And the smell. And the slight aura of defeat around the cup.\"", "x": 909, "y": 323 },
+            { "type": "say", "text": "\"I appreciate the thought. I really do. But no.\"", "x": 909, "y": 323 }
+          ]
+        },
+        {
+          "item": "terrible_filter_coffee",
+          "verb": "use",
+          "text": "You place the cup on the desk.",
+          "color": "narrator",
+          "effects": [
+            { "type": "say", "text": "She looks at it. She looks at you.", "color": "narrator" },
+            { "type": "say", "text": "\"That's from the kitchen machine. I can smell it from here.\"", "x": 909, "y": 323 },
+            { "type": "say", "text": "\"That's not coffee. That's coffee-adjacent.\"", "x": 909, "y": 323 }
+          ]
+        },
+        {
+          "item": "frozen_egg",
+          "verb": "give",
+          "text": "You hold up the frozen egg.",
+          "color": "narrator",
+          "effects": [
+            { "type": "say", "text": "She stares at it for a full second.", "color": "narrator" },
+            { "type": "say", "text": "\"Is that... an egg?\"", "x": 909, "y": 323 },
+            { "type": "say", "text": "\"From the kitchen fridge, yes.", "color": "player" },
+            { "type": "say", "text": "\"Please don't bring produce to the front desk. And please don't ask me why that's a rule.\"", "x": 909, "y": 323 }
+          ]
+        },
+        {
+          "item": "mystery_package",
+          "verb": "give",
+          "text": "You place the package on the desk. She reads the label.",
+          "color": "narrator",
+          "effects": [
+            { "type": "say", "text": "\"This is addressed to... oh. Chen.\"", "x": 909, "y": 323 },
+            { "type": "say", "text": "A pause. Something like recognition, or sadness, crosses her face.", "color": "narrator" },
+            { "type": "say", "text": "\"They cleared that desk on Tuesday. You should probably bring this upstairs. HR would know what to do with it.\"", "x": 909, "y": 323 },
+            { "type": "say", "text": "She slides it back to you.", "color": "narrator" }
+          ]
+        },
+        {
           "item": "business_card",
           "verb": "give",
           "text": "You slide the business card across the desk with quiet confidence.",
@@ -498,9 +545,14 @@
             },
             {
               "type": "say",
-              "text": "\"Working at Amazon is never stressful. This will go straight to lost property.\"",
+              "text": "\"Working at Amazon is never stressful - so absolutely no need for this.\"",
               "x": 909,
               "y": 323
+            },
+            {
+              "type": "say",
+              "text": "She smiles suspicously.",
+              "color": "narrator"
             }
           ]
         },
@@ -518,9 +570,14 @@
             },
             {
               "type": "say",
-              "text": "\"Working at Amazon is never stressful. This will go straight to lost property.\"",
+              "text": "\"Working at Amazon is never stressful - so absolutely no need for this.\"",
               "x": 909,
               "y": 323
+            },
+            {
+              "type": "say",
+              "text": "She smiles suspicously.",
+              "color": "narrator"
             }
           ]
         }

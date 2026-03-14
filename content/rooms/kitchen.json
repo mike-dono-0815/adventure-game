@@ -157,7 +157,7 @@
             "text": "The fridge is already open. A wave of cold and mild existential dread flows out."
           },
           {
-            "text": "You pull open the fridge. Inside: a sad desk salad, a container labelled 'Karen's lunch', and a single egg — frozen solid. Someone had this fridge set to arctic. You pocket the egg.",
+            "text": "You pull open the fridge. Inside: a sad desk salad that's seen better days, a Tupperware labelled 'Karen's — DO NOT TOUCH — I MEAN IT THIS TIME', and one lone egg, frozen completely solid. Someone had this fridge set to deep space. You pocket the egg.",
             "color": "narrator",
             "effects": [
               {
@@ -353,11 +353,13 @@
               "id": "hr_actor",
               "texts": [
                 "WHO DID THIS.",
-                "This is a POLICY VIOLATION.",
-                "I will find out who did this.",
-                "HR Case — OPENED.",
+                "POLICY. VIOLATION.",
+                "I am logging this RIGHT NOW.",
+                "HR Case — OPENED. Category: Egg.",
                 "This kitchen is a CRIME SCENE.",
-                "Someone is getting a final warning.",
+                "Someone is getting a formal warning.",
+                "A VERY formal warning.",
+                "I have a notebook.",
                 "I will not be ignored."
               ],
               "interval": 1.8,
@@ -418,7 +420,7 @@
           "text": "A small whiteboard next to the coffee machine. It reads: 'DAYS SINCE LAST KITCHEN INCIDENT: 0'. The number has been erased and rewritten so many times the surface is grey."
         },
         "use": {
-          "text": "I am not the person who maintains the incident board. I may be the person who resets it, though."
+          "text": "I am not the person who maintains the incident board. I am, however, almost certainly the person who just set it back to zero."
         }
       }
     },
@@ -528,6 +530,37 @@
         }
       },
       "combinations": [
+        {
+          "item": "stress_ball",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You offer the Amazon stress ball. She stops mid-rant and looks at it.", "color": "narrator" },
+            { "type": "say", "text": "Is that an Amazon stress ball.", "x": 914, "y": 98 },
+            { "type": "say", "text": "Working at Amazon is not stressful. This is a wellness initiative.", "x": 914, "y": 98 },
+            { "type": "say", "text": "She doesn't take it. She turns back to the microwave.", "color": "narrator" },
+            { "type": "say", "text": "A moment passes. When she thinks you're not looking, she picks it up.", "color": "narrator" }
+          ]
+        },
+        {
+          "item": "stress_ball",
+          "verb": "use",
+          "effects": [
+            { "type": "say", "text": "You place the stress ball on the counter near her.", "color": "narrator" },
+            { "type": "say", "text": "This is not a negotiation.", "x": 914, "y": 98 },
+            { "type": "say", "text": "She pushes it away. It rolls back to her. She stares at it.", "color": "narrator" }
+          ]
+        },
+        {
+          "item": "mystery_package",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You hold up the Amazon package. She reads the label.", "color": "narrator" },
+            { "type": "say", "text": "Chen. That's a terminated employee. This is undelivered inventory.", "x": 914, "y": 98 },
+            { "type": "say", "text": "She opens a notebook. Writes something.", "color": "narrator" },
+            { "type": "say", "text": "I'm logging this. Leave it with reception.", "x": 914, "y": 98 },
+            { "type": "say", "text": "She turns back to the microwave. The package remains yours.", "color": "narrator" }
+          ]
+        },
         {
           "item": "business_card",
           "verb": "give",

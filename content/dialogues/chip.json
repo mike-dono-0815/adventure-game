@@ -52,7 +52,7 @@
       ]
     },
     "access_no": {
-      "npc_text": "No. That's what the process is for. I can't think straight in this open plan anyway. If I had something to block this noise out I might actually clear the backlog faster, but here we are.",
+      "npc_text": "No. There is no faster way. The process is the process. I built the process. Anyway, I can't think straight out here — the printer alone is running at 47 decibels, I measured it. If I could actually concentrate I might see a workaround. But I cannot. So there isn't.",
       "choices": [
         {
           "id": "back2",
@@ -62,7 +62,7 @@
       ]
     },
     "hr_response": {
-      "npc_text": "HR? HR has never once contacted IT voluntarily. They don't know we exist. I don't know they exist. It's a mutual arrangement. So no, I have no idea where they are.",
+      "npc_text": "HR? HR has never submitted a single ticket. Not one. So technically they don't exist in my system. Which means, philosophically, they might not exist at all. Ask someone who believes in them.",
       "choices": [
         {
           "id": "hr_thanks",
@@ -87,7 +87,7 @@
       ]
     },
     "fifa_ego": {
-      "npc_text": "Statistically dominant. Forty-three games, zero losses. xG differential plus eleven. But I'm not playing right now. I have six open tickets and the ambient noise in this building is genuinely affecting my cognitive throughput.",
+      "npc_text": "Statistically dominant. Forty-three games, zero losses. xG differential of plus eleven point four. I track it on a spreadsheet. With conditional formatting. But I'm not playing right now — I have six open tickets and the noise in this building is genuinely destroying my cognition. I can literally hear the servers hum.",
       "choices": [
         {
           "id": "push_fifa",
@@ -102,7 +102,7 @@
       ]
     },
     "fifa_noise": {
-      "npc_text": "Better headphones. Mine just suck - I can hear literally everything — the printer, the fridge hum, the receptionist's sighing. It's not a productive environment.",
+      "npc_text": "Better headphones. Right now I can hear the printer, the servers hum, someone microwaving something that smells criminal, and the receptionist sighing on a very consistent four-second cycle. I've got twelve tickets to clear and my brain is just... buffering.",
       "choices": [
         {
           "id": "noted",
@@ -112,7 +112,7 @@
       ]
     },
     "fifa_refuse": {
-      "npc_text": "No. I don't play with randoms. And I have work to do. Come back when you have a ticket number.",
+      "npc_text": "No. I don't play randoms. My record is clean and I intend to keep it that way. Raise a ticket. Three to five business weeks. Goodbye.",
       "choices": [
         {
           "id": "leave",

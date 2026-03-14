@@ -127,6 +127,80 @@
       "walk_to": [222, 680],
       "face_dir": "back",
       "dialogue": "coworker",
+      "combinations": [
+        {
+          "item": "stress_ball",
+          "verb": "give",
+          "condition": { "headphones_taken": false },
+          "text": "You hold the stress ball out toward them. The headphones have made you invisible. You stand there for a moment with an Amazon stress ball extended toward no one.",
+          "color": "narrator"
+        },
+        {
+          "item": "stress_ball",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You slide the stress ball across the desk.", "color": "narrator" },
+            { "type": "say", "text": "Oh. An Amazon stress ball. Someone actually kept one of these.", "x": 490, "y": 530 },
+            { "type": "say", "text": "They squeeze it once, look at it, then put it in their drawer without further comment.", "color": "narrator" }
+          ]
+        },
+        {
+          "item": "frozen_egg",
+          "verb": "give",
+          "condition": { "headphones_taken": false },
+          "text": "You offer the frozen egg to a person sealed inside noise-cancelling headphones. Incredibly, they don't take it.",
+          "color": "narrator"
+        },
+        {
+          "item": "frozen_egg",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You hold out the frozen egg.", "color": "narrator" },
+            { "type": "say", "text": "Why do you have a frozen egg.", "x": 490, "y": 530 },
+            { "type": "say", "text": "Found it in the fridge.", "color": "player" },
+            { "type": "say", "text": "You should probably deal with that before it does something.", "x": 490, "y": 530 }
+          ]
+        },
+        {
+          "item": "thawed_egg",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You produce the slightly damp egg.", "color": "narrator" },
+            { "type": "say", "text": "Why is it wet.", "x": 490, "y": 530 },
+            { "type": "say", "text": "Coffee.", "color": "player" },
+            { "type": "say", "text": "Yeah. Keep it away from me.", "x": 490, "y": 530 }
+          ]
+        },
+        {
+          "item": "terrible_filter_coffee",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You offer the cup of filter coffee.", "color": "narrator" },
+            { "type": "say", "text": "Oh god. Is that from the kitchen machine?", "x": 490, "y": 530 },
+            { "type": "say", "text": "Yes.", "color": "player" },
+            { "type": "say", "text": "That's not coffee. That's a cry for help in liquid form. No thank you.", "x": 490, "y": 530 }
+          ]
+        },
+        {
+          "item": "mystery_package",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You show them the package. They read the label.", "color": "narrator" },
+            { "type": "say", "text": "That's Chen's. They were let go Tuesday.", "x": 490, "y": 530 },
+            { "type": "say", "text": "A pause.", "color": "narrator" },
+            { "type": "say", "text": "You should probably give that to HR. If you can find them.", "x": 490, "y": 530 }
+          ]
+        },
+        {
+          "item": "winning_ugly",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You hand them the book.", "color": "narrator" },
+            { "type": "say", "text": "Oh. 'Winning Ugly'. I read that.", "x": 490, "y": 530 },
+            { "type": "say", "text": "Chapter three made me question my choices as a person. Keep it.", "x": 490, "y": 530 }
+          ]
+        }
+      ],
       "interactions": {
         "look_at": [
           {

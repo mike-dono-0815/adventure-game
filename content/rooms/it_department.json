@@ -119,6 +119,76 @@
             { "type": "say", "text": "He pulls his old headphones off the hook and tosses them in the bin without looking. The world outside his monitors ceases to matter.", "color": "narrator" },
             { "type": "remove_item", "item": "headphones" }
           ]
+        },
+        {
+          "item": "frozen_egg",
+          "verb": "give",
+          "condition": { "chip_distracted": true },
+          "text": "You wave the egg at him. He's completely sealed off in his headphone bubble. He does not react. The egg and Chip regard each other. Only one of them knows this is happening.",
+          "color": "narrator"
+        },
+        {
+          "item": "frozen_egg",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You hold out the frozen egg. Chip glances at it without turning his head.", "color": "narrator" },
+            { "type": "say", "text": "Why do you have an egg.", "x": 640, "y": 530 },
+            { "type": "say", "text": "Found it in the fridge.", "color": "player" },
+            { "type": "say", "text": "Put it back.", "x": 640, "y": 530 },
+            { "type": "say", "text": "He turns back to his monitors. Exchange concluded.", "color": "narrator" }
+          ]
+        },
+        {
+          "item": "frozen_egg",
+          "verb": "use",
+          "condition": { "chip_distracted": true },
+          "text": "You hold the frozen egg in his eyeline. Nothing. The headphones have made him bulletproof.",
+          "color": "narrator"
+        },
+        {
+          "item": "frozen_egg",
+          "verb": "use",
+          "effects": [
+            { "type": "say", "text": "You extend the frozen egg toward Chip. He clocks it without turning his head.", "color": "narrator" },
+            { "type": "say", "text": "I don't want that. Whatever it is. No.", "x": 640, "y": 530 }
+          ]
+        },
+        {
+          "item": "thawed_egg",
+          "verb": "give",
+          "condition": { "chip_distracted": true },
+          "text": "You offer the damp egg to a man sealed inside noise-cancelling headphones. It does not go well for the egg's dignity.",
+          "color": "narrator"
+        },
+        {
+          "item": "thawed_egg",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You offer Chip the slightly damp, faintly coffee-stained egg.", "color": "narrator" },
+            { "type": "say", "text": "Is that an egg.", "x": 640, "y": 530 },
+            { "type": "say", "text": "Yes.", "color": "player" },
+            { "type": "say", "text": "Why is it wet.", "x": 640, "y": 530 },
+            { "type": "say", "text": "Coffee.", "color": "player" },
+            { "type": "say", "text": "Chip stares at you for a long, uncomfortable moment.", "color": "narrator" },
+            { "type": "say", "text": "I don't want it. I really don't want it.", "x": 640, "y": 530 }
+          ]
+        },
+        {
+          "item": "terrible_filter_coffee",
+          "verb": "give",
+          "condition": { "chip_distracted": true },
+          "text": "You wave the cup near him. He can't hear you. He might be able to smell it though — his nose wrinkles slightly.",
+          "color": "narrator"
+        },
+        {
+          "item": "terrible_filter_coffee",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You offer Chip the cup of filter coffee.", "color": "narrator" },
+            { "type": "say", "text": "I can smell that from here.", "x": 640, "y": 530 },
+            { "type": "say", "text": "That's from the kitchen machine. I would rather drink directly from a motivational poster.", "x": 640, "y": 530 },
+            { "type": "say", "text": "He waves you off without looking up.", "color": "narrator" }
+          ]
         }
       ]
     },

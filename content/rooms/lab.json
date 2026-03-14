@@ -73,6 +73,20 @@
       "face_dir": "right",
       "hidden_if": { "fifa_won": true },
       "dialogue": "fifa_players",
+      "combinations": [
+        {
+          "item": "frozen_egg",
+          "verb": "give",
+          "text": "You hold up the frozen egg during the match. Neither player looks up. After a moment, one of them says 'good idea, actually' without breaking eye contact with the screen. Nothing else happens.",
+          "color": "narrator"
+        },
+        {
+          "item": "thawed_egg",
+          "verb": "give",
+          "text": "You present the damp egg to two people in the middle of a FIFA match. One of them says 'not now'. The other says nothing. You put the egg away.",
+          "color": "narrator"
+        }
+      ],
       "interactions": {
         "look_at": {
           "text": "Two people locked in a FIFA match with the focus of professional athletes. Neither has looked up since I entered. The score is 2-2. The tension is real."

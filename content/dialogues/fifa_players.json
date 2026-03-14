@@ -6,7 +6,7 @@
   "start": "challenge",
   "nodes": {
     "challenge": {
-      "npc_text": "Sure. Standard rules. 5 minutes. No substitutes. No pausing. And definitely no noodling. No excuses.",
+      "npc_text": "Sure. Standard rules. Five minutes, no subs, no pausing, no noodling. No complaining about the controller either. I have a spare and it's worse.",
       "choices": [
         {
           "id": "play_without_book",
@@ -34,7 +34,7 @@
       ]
     },
     "lose": {
-      "npc_text": "Tactically, that was a masterclass in what not to do. You pressed too high, dribbled into the box, and ran the same corner routine until it stopped being a mistake and started being a choice. I have notes. Do you want the notes?",
+      "npc_text": "Tactically, that was a clinic. A clinic in what not to do. You pressed too high, dribbled into the box on every single chance, and ran the same corner routine so many times it stopped being a mistake and became a philosophy. I have notes. Six pages. Do you want the PR-FAQ?",
       "choices": [
         {
           "id": "rematch",
@@ -49,7 +49,7 @@
       ]
     },
     "pre_win": {
-      "npc_text": "Wait. You're... playing differently. You held the line, you pressed at 70%, you didn't panic at all. What happened to you?",
+      "npc_text": "Wait. You're — what is happening. You're holding the line. Pressing at 70. You didn't panic. This is structured. Who are you.",
       "choices": [
         {
           "id": "reveal_book",
@@ -64,7 +64,7 @@
       ]
     },
     "win_book": {
-      "npc_text": "'Winning Ugly'? You read 'Winning Ugly'? That book is... okay that's actually a legitimate psychological framework. I — fine. You won. The better tactician won today. I need to sit with this.",
+      "npc_text": "'Winning Ugly'? You read 'Winning Ugly'? That's — I mean — that's actually a legitimate psychological framework. Chapter nine is almost offensively correct. Fine. You won. The better tactician won today. I need to sit with this for a while.",
       "choices": [
         {
           "id": "claim_win",
@@ -74,7 +74,7 @@
       ]
     },
     "win_vague": {
-      "npc_text": "You actually won. I don't know what I just watched but it was structured. Like you had a plan and stuck to it. I respect that more than I want to admit.",
+      "npc_text": "You actually won. I don't know what just happened but it was structured. You had a plan and executed it. Against me. Against my record. I respect that more than I'm comfortable admitting.",
       "choices": [
         {
           "id": "claim_win2",
@@ -84,7 +84,7 @@
       ]
     },
     "post_win": {
-      "npc_text": "Look — you won fair. We are going to step out for a bit. The lab's yours. Don't touch the compile terminal. And if I would be you, I would not touch the specimen...",
+      "npc_text": "Look. You won. Fair and square, even if I don't fully understand how. We're stepping out to process this. Lab's yours. Don't touch the compile terminal. And whatever you do — don't touch the specimen cup. I'm serious. I don't know exactly what's in it anymore.",
       "choices": [
         {
           "id": "finish",

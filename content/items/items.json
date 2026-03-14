@@ -32,7 +32,7 @@
           "text": "A squishy orange stress ball with the Amazon logo on it. They handed these out after the last round of redundancies. The irony was apparently lost on HR."
         },
         "use": {
-          "text": "I squeeze it a few times. It doesn't help. It never really did."
+          "text": "I give it a few squeezes. My stress is entirely undeterred. The stress ball and I have reached a mutual agreement: it absorbs nothing, and I pretend it helps."
         },
         "give": {
           "text": "I think I need this more than anyone else here right now."
@@ -71,7 +71,7 @@
           "text": "A plastic visitor badge with my name on it. 'VISITOR - Alex'. At least they spelled it right."
         },
         "use": {
-          "text": "I need to use this with something, like a door."
+          "text": "I need to use this on a door. It is a badge. It opens doors. It does not open conversations, situations, or cabinets. Just doors."
         }
       }
     },
@@ -158,10 +158,10 @@
       "icon": "\ud83e\udd5a",
       "interactions": {
         "look_at": {
-          "text": "A white egg covered in frost crystals. Frozen solid. I can't microwave this — it'll just sit there. I need to thaw it first."
+          "text": "A white egg completely encased in frost crystals. Someone had that fridge set to deep space. I can't microwave this — it'll just sit there, confused and cold. I need to thaw it first."
         },
         "use": {
-          "text": "It's too frozen to do anything with yet. I need to thaw it somehow."
+          "text": "I look at the egg. The egg looks back. Neither of us is ready for what comes next."
         }
       }
     },
@@ -203,7 +203,7 @@
       "icon": "\ud83c\udfa7",
       "interactions": {
         "look_at": {
-          "text": "A pair of over-ear headphones. They still have the lo-fi beats playlist queued up. Someone is going to be very upset when they notice these are gone."
+          "text": "A pair of Sony over-ear headphones. The lo-fi beats playlist is still queued. The 'Property of Amazon' sticker is half-peeled in a way that suggests someone started the job, lost confidence, and walked away. Someone is going to be very upset when they notice these are gone."
         },
         "use": {
           "text": "I should give these to someone who needs the distraction."
@@ -308,7 +308,7 @@
       "icon": "\ud83d\udcbe",
       "interactions": {
         "look_at": {
-          "text": "A USB stick with 'IMPORTANT — DO NOT LOSE' written on it in shaky permanent marker. The cap is long gone. Someone, somewhere, is very worried about this right now."
+          "text": "A USB stick. Scrawled in permanent marker: 'IMPORTANT — DO NOT LOSE'. The cap is long gone. The handwriting is shaky — not from haste, but from the weight of responsibility. Someone is definitely pacing right now."
         },
         "use": {
           "text": "I should plug this into a computer to see what's on it."
@@ -335,7 +335,7 @@
     {
       "item1": "pen",
       "item2": "separation_agreement",
-      "text": "I take a deep breath and sign the separation agreement. It's done. Now I need a counter-signature.",
+      "text": "I take a deep breath. I sign. In big, clear letters. There. I've officially cancelled myself. Now I need someone to countersign.",
       "effects": [
         { "type": "replace_item", "old_item": "separation_agreement", "new_item": "signed_agreement" },
         { "type": "set_flag", "flag": "agreement_signed", "value": true }

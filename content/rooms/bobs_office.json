@@ -22,7 +22,7 @@
       "face_dir": "left",
       "interactions": {
         "look_at": {
-          "text": "A shelf of business books. The titles blur into one another: 'Radical Ownership', 'The Seven Habits', 'EMotional Intelligence?' All spine-out, unchipped, unread. Props for a performance. But there is one sicking out: 'Leadership in the Age of AI' by Michael Donoser - looks like a Bestseller."
+          "text": "A shelf of business books. 'Radical Ownership', 'The Seven Habits', 'Emotional Intelligence'. All pristine. All spine-out. All bought, displayed, and pointedly unread. Props for a performance review. One sticks out slightly: 'Leadership in the Age of AI' by Michael Donoser. It has a Post-it on it: 'READ THIS'."
         },
         "use": {
           "text": "I don't need to read any of these. I need to leave."
@@ -252,6 +252,43 @@
             { "type": "say", "text": "Where did you get this.", "x": 637, "y": 297 },
             { "type": "say", "text": "It isn't a question. He doesn't take it.", "color": "narrator" }
           ]
+        },
+        {
+          "item": "winning_ugly",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You hand Bob 'Winning Ugly'. He reads the cover. He reads the subtitle.", "color": "narrator" },
+            { "type": "say", "text": "Why are you showing me this.", "x": 637, "y": 297 },
+            { "type": "say", "text": "He hands it back. He looks like a man filing something unpleasant away for later.", "color": "narrator" }
+          ]
+        },
+        {
+          "item": "frozen_egg",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You hold out the frozen egg. Bob looks at it. He looks at you.", "color": "narrator" },
+            { "type": "say", "text": "I have seventeen open cases.", "x": 637, "y": 297 },
+            { "type": "say", "text": "He returns to his screen. The egg is still yours.", "color": "narrator" }
+          ]
+        },
+        {
+          "item": "thawed_egg",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You produce the damp egg. Bob stares at it.", "color": "narrator" },
+            { "type": "say", "text": "I don't know what that is. I don't want to know what that is.", "x": 637, "y": 297 },
+            { "type": "say", "text": "He points at the door.", "color": "narrator" }
+          ]
+        },
+        {
+          "item": "terrible_filter_coffee",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You offer the kitchen coffee. He sniffs it.", "color": "narrator" },
+            { "type": "say", "text": "That's from the drip machine.", "x": 637, "y": 297 },
+            { "type": "say", "text": "He gestures to his own untouched mug.", "color": "narrator" },
+            { "type": "say", "text": "I have one. Also from the drip machine. I know.", "x": 637, "y": 297 }
+          ]
         }
       ]
     },
@@ -263,7 +300,7 @@
       "face_dir": "left",
       "interactions": {
         "look_at": {
-          "text": "A small foam stress ball sitting on the desk. It's been squeezed so many times it has a permanent handprint impression. Someone needs it."
+          "text": "A small foam stress ball on the desk. It's been squeezed so many times the Amazon logo is barely legible and there's a permanent fist-shaped dent in the side. Someone has been working through some things."
         },
         "pick_up": {
           "text": "That's on Bob's desk. I'm not taking it while he's sitting right there."

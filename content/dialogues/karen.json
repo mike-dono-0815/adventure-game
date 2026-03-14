@@ -91,7 +91,7 @@
       "next": "main_options"
     },
     "tired_response": {
-      "npc_text": "I am absolutely shattered. Four hours at this desk without a break. I haven't even had a coffee.",
+      "npc_text": "I am absolutely shattered. Four hours at this desk, no break, no coffee, and I've explained the badge policy to seventeen different people. Each time slightly more slowly than the last.",
       "choices": [
         {
           "id": "coffee_question",
@@ -106,7 +106,7 @@
       ]
     },
     "coffee_preference": {
-      "npc_text": "Oh — cappuccino, every time. And here's the thing: that machine over there actually makes one, if you know how. Nobody reads the manual, but if you hold the Milk Froth button and tap Double Espresso twice — it unlocks a hidden menu. Perfect cappuccino. I discovered it completely by accident. I'd love one right now but I cannot leave this desk unattended.",
+      "npc_text": "Cappuccino. Every time. And here's the thing — that machine over there actually makes a proper one, if you know the trick. Nobody reads the manual, which is frankly criminal. Hold the Milk Froth button and tap Double Espresso twice. Hidden menu. Perfect cappuccino. I found it by accident while stress-pressing buttons during a particularly bad Monday. I'd get one myself but I cannot leave this desk or the entire security model collapses.",
       "effects": [
         { "type": "set_flag", "flag": "karen_told_cappuccino", "value": true }
       ],
@@ -124,7 +124,7 @@
       ]
     },
     "badge_printer_response": {
-      "npc_text": "Out of paper. I logged a ticket with IT on Monday. It's Thursday. I've had better luck communicating with the ficus in the corner.",
+      "npc_text": "Out of paper since Monday. I've logged a ticket, sent a follow-up, and sent a follow-up to the follow-up. At some point I stopped being sure if I was talking to a human or an auto-reply. The ficus has been more responsive.",
       "next": "main_options"
     },
     "emergency_response": {
@@ -138,7 +138,7 @@
       ]
     },
     "suspicious": {
-      "npc_text": "Right. Well. Let's hope it doesn't come to that. Is there anything else I can help you with?",
+      "npc_text": "Right. Well. We haven't had a drill in three years and I'd very much like to keep it that way. Is there anything else I can help you with?",
       "next": "main_options"
     }
   }

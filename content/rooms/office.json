@@ -158,6 +158,26 @@
           "item": "business_card",
           "verb": "give",
           "text": "Bob looks at the Jeff Bezos business card for a long time. 'Where did you get this.' It isn't a question. He doesn't take it."
+        },
+        {
+          "item": "winning_ugly",
+          "verb": "give",
+          "text": "You hand Bob 'Winning Ugly'. He reads the cover. He reads the subtitle. 'Why are you showing me this.' He hands it back. He looks like a man filing something unpleasant away for later."
+        },
+        {
+          "item": "frozen_egg",
+          "verb": "give",
+          "text": "You hold out the frozen egg. Bob looks at it. He looks at you. 'I have seventeen open cases.' He returns to his screen. The egg is still yours."
+        },
+        {
+          "item": "thawed_egg",
+          "verb": "give",
+          "text": "You produce the damp egg. Bob stares at it. 'I don't know what that is. I don't want to know what that is.' He points at the door."
+        },
+        {
+          "item": "terrible_filter_coffee",
+          "verb": "give",
+          "text": "You offer the kitchen coffee. He sniffs it. 'That's from the drip machine.' He gestures to his own untouched mug. 'I have one. Also from the drip machine. I know.'"
         }
       ]
     },
@@ -170,7 +190,7 @@
       "hidden_if": { "stress_ball_given": true },
       "interactions": {
         "look_at": {
-          "text": "A small foam stress ball sitting on the desk. It's been squeezed so many times it has a permanent handprint impression. Someone needs it."
+          "text": "A small foam stress ball on the desk. It's been squeezed so many times the Amazon logo is barely legible and there's a permanent fist-shaped dent in the side. Someone has been working through some things."
         },
         "pick_up": {
           "text": "That's on Bob's desk. I'm not taking it while he's sitting right there."

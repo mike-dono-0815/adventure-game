@@ -199,7 +199,7 @@
             "text": "I already have it."
           },
           {
-            "text": "You pick up the package. It clunks once, significantly. You now have a new responsibility.",
+            "text": "You pick up the package. It clunks once, significantly. Someone ordered something they will never receive. You now have a new responsibility.",
             "color": "narrator",
             "effects": [
               { "type": "add_item", "item": "mystery_package" },
