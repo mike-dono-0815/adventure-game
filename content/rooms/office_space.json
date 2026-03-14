@@ -347,6 +347,7 @@
             ]
           }
         ],
+        "open": { "text": "Open... the open cupboard. You know what, that's actually genius. Truly. The game is not ready for you." },
         "use": { "text": "It's already open. Nothing else to do with it." }
       }
     }

@@ -303,15 +303,15 @@
     {
       "id": "usb_stick",
       "name": "USB stick",
-      "description": "A plain black USB drive. Written in uneven permanent marker: 'IMPORTANT — DO NOT LOSE'. The cap is missing.",
+      "description": "A CVNA lab USB drive. Label: 'CVNA BUILD v4.1 — FINAL_FINAL_v2'. Someone has also written 'IMPORTANT — DO NOT LOSE' in permanent marker. The cap is missing.",
       "color": "#333333",
       "icon": "\ud83d\udcbe",
       "interactions": {
         "look_at": {
-          "text": "A USB stick. Scrawled in permanent marker: 'IMPORTANT — DO NOT LOSE'. The cap is long gone. The handwriting is shaky — not from haste, but from the weight of responsibility. Someone is definitely pacing right now."
+          "text": "A black USB drive with a printed label: 'CVNA BUILD v4.1 — FINAL_FINAL_v2'. Underneath, in shaky permanent marker: 'IMPORTANT — DO NOT LOSE'. The cap is long gone."
         },
         "use": {
-          "text": "I should plug this into a computer to see what's on it."
+          "text": "We need to plug this into a computer. Not sure what is going to happen - only at your own risk."
         }
       }
     },

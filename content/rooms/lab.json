@@ -187,7 +187,7 @@
       "hidden_if": { "has_item": "usb_stick" },
       "interactions": {
         "look_at": {
-          "text": "A USB stick sitting next to a workstation, labelled in small type: 'CVNA BUILD v4.1 — FINAL_FINAL_v2'. Someone's entire project, just sitting there."
+          "text": "A USB drive sitting next to a workstation. Label: 'CVNA BUILD v4.1 — FINAL_FINAL_v2'. Someone has also written 'IMPORTANT — DO NOT LOSE' in permanent marker on the side."
         },
         "pick_up": [
           {

@@ -189,6 +189,149 @@
             { "type": "say", "text": "That's from the kitchen machine. I would rather drink directly from a motivational poster.", "x": 640, "y": 530 },
             { "type": "say", "text": "He waves you off without looking up.", "color": "narrator" }
           ]
+        },
+        {
+          "item": "winning_ugly",
+          "verb": "give",
+          "condition": { "chip_distracted": true },
+          "text": "You hold the book up to his eyeline. He can't hear you. He can, however, read the cover. His jaw tightens almost imperceptibly.",
+          "color": "narrator"
+        },
+        {
+          "item": "winning_ugly",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You hold out 'Winning Ugly'. Chip clocks the cover mid-keystroke.", "color": "narrator" },
+            { "type": "say", "text": "I've read that.", "x": 640, "y": 530 },
+            { "type": "say", "text": "Oh.", "color": "player" },
+            { "type": "say", "text": "Chapter nine is correct. Don't tell anyone I said that.", "x": 640, "y": 530 },
+            { "type": "say", "text": "He goes back to typing. The book is still yours.", "color": "narrator" }
+          ]
+        },
+        {
+          "item": "mystery_package",
+          "verb": "give",
+          "condition": { "chip_distracted": true },
+          "text": "You hold the package in front of him. He can't hear you. His eyes flick to the label for one frame, then back to his monitors. Something in his expression does not change.",
+          "color": "narrator"
+        },
+        {
+          "item": "mystery_package",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You show Chip the package. He reads the label.", "color": "narrator" },
+            { "type": "say", "text": "That's addressed to Chen.", "x": 640, "y": 530 },
+            { "type": "say", "text": "Yes.", "color": "player" },
+            { "type": "say", "text": "I revoked their access Tuesday. 9:47 AM.", "x": 640, "y": 530 },
+            { "type": "say", "text": "A beat.", "color": "narrator" },
+            { "type": "say", "text": "Take it to HR. Assuming they exist.", "x": 640, "y": 530 }
+          ]
+        },
+        {
+          "item": "business_card",
+          "verb": "give",
+          "condition": { "chip_distracted": true },
+          "text": "You hold the Jeff Bezos business card in front of Chip's face. He can't hear you. He reads it. His expression does not change. He looks back at his monitors.",
+          "color": "narrator"
+        },
+        {
+          "item": "business_card",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You hold up the Jeff Bezos business card.", "color": "narrator" },
+            { "type": "say", "text": "Jeff Bezos.", "x": 640, "y": 530 },
+            { "type": "say", "text": "Yes.", "color": "player" },
+            { "type": "say", "text": "He's never submitted a ticket either.", "x": 640, "y": 530 },
+            { "type": "say", "text": "He turns back to his screens.", "color": "narrator" }
+          ]
+        },
+        {
+          "item": "stress_ball",
+          "verb": "give",
+          "condition": { "chip_distracted": true },
+          "text": "You offer the stress ball to a man inside noise-cancelling headphones. He cannot receive it. He does not have stress anyway. He has tickets.",
+          "color": "narrator"
+        },
+        {
+          "item": "stress_ball",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You hold out the Amazon stress ball.", "color": "narrator" },
+            { "type": "say", "text": "I don't have stress.", "x": 640, "y": 530 },
+            { "type": "say", "text": "I have six open tickets. Those are categorically different.", "x": 640, "y": 530 },
+            { "type": "say", "text": "He slides it back without looking at it.", "color": "narrator" }
+          ]
+        },
+        {
+          "item": "usb_stick",
+          "verb": "give",
+          "condition": { "chip_distracted": true },
+          "text": "You hold up the USB stick. Chip clocks the label from behind his headphones. A flicker of recognition. Those aren't supposed to leave the lab. He looks back at his monitors. Not his ticket queue.",
+          "color": "narrator"
+        },
+        {
+          "item": "usb_stick",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You hold out the USB stick. Chip reads the label.", "color": "narrator" },
+            { "type": "say", "text": "That's a CVNA build token.", "x": 640, "y": 530 },
+            { "type": "say", "text": "Yes.", "color": "player" },
+            { "type": "say", "text": "Those are not supposed to leave the lab.", "x": 640, "y": 530 },
+            { "type": "say", "text": "It was just sitting on a workstation.", "color": "player" },
+            { "type": "say", "text": "Yes. That is also a policy violation.", "x": 640, "y": 530 },
+            { "type": "say", "text": "A pause.", "color": "narrator" },
+            { "type": "say", "text": "Not my ticket queue.", "x": 640, "y": 530 },
+            { "type": "say", "text": "He looks away. The token remains yours.", "color": "narrator" }
+          ]
+        },
+        {
+          "item": "separation_agreement",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You hold out the separation agreement.", "color": "narrator" },
+            { "type": "say", "text": "That's not an IT issue.", "x": 640, "y": 530 },
+            { "type": "say", "text": "I know, I just—", "color": "player" },
+            { "type": "say", "text": "Log a ticket with HR. Three to five business weeks.", "x": 640, "y": 530 }
+          ]
+        },
+        {
+          "item": "signed_agreement",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You present the signed agreement to Chip.", "color": "narrator" },
+            { "type": "say", "text": "I don't countersign things. I don't have signing permissions. I have root access to three servers and a very clean commit history.", "x": 640, "y": 530 }
+          ]
+        },
+        {
+          "item": "pen",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You offer Chip the pen.", "color": "narrator" },
+            { "type": "say", "text": "I use a keyboard.", "x": 640, "y": 530 },
+            { "type": "say", "text": "He says this like it explains everything. It does.", "color": "narrator" }
+          ]
+        },
+        {
+          "item": "visitor_badge",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You hold up the visitor badge.", "color": "narrator" },
+            { "type": "say", "text": "You already have physical access.", "x": 640, "y": 530 },
+            { "type": "say", "text": "I just thought—", "color": "player" },
+            { "type": "say", "text": "Badge provisioning is not IT. Badge provisioning is facilities. Different ticket system.", "x": 640, "y": 530 }
+          ]
+        },
+        {
+          "item": "cappuccino_cup",
+          "verb": "give",
+          "effects": [
+            { "type": "say", "text": "You offer the cappuccino. Chip doesn't look up.", "color": "narrator" },
+            { "type": "say", "text": "I don't drink cappuccinos.", "x": 640, "y": 530 },
+            { "type": "say", "text": "Why not?", "color": "player" },
+            { "type": "say", "text": "Milk interferes with cognitive function. There are studies.", "x": 640, "y": 530 },
+            { "type": "say", "text": "That seems made up.", "color": "player" },
+            { "type": "say", "text": "Everything I do is evidence-based.", "x": 640, "y": 530 }
+          ]
         }
       ]
     },

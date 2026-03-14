@@ -152,7 +152,7 @@
         {
           "item": "usb_stick",
           "verb": "give",
-          "text": "'What is this for?' He turns it over. 'I'm not plugging a random USB into my machine.' He hands it back."
+          "text": "Bob glances at it. 'The personnel system needs the token in the port — not handed to me.' He gestures toward the computer."
         },
         {
           "item": "business_card",

@@ -89,7 +89,7 @@
       ]
     },
     "usb_hint": {
-      "npc_text": "The CVNA lab would have one. They use token-bearing devices for their build deployments. Someone down there will have what you need.",
+      "npc_text": "The CVNA lab would have one. They use USB security tokens for their build deployments — same protocol as the HR personnel system. Don't ask me why those two things share a standard. I didn't design it. Someone down there will have one.",
       "choices": [
         {
           "id": "understood",

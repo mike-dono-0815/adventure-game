@@ -53,7 +53,17 @@
       ]
     },
     "wrong_americano": {
-      "narrator_text": "The machine clunks and dispenses something so black it seems to absorb light. You present it to the receptionist with quiet confidence. She sniffs it. Her face does something complicated. 'I appreciate the thought. But that's not it. Still too tired, actually — ' The cup slips from your hand. Coffee everywhere.",
+      "narrator_text": "The machine clunks and dispenses something so black it seems to absorb light. You present it to the receptionist with quiet confidence.",
+      "next": "wrong_americano_karen"
+    },
+    "wrong_americano_karen": {
+      "npc_text": "I appreciate the thought. But that's not it. Still too tired, actually —",
+      "speaker_x": 909,
+      "speaker_y": 323,
+      "next": "wrong_americano_spill"
+    },
+    "wrong_americano_spill": {
+      "narrator_text": "The cup slips from your hand. Coffee everywhere.",
       "choices": [
         {
           "id": "try_again_1",
@@ -68,7 +78,17 @@
       ]
     },
     "wrong_espresso": {
-      "narrator_text": "The machine vibrates, gurgles, and presents a tiny, furious espresso. You offer it across the desk. She regards it like it's issued a personal challenge. 'That's... very committed of the machine. I need something with more milk. And less existential dread.' The cup tips over. It was barely two sips anyway.",
+      "narrator_text": "The machine vibrates, gurgles, and presents a tiny, furious espresso. You offer it across the desk.",
+      "next": "wrong_espresso_karen"
+    },
+    "wrong_espresso_karen": {
+      "npc_text": "That's... very committed of the machine. I need something with more milk. And less existential dread.",
+      "speaker_x": 909,
+      "speaker_y": 323,
+      "next": "wrong_espresso_spill"
+    },
+    "wrong_espresso_spill": {
+      "narrator_text": "The cup tips over. It was barely two sips anyway.",
       "choices": [
         {
           "id": "try_again_3",

@@ -47,8 +47,8 @@ Game.Dialogue = (function () {
 
     if (node.npc_text) {
       // NPC speaks above their character in the viewport
-      var sx   = dialogueData.speaker_x || Game.Config.WIDTH / 2;
-      var sy   = dialogueData.speaker_y || 300;
+      var sx   = node.speaker_x || dialogueData.speaker_x || Game.Config.WIDTH / 2;
+      var sy   = node.speaker_y || dialogueData.speaker_y || 300;
       var text = node.npc_text.replace(/\n/g, ' ');
       Game.TextBox.showBlocking(text, sx, sy,
         Game.Config.COLORS.TEXT_NPC, function () {
