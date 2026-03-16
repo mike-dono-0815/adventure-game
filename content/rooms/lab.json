@@ -214,6 +214,14 @@
       "rect": [64, 297, 275, 154],
       "walk_to": [201, 700],
       "face_dir": "left",
+      "combinations": [
+        {
+          "item": "usb_stick",
+          "verb": "use",
+          "text": "You plug in the USB stick. The workstation unlocks immediately — no password, no PIN, just a cheerful chime and a desktop that loads in full. Oh. Oh no. There are forty-seven browser tabs open. The first one is a forum post titled 'Am I the problem?'. I did not need to see any of this. You eject the stick and back away slowly.",
+          "color": "narrator"
+        }
+      ],
       "interactions": {
         "look_at": {
           "text": "Four workstations arranged in an L-shape. Only one is active, showing a terminal window mid-scroll. The others are sleeping. A sticky note on the active monitor reads: 'compile then go home'."

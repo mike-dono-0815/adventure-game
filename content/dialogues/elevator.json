@@ -10,10 +10,32 @@
       "choices": [
         {
           "id": "floor_28",
+          "condition": { "floor_digit_1_known": true, "floor_digit_2_known": true },
           "text": "Floor 28 — Human Resources",
           "next": null,
           "effects": [
             { "type": "transition", "room": "hr_floor", "player_x": 1155, "player_y": 616, "player_dir": "left" }
+          ]
+        },
+        {
+          "id": "basement",
+          "text": "Basement — B1",
+          "next": null,
+          "effects": [
+            {
+              "type": "show_title_card",
+              "title": "The Basement",
+              "lines": [
+                "The doors open. The smell hits first.",
+                "Damp carpet. Old servers. One flickering strip light.",
+                "Three people sit at folding tables, running reports nobody reads.",
+                "A hand-drawn sign reads: 'COMPLIANCE — DO NOT ENTER (unless you are compliance)'.",
+                "You press the close-door button.",
+                "Some floors are better left as a mystery.",
+                "The elevator returns you to safety."
+              ]
+            },
+            { "type": "transition", "room": "aisle", "player_x": 1040, "player_y": 700, "player_dir": "right" }
           ]
         },
         {

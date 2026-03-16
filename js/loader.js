@@ -215,7 +215,7 @@ Game.Loader = (function () {
       { key: 'bg_title',         url: 'assets/backgrounds/Start2.png' },
       { key: 'bg_lobby',       url: 'assets/backgrounds/Reception.png' },
       { key: 'bg_bobs_office', url: 'assets/backgrounds/BobsOffice.png' },
-      { key: 'bg_hr_floor',    url: 'assets/backgrounds/office.png' },
+      { key: 'bg_hr_floor',    url: 'assets/backgrounds/Office.png' },
       { key: 'bg_kitchen',        url: 'assets/backgrounds/Kitchen.jpg' },
       { key: 'bg_kitchen_egg',    url: 'assets/backgrounds/Kitchen_Egg.jpg' },
       { key: 'bg_office_space',  url: 'assets/backgrounds/OfficeSpace.jpg' },

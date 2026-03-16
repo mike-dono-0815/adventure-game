@@ -34,7 +34,7 @@
       ]
     },
     "lose": {
-      "npc_text": "Tactically, that was a clinic. A clinic in what not to do. You pressed too high, dribbled into the box on every single chance, and ran the same corner routine so many times it stopped being a mistake and became a philosophy. I have notes. Six pages. Do you want the PR-FAQ?",
+      "npc_text": "Tactically, that was a masterclass. A masterclass in what not to do. You pressed too high, dribbled into the box on every single chance, and ran the same corner routine so many times it stopped being a mistake and became a philosophy. I have notes. Six pages. Do you want the PR-FAQ?",
       "choices": [
         {
           "id": "rematch",

@@ -120,40 +120,16 @@
         },
         "use": [
           {
-            "condition": { "floor_digit_1_known": true, "floor_digit_2_known": true },
             "effects": [
               { "type": "dialogue", "dialogue": "elevator" }
             ]
-          },
-          {
-            "condition": { "floor_digit_1_known": true },
-            "text": "The floor panel is blank. I know the first digit — HR is on a floor starting with 2. I still need the second digit."
-          },
-          {
-            "condition": { "floor_digit_2_known": true },
-            "text": "The floor panel is blank. I know the second digit — HR's floor ends in 8. I still need the first digit."
-          },
-          {
-            "text": "The floor panel is blank. I have no idea which floor HR is on."
           }
         ],
         "open": [
           {
-            "condition": { "floor_digit_1_known": true, "floor_digit_2_known": true },
             "effects": [
               { "type": "dialogue", "dialogue": "elevator" }
             ]
-          },
-          {
-            "condition": { "floor_digit_1_known": true },
-            "text": "The floor panel is blank. I know the first digit — HR is on a floor starting with 2. I still need the second digit."
-          },
-          {
-            "condition": { "floor_digit_2_known": true },
-            "text": "The floor panel is blank. I know the second digit — HR's floor ends in 8. I still need the first digit."
-          },
-          {
-            "text": "The floor panel is blank. I have no idea which floor HR is on."
           }
         ],
         "push": {

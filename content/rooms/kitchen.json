@@ -316,7 +316,7 @@
             },
             {
               "type": "say",
-              "text": "Thirty seconds later, the door swings open.",
+              "text": "Ten seconds later, the door swings open.",
               "x": 625,
               "y": 280,
               "color": "narrator"
@@ -398,6 +398,12 @@
         },
         "use": {
           "text": "I don't need anything from the counter right now."
+        },
+        "open": {
+          "text": "Do you really want to know what's inside? I'm going to say no. Some things in an office kitchen are better left as a mystery."
+        },
+        "pick_up": {
+          "text": "The counter is bolted to the wall. As is everything in this kitchen, presumably to stop people like me."
         }
       }
     },
@@ -572,6 +578,29 @@
           "text": "You flash the business card like a badge. They squint. 'That's... not an employee ID.' They back away slightly."
         }
       ]
+    },
+    {
+      "id": "open_office_view",
+      "name": "open office",
+      "rect": [
+        389,
+        50,
+        606,
+        227
+      ],
+      "walk_to": [
+        545,
+        680
+      ],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": {
+          "text": "Through the opening to the office floor. Rows of desks, dark monitors, unsettling quiet. I'm almost certain I saw a mouse run under the third desk on the left. Either that or it was someone's career."
+        },
+        "use": {
+          "text": "It's an office floor. There's nothing to use here, unless you count staring into the void."
+        }
+      }
     },
     {
       "id": "exit_to_office_bottom",
