@@ -95,7 +95,7 @@
       "choices": [
         {
           "id": "coffee_question",
-          "text": "What coffee do you like?",
+          "text": "Would you like a coffee?",
           "next": "coffee_preference"
         },
         {
@@ -106,7 +106,7 @@
       ]
     },
     "coffee_preference": {
-      "npc_text": "Cappuccino. Every time. And here's the thing — that machine over there actually makes a proper one, if you know the trick. Nobody reads the manual, which is frankly criminal. Hold the Milk Froth button and tap Double Espresso twice. Hidden menu. Perfect cappuccino. I found it by accident while stress-pressing buttons during a particularly bad Monday. I'd get one myself but I cannot leave this desk or the entire security model collapses.",
+      "npc_text": "Oh yes - that would be amazing. I love Cappuccino. Every time. And here's the thing — that machine over there actually makes a proper one, if you know the trick. Nobody reads the manual, which is frankly criminal. Hold the Milk Froth button and tap Double Espresso twice. Hidden menu. Perfect cappuccino. I found it by accident while stress-pressing buttons during a particularly bad Monday. I'd get one myself but I cannot leave this desk or the entire security model collapses.",
       "effects": [
         { "type": "set_flag", "flag": "karen_told_cappuccino", "value": true }
       ],

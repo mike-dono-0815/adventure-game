@@ -35,7 +35,7 @@ Game.Config = {
   // Text
   FONT_FAMILY: '"Segoe UI", Arial, sans-serif',
   FONT_SIZE: 22,
-  DIALOGUE_FONT_SIZE: 28,
+  DIALOGUE_FONT_SIZE: 25,
 
   // Colors — Amazon brand palette
   // #131A22 Cool Black · #232F3E Ebony Clay · #37475A Space

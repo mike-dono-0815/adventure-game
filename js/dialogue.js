@@ -178,7 +178,7 @@ Game.Dialogue = (function () {
     var cfg    = Game.Config;
     var panelY = cfg.BOTTOM_BAR_Y;
     var lineH  = 46;
-    var startY = panelY + 2;
+    var startY = panelY + 8;
 
     for (var i = 0; i < choices.length; i++) {
       var cy = startY + i * lineH;
@@ -207,7 +207,7 @@ Game.Dialogue = (function () {
     if (choices.length === 0) return; // NPC or player is speaking via TextBox above
 
     var lineH  = 46;
-    var startY = panelY + 2;
+    var startY = panelY + 8;
 
     ctx.font         = cfg.DIALOGUE_FONT_SIZE + 'px ' + cfg.FONT_FAMILY;
     ctx.textAlign    = 'left';
