@@ -282,16 +282,6 @@ Game.Wordfight = (function () {
       return true;
     }
 
-    if (state === 'win') {
-      var cb = endCallback;
-      Game.ActionLine.clearOverride();
-      active      = false;
-      endCallback = null;
-      state       = 'idle';
-      if (cb) cb();
-      return true;
-    }
-
     if (state === 'loss') {
       handleLoss();
       return true;
@@ -309,6 +299,9 @@ Game.Wordfight = (function () {
     }
     if (lossOptions && lossOptions.set_flag) {
       Game.State.set(lossOptions.set_flag, true);
+    }
+    if (lossOptions && lossOptions.player_x !== undefined) {
+      Game.Player.setPosition(lossOptions.player_x, lossOptions.player_y);
     }
     active      = false;
     endCallback = null;
@@ -369,8 +362,6 @@ Game.Wordfight = (function () {
 
     if (state === 'choosing') {
       drawChoices(ctx);
-    } else if (state === 'win') {
-      drawEndScreen(ctx, true);
     } else if (state === 'loss') {
       drawEndScreen(ctx, false);
     }
