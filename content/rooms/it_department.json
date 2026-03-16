@@ -356,7 +356,7 @@
               "chip_distracted": true,
               "lab_door_tried": true
             },
-            "text": "Four monitors. Left: a build terminal, logs scrolling. Second: Phone Tool — the employee directory. I scan straight for the cost center column. There it is: Computer Vision North America (CVNA) lab — 2847. Third: support tickets, 47 unread. Far right: a budget spreadsheet. I have what I came for.",
+            "text": "Four monitors. Left: a build terminal, logs scrolling. Second: Phone Tool — the employee directory. I scan straight for the cost center column. There it is: Computer Vision North America (CVNA) lab — 2847. Third: support tickets, 112 unread. Far right: a budget spreadsheet. I have what I came for.",
             "color": "narrator",
             "effects": [
               { "type": "set_flag", "flag": "knows_lab_code", "value": true }
@@ -366,7 +366,7 @@
             "condition": {
               "chip_distracted": true
             },
-            "text": "Four monitors, all live. Left: a build terminal. Second: something called Phone Tool — looks like an employee directory with cost center columns. Third: a support ticket system, 47 unread. Far right: a budget spreadsheet. There's a lot here. I'm not sure what I'm looking for.",
+            "text": "Four monitors, all live. Left: a build terminal. Second: something called Phone Tool — looks like an employee directory with cost center columns. Third: a support ticket system, 11 unread. Far right: a budget spreadsheet. There's a lot here. I'm not sure what I'm looking for.",
             "color": "narrator"
           },
           {
