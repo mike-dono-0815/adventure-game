@@ -174,6 +174,14 @@ Game.Effects = (function () {
         done();
         break;
 
+      case 'if':
+        if (Game.State.evaluate(effect.condition)) {
+          execute(effect.effects, done);
+        } else {
+          done();
+        }
+        break;
+
       default:
         console.warn('Unknown effect type:', effect.type);
         done();

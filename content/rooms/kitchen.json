@@ -62,6 +62,40 @@
       ]
     }
   ],
+  "on_enter": [
+    {
+      "type": "if",
+      "condition": { "hr_person_entered": true, "hr_person_left": false },
+      "effects": [
+        {
+          "type": "spawn_npc",
+          "id": "hr_actor",
+          "x": 914,
+          "y": 523,
+          "sprite": "hr",
+          "dualSheet": true,
+          "dir": "left"
+        },
+        {
+          "type": "start_rant",
+          "id": "hr_actor",
+          "texts": [
+            "WHO DID THIS.",
+            "POLICY. VIOLATION.",
+            "I am logging this RIGHT NOW.",
+            "HR Case — OPENED. Category: Egg.",
+            "This kitchen is a CRIME SCENE.",
+            "Someone is getting a formal warning.",
+            "A VERY formal warning.",
+            "I have a notebook.",
+            "I will not be ignored."
+          ],
+          "interval": 1.8,
+          "speed": 0.168
+        }
+      ]
+    }
+  ],
   "characters": [],
   "hotspots": [
     {
@@ -431,6 +465,29 @@
       }
     },
     {
+      "id": "open_office_view",
+      "name": "open office",
+      "rect": [
+        389,
+        50,
+        606,
+        227
+      ],
+      "walk_to": [
+        545,
+        680
+      ],
+      "face_dir": "back",
+      "interactions": {
+        "look_at": {
+          "text": "Through the opening to the office floor. Rows of desks, dark monitors, unsettling quiet. I'm almost certain I saw a mouse run under the third desk on the left. Either that or it was someone's career."
+        },
+        "use": {
+          "text": "It's an office floor. There's nothing to use here, unless you count staring into the void."
+        }
+      }
+    },
+    {
       "id": "hr_person",
       "name": "HR Person",
       "rect": [
@@ -578,29 +635,6 @@
           "text": "You flash the business card like a badge. They squint. 'That's... not an employee ID.' They back away slightly."
         }
       ]
-    },
-    {
-      "id": "open_office_view",
-      "name": "open office",
-      "rect": [
-        389,
-        50,
-        606,
-        227
-      ],
-      "walk_to": [
-        545,
-        680
-      ],
-      "face_dir": "back",
-      "interactions": {
-        "look_at": {
-          "text": "Through the opening to the office floor. Rows of desks, dark monitors, unsettling quiet. I'm almost certain I saw a mouse run under the third desk on the left. Either that or it was someone's career."
-        },
-        "use": {
-          "text": "It's an office floor. There's nothing to use here, unless you count staring into the void."
-        }
-      }
     },
     {
       "id": "exit_to_office_bottom",

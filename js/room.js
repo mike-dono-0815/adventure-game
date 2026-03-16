@@ -21,6 +21,11 @@ Game.Room = (function () {
     // Build active hotspot list
     rebuildHotspots();
 
+    // Fire on_enter effects
+    if (roomData.on_enter && roomData.on_enter.length) {
+      Game.Effects.execute(roomData.on_enter, null);
+    }
+
     // In no-walk rooms default to Look at instead of Walk to
     if (roomData && roomData.no_walk) {
       Game.Verbs.setCurrent('Look at');
