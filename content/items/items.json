@@ -247,7 +247,7 @@
             "effects": [{ "type": "set_flag", "flag": "read_winning_ugly", "value": true }]
           },
           {
-            "text": "You have read all five chapters. There is nothing left to learn. Only to execute."
+            "text": "You have read all chapters. There is nothing left to learn. Only to execute."
           }
         ],
         "use": [
