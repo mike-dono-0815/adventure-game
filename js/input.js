@@ -111,21 +111,21 @@ Game.Input = (function () {
   }
 
   function onClick(e) {
-    // Ignore all clicks until the game loop is running (title screen)
-    if (!Game.Renderer.isStarted()) return;
-
-    // Suppress click if the debug editor just finished a drag
-    if (Game.DebugEditor.consumedDrag()) return;
-
     var gp = screenToGame(e.offsetX, e.offsetY);
     var gx = gp.x, gy = gp.y;
     var cfg = Game.Config;
 
-    // Save/Load menu absorbs all clicks
+    // Save/Load menu absorbs all clicks — even on title screen
     if (Game.SaveLoad.isOpen()) {
       Game.SaveLoad.handleClick(gx, gy);
       return;
     }
+
+    // Ignore all other clicks until the game loop is running (title screen)
+    if (!Game.Renderer.isStarted()) return;
+
+    // Suppress click if the debug editor just finished a drag
+    if (Game.DebugEditor.consumedDrag()) return;
 
     // FifaResult overlay absorbs all clicks
     if (Game.FifaResult.isActive()) {
@@ -240,7 +240,7 @@ Game.Input = (function () {
       if (Game.SaveLoad.isOpen()) {
         Game.SaveLoad.close();
       } else {
-        Game.SaveLoad.open('save');
+        Game.SaveLoad.open('select');
       }
       e.preventDefault();
     }

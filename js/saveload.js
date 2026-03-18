@@ -1,14 +1,16 @@
 Game.SaveLoad = (function () {
-  var SAVE_KEY = 'separation_agreement_saves';
+  var SAVE_KEY = 'corporate_adventure_saves' + (window.GAME_VARIANT === 'b' ? '_b' : '');
   var NUM_SLOTS = 8;
   var menuOpen = false;
-  var mode = 'save'; // 'save' or 'load'
+  var mode = 'select'; // 'select' | 'save' | 'load'
   var hoverSlot = -1;
+  var hoverBtn = -1; // for select screen: 0 = save, 1 = load
 
   function open(m) {
-    mode = m || 'save';
+    mode = m || 'select';
     menuOpen = true;
     hoverSlot = -1;
+    hoverBtn = -1;
   }
 
   function close() {
@@ -26,10 +28,12 @@ Game.SaveLoad = (function () {
     }
   }
 
-  function saveToSlot(slot) {
+  function saveToSlot(slot, isQuick) {
     var saves = getSaves();
     saves[slot] = {
       timestamp: new Date().toLocaleString(),
+      savedAt: Date.now(),
+      quicksave: isQuick || false,
       room: Game.Room.getCurrentId(),
       state: Game.State.serialize(),
       player: Game.Player.serialize(),
@@ -52,16 +56,40 @@ Game.SaveLoad = (function () {
     Game.TextBox.clear();
     Game.Dialogue.end();
     Game.Interaction.finishInteraction();
+    if (!Game.Renderer.isStarted()) Game.Renderer.start();
     close();
     return true;
   }
 
   function quickSave() {
-    saveToSlot('quick');
+    var saves = getSaves();
+    var targetSlot = -1;
+    for (var i = 0; i < NUM_SLOTS; i++) {
+      if (!saves[i]) { targetSlot = i; break; }
+    }
+    if (targetSlot === -1) {
+      // All slots full — overwrite the oldest
+      var oldestTime = Infinity;
+      for (var i = 0; i < NUM_SLOTS; i++) {
+        var t = saves[i] ? (saves[i].savedAt || 0) : 0;
+        if (t < oldestTime) { oldestTime = t; targetSlot = i; }
+      }
+    }
+    saveToSlot(targetSlot, true);
   }
 
   function quickLoad() {
-    return loadFromSlot('quick');
+    var saves = getSaves();
+    var latestSlot = null;
+    var latestTime = -1;
+    for (var i = 0; i < NUM_SLOTS; i++) {
+      if (saves[i]) {
+        var t = saves[i].savedAt || 0;
+        if (t > latestTime) { latestTime = t; latestSlot = i; }
+      }
+    }
+    if (latestSlot === null) return false;
+    return loadFromSlot(latestSlot);
   }
 
   function handleClick(gx, gy) {
@@ -73,9 +101,22 @@ Game.SaveLoad = (function () {
     var menuX = (cfg.WIDTH - menuW) / 2;
     var menuY = (cfg.HEIGHT - menuH) / 2;
 
-    // Close button
+    // Close button (all screens)
     if (gx >= menuX + menuW - 40 && gx <= menuX + menuW && gy >= menuY && gy <= menuY + 40) {
       close();
+      return true;
+    }
+
+    // Select screen
+    if (mode === 'select') {
+      var btnW = 200, btnH = 60;
+      var saveX = menuX + menuW / 2 - btnW - 20;
+      var loadX = menuX + menuW / 2 + 20;
+      var btnY  = menuY + menuH / 2 - btnH / 2;
+      if (gy >= btnY && gy <= btnY + btnH) {
+        if (gx >= saveX && gx <= saveX + btnW) { mode = 'save'; hoverSlot = -1; return true; }
+        if (gx >= loadX && gx <= loadX + btnW) { mode = 'load'; hoverSlot = -1; return true; }
+      }
       return true;
     }
 
@@ -107,9 +148,22 @@ Game.SaveLoad = (function () {
     var menuH = 500;
     var menuX = (cfg.WIDTH - menuW) / 2;
     var menuY = (cfg.HEIGHT - menuH) / 2;
+
+    if (mode === 'select') {
+      var btnW = 200, btnH = 60;
+      var saveX = menuX + menuW / 2 - btnW - 20;
+      var loadX = menuX + menuW / 2 + 20;
+      var btnY  = menuY + menuH / 2 - btnH / 2;
+      hoverBtn = -1;
+      if (gy >= btnY && gy <= btnY + btnH) {
+        if (gx >= saveX && gx <= saveX + btnW) hoverBtn = 0;
+        if (gx >= loadX && gx <= loadX + btnW) hoverBtn = 1;
+      }
+      return;
+    }
+
     var slotH = 50;
     var startY = menuY + 70;
-
     hoverSlot = -1;
     for (var i = 0; i < NUM_SLOTS; i++) {
       var sy = startY + i * slotH;
@@ -144,7 +198,33 @@ Game.SaveLoad = (function () {
     ctx.fillStyle = '#e0e0e0';
     ctx.font = 'bold 28px ' + cfg.FONT_FAMILY;
     ctx.textAlign = 'center';
-    ctx.fillText(mode === 'save' ? 'SAVE GAME' : 'LOAD GAME', cfg.WIDTH / 2, menuY + 45);
+    ctx.fillText(mode === 'save' ? 'SAVE GAME' : mode === 'load' ? 'LOAD GAME' : 'SAVE / LOAD', cfg.WIDTH / 2, menuY + 45);
+
+    // Select screen — two big buttons
+    if (mode === 'select') {
+      var btnW = 200, btnH = 60;
+      var saveX = menuX + menuW / 2 - btnW - 20;
+      var loadX = menuX + menuW / 2 + 20;
+      var btnY  = menuY + menuH / 2 - btnH / 2;
+
+      ctx.fillStyle = hoverBtn === 0 ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.08)';
+      ctx.fillRect(saveX, btnY, btnW, btnH);
+      ctx.strokeStyle = '#e0e0e0';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(saveX, btnY, btnW, btnH);
+
+      ctx.fillStyle = hoverBtn === 1 ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.08)';
+      ctx.fillRect(loadX, btnY, btnW, btnH);
+      ctx.strokeRect(loadX, btnY, btnW, btnH);
+
+      ctx.fillStyle = '#e0e0e0';
+      ctx.font = 'bold 22px ' + cfg.FONT_FAMILY;
+      ctx.textAlign = 'center';
+      ctx.fillText('SAVE GAME', saveX + btnW / 2, btnY + btnH / 2 + 8);
+      ctx.fillText('LOAD GAME', loadX + btnW / 2, btnY + btnH / 2 + 8);
+      ctx.textAlign = 'left';
+      return;
+    }
 
     // Close button
     ctx.fillStyle = '#ff6b6b';
@@ -168,7 +248,8 @@ Game.SaveLoad = (function () {
 
       ctx.fillStyle = '#e0e0e0';
       if (save) {
-        ctx.fillText('Slot ' + (i + 1) + ':  ' + save.room + '  —  ' + save.timestamp, menuX + 35, sy + 30);
+        var label = 'Slot ' + (i + 1) + ':  ' + (save.quicksave ? '[Quicksave]  ' : '') + save.room + '  —  ' + save.timestamp;
+        ctx.fillText(label, menuX + 35, sy + 30);
       } else {
         ctx.fillStyle = '#888';
         ctx.fillText('Slot ' + (i + 1) + ':  (empty)', menuX + 35, sy + 30);

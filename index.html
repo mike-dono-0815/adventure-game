@@ -10,6 +10,10 @@
 <body>
   <canvas id="gameCanvas"></canvas>
 
+  <script>
+    window.GAME_VARIANT = 'b';
+    document.title = window.GAME_VARIANT === 'b' ? 'Approval Pending: A Corporate Adventure' : 'The Separation Agreement';
+  </script>
   <script src="js/config.js?v=53"></script>
   <script src="js/state.js?v=53"></script>
   <script src="js/loader.js?v=53"></script>

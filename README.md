@@ -1,8 +1,8 @@
-# The Separation Agreement
+# The Certificate of Mutual Pretending
 
-A classic point-and-click adventure game set in the soul-crushing offices of **Amazon Inc.**
+A classic point-and-click adventure game set in the soul-crushing offices of **Obscura Corp**.
 
-You play as **Alex Deskworth**, a mid-level employee who has finally negotiated a Mutual Separation Agreement — their ticket to freedom — only for the signed contract to vanish into the bureaucratic abyss. Navigate office politics, absurd corporate procedures, and passive-aggressive coworkers to recover the document before HR "loses" it permanently.
+You play as **Alex Deskworth**, a mid-level employee who has finally been handed a Certificate of Mutual Pretending — their ticket to freedom — only for the signed document to vanish into the bureaucratic abyss. Navigate office politics, absurd corporate procedures, and passive-aggressive coworkers to recover it before HR "loses" it permanently. Nobody is entirely sure what the Certificate of Mutual Pretending is, or why it needs to be signed. But it does.
 
 **Genre:** Comedy/Satire Point-and-Click Adventure
 **Tone:** Dry humor and corporate satire (think *Office Space* meets *Monkey Island*)
@@ -84,7 +84,7 @@ A sterile corporate lobby with a reception desk, a Barista Pro coffee machine, a
 
 A soul-crushing open-plan office with cubicles, a filing cabinet, and Bob from Accounting at his desk.
 
-**Puzzle goal:** Talk to Bob, retrieve the Separation Agreement from the filing cabinet, find a pen, sign it, and hand it over.
+**Puzzle goal:** Talk to Bob, retrieve the Certificate of Mutual Pretending from the filing cabinet, find a pen, sign it, and hand it over.
 
 ---
 
@@ -95,9 +95,9 @@ A soul-crushing open-plan office with cubicles, a filing cabinet, and Bob from A
 | Cappuccino | Brewed from the lobby coffee machine. The receptionist has opinions about her coffee. |
 | Visitor Badge | Grants access through secured doors. |
 | Cup of Coffee | Black, no sugar. Just how Bob likes it. |
-| Separation Agreement | The document. Just needs a signature. |
-| Pen | Found in the filing cabinet. Perfect for signing legal documents. |
-| Signed Agreement | The finished document. Time to make it official. |
+| Certificate of Mutual Pretending | The document. Just needs a signature. Nobody knows why. |
+| Pen | Found in the filing cabinet. Perfect for signing documents of unclear purpose. |
+| Signed Certificate | The finished document. Time to make it official. Whatever that means. |
 
 ---
 

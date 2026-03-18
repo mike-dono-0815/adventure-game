@@ -271,9 +271,9 @@ Game.Renderer = (function () {
     ctx.shadowBlur  = 0;
 
     var endLines = [
-      'Six weeks later. A beach somewhere between Barbados and not-Amazon.',
-      'The agreement is framed on the wall of a rented villa. Bob sent a postcard.',
-      'Chip won the FIFA league. HR relocated to floor 28. Nobody noticed you left.',
+      window.GAME_VARIANT === 'b' ? 'Six weeks later. A beach somewhere between Barbados and not-Obscura Corp.' : 'Six weeks later. A beach somewhere between Barbados and not-Amazon.',
+      window.GAME_VARIANT === 'b' ? 'The Certificate is framed on the wall of a rented villa. Nobody knows why. Bob sent a postcard.' : 'The agreement is framed on the wall of a rented villa. Bob sent a postcard.',
+      window.GAME_VARIANT === 'b' ? 'Chip won the FIFA league. The Innovation Team shipped something. Nobody knows what.' : 'Chip won the FIFA league. HR relocated to floor 28. Nobody noticed you left.',
       'You order another Pina Colada and watch the horizon. It is, somehow, enough.',
     ];
     ctx.fillStyle = cfg.COLORS.TEXT_DEFAULT;

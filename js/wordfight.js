@@ -8,7 +8,7 @@ Game.Wordfight = (function () {
   var netScore      = 0;  // cumulative: +1 correct, -1 wrong — never resets
   var STREAK_NEEDED = 3;  // fill the whole meter to win or lose
 
-  // States: idle | title | moving | choosing | win | loss
+  // States: idle | title | moving | choosing | win
   // Speech is handled by TextBox.showBlocking; 'moving' = any busy/transition state
   var state      = 'idle';
   var hoverChoice  = -1;
@@ -45,10 +45,10 @@ Game.Wordfight = (function () {
     hoverChoice   = -1;
 
     lossOptions = {
-      reset_trigger: effect.on_loss_reset_trigger || null,
-      player_x:      effect.on_loss_player_x !== undefined ? effect.on_loss_player_x : 900,
-      player_y:      effect.on_loss_player_y !== undefined ? effect.on_loss_player_y : PLAYER_Y,
-      set_flag:      effect.on_loss_set_flag || null,
+      reset_trigger:    effect.on_loss_reset_trigger || null,
+      set_flag:         effect.on_loss_set_flag || null,
+      override_player_x: effect.on_loss_player_x !== undefined ? effect.on_loss_player_x : null,
+      override_player_y: effect.on_loss_player_y !== undefined ? effect.on_loss_player_y : null,
     };
 
     playerX      = Game.Player.getX();
@@ -57,7 +57,7 @@ Game.Wordfight = (function () {
     var isRetry = effect.retry_flag && Game.State.check(effect.retry_flag);
     introText  = (isRetry && effect.intro_text_retry) ? effect.intro_text_retry : (effect.intro_text || '');
     titleSeen  = false;
-    Game.ActionLine.setOverride('Talking to Amazonian');
+    Game.ActionLine.setOverride(window.GAME_VARIANT === 'b' ? 'Talking to Obscura Corp employee' : 'Talking to Amazonian');
 
     if (introText) {
       // Stakeholder speaks first, then title card appears
@@ -72,17 +72,44 @@ Game.Wordfight = (function () {
             playerX, Game.Player.getHeadY(),
             Game.Config.COLORS.TEXT_PLAYER,
             function () {
-              titleSeen  = true;
-              state      = 'title';
-              titleTimer = TITLE_DURATION;
+              if (window.GAME_VARIANT === 'b') {
+                Game.TextBox.showBlocking(
+                  'Fair warning — our principles may look familiar. We drew... inspiration from a very large company. You know the one.',
+                  stakeholderX, Game.Actors.getHeadY('stakeholder'),
+                  Game.Config.COLORS.TEXT_NPC,
+                  function () {
+                    titleSeen  = true;
+                    state      = 'title';
+                    titleTimer = TITLE_DURATION;
+                  }
+                );
+              } else {
+                titleSeen  = true;
+                state      = 'title';
+                titleTimer = TITLE_DURATION;
+              }
             }
           );
         }
       );
     } else {
-      titleSeen  = true;
-      state      = 'title';
-      titleTimer = TITLE_DURATION;
+      if (window.GAME_VARIANT === 'b') {
+        state = 'moving';
+        Game.TextBox.showBlocking(
+          'Fair warning — our principles may look familiar. We drew... inspiration from a very large company. You know the one.',
+          stakeholderX, Game.Actors.getHeadY('stakeholder'),
+          Game.Config.COLORS.TEXT_NPC,
+          function () {
+            titleSeen  = true;
+            state      = 'title';
+            titleTimer = TITLE_DURATION;
+          }
+        );
+      } else {
+        titleSeen  = true;
+        state      = 'title';
+        titleTimer = TITLE_DURATION;
+      }
     }
   }
 
@@ -121,7 +148,7 @@ Game.Wordfight = (function () {
   }
 
   var CORRECT_REACTIONS = [
-    'Sounds Amazonian.',
+    window.GAME_VARIANT === 'b' ? 'Sounds like Obscura Corp.' : 'Sounds Amazonian.',
     'Leadership would approve.',
     'Correct!',
     "Now that's a Leadership Principle.",
@@ -131,7 +158,7 @@ Game.Wordfight = (function () {
   ];
 
   var WIN_STATEMENTS = [
-    'Wow, you clearly are an Amazonian.',
+    window.GAME_VARIANT === 'b' ? 'Wow, you clearly are an Obscura Corp employee.' : 'Wow, you clearly are an Amazonian.',
     'Impressive. You truly understand our principles.',
     'I stand corrected. You belong here.',
     'Well played. You know your Leadership Principles.',
@@ -139,10 +166,10 @@ Game.Wordfight = (function () {
   ];
 
   var LOSS_STATEMENTS = [
-    'Wow, that was bad. You clearly are no Amazonian. But I have a lunch break — escort yourself out, please.',
+    window.GAME_VARIANT === 'b' ? 'Wow, that was bad. You clearly are no Obscura Corp employee. But I have a lunch break — escort yourself out, please.' : 'Wow, that was bad. You clearly are no Amazonian. But I have a lunch break — escort yourself out, please.',
     'That was painful to watch. The exit is that way.',
     "I've seen better Leadership Principles from the office ficus. Goodbye.",
-    'Not Amazonian at all. Please leave before I file a report.',
+    window.GAME_VARIANT === 'b' ? 'Not Obscura Corp at all. Please leave before I file a report.' : 'Not Amazonian at all. Please leave before I file a report.',
     'That settles it. You do not belong here. Off you go.',
   ];
 
@@ -211,7 +238,7 @@ Game.Wordfight = (function () {
                 pick(LOSS_STATEMENTS),
                 stakeholderX, Game.Actors.getHeadY('stakeholder'),
                 Game.Config.COLORS.TEXT_NPC,
-                function () { walkStakeholderOff(function () { state = 'loss'; }); }
+                function () { walkStakeholderOff(function () { showLossComment(); }); }
               );
             } else {
               nextDuel();
@@ -220,6 +247,23 @@ Game.Wordfight = (function () {
         );
       });
     }
+  }
+
+  var PLAYER_LOSS_COMMENTS = [
+    'Well. That could have gone better.',
+    'I should have read the principles more carefully.',
+    'Right. Back to the drawing board.',
+    "That was not my finest moment.",
+    'Noted. I will not do that again.',
+  ];
+
+  function showLossComment() {
+    Game.TextBox.showBlocking(
+      pick(PLAYER_LOSS_COMMENTS),
+      playerX, Game.Player.getHeadY(),
+      Game.Config.COLORS.TEXT_PLAYER,
+      function () { handleLoss(); }
+    );
   }
 
   function startMoving(callback) {
@@ -282,11 +326,6 @@ Game.Wordfight = (function () {
       return true;
     }
 
-    if (state === 'loss') {
-      handleLoss();
-      return true;
-    }
-
     return true;
   }
 
@@ -294,14 +333,15 @@ Game.Wordfight = (function () {
     Game.ActionLine.clearOverride();
     Game.Actors.remove('stakeholder');
     Game.Input.unlock();
+    Game.Interaction.finishInteraction();
     if (lossOptions && lossOptions.reset_trigger) {
       Game.Room.resetTrigger(lossOptions.reset_trigger);
     }
     if (lossOptions && lossOptions.set_flag) {
       Game.State.set(lossOptions.set_flag, true);
     }
-    if (lossOptions && lossOptions.player_x !== undefined) {
-      Game.Player.setPosition(lossOptions.player_x, lossOptions.player_y);
+    if (lossOptions && lossOptions.override_player_x !== null) {
+      Game.Player.setPosition(lossOptions.override_player_x, lossOptions.override_player_y);
     }
     active      = false;
     endCallback = null;
@@ -362,8 +402,6 @@ Game.Wordfight = (function () {
 
     if (state === 'choosing') {
       drawChoices(ctx);
-    } else if (state === 'loss') {
-      drawEndScreen(ctx, false);
     }
     // state === 'moving': just the meter bar — speech appears in viewport via TextBox
   }

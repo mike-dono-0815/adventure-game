@@ -99,8 +99,8 @@ Game.Main = (function () {
       var offset   = Game.Renderer.getOffset();
 
       // Button rects as [x, y, w, h] arrays — mutable in-place for debug dragging
-      var START_BTN   = [484, 687, 193, 68];
-      var OPTIONS_BTN = [700, 686, 190, 72];
+      var START_BTN   = window.GAME_VARIANT === 'b' ? [449, 670, 189, 68] : [484, 687, 193, 68];
+      var OPTIONS_BTN = window.GAME_VARIANT === 'b' ? [739, 671, 190, 66] : [700, 686, 190, 72];
 
       var titleState  = 'title'; // 'title' | 'options'
       var HANDLE_R    = 6;
@@ -201,7 +201,12 @@ Game.Main = (function () {
         ctx.fillRect(0, cfg.BOTTOM_BAR_Y, cfg.WIDTH, cfg.BOTTOM_BAR_HEIGHT);
 
         // Story description
-        var storyLines = [
+        var storyLines = window.GAME_VARIANT === 'b' ? [
+          'You are Alex. You work at Obscura Corp. You have always worked at Obscura Corp. To wrap up the most',
+          'important project of your life, you need the Certificate of Mutual Pretending signed by Bob in HR.',
+          'Do not ask what it is. Do not ask why. It simply must be signed. You know Bob has it and is',
+          'somewhere in your office - but you\'ve lost your badge, and you have no idea where Bob sits.',
+        ] : [
           'You are Alex, an Applied Scientist. After months of corporate drift inside Amazon\'s peculiar environment,',
           'you\'ve finally gained clarity: it is enough. You need Bob in HR to give you your Mutual Separation',
           'Agreement - your ticket out - so you can sign it and walk free. There\'s just one problem: you lost your badge,',
@@ -214,6 +219,13 @@ Game.Main = (function () {
         for (var li = 0; li < storyLines.length; li++) {
           ctx.fillText(storyLines[li], textX, textY + li * lineH);
         }
+
+        // Save/load hint in action line bar
+        ctx.fillStyle = 'rgba(255,255,255,0.85)';
+        ctx.font = '22px ' + cfg.FONT_FAMILY;
+        ctx.textAlign = 'center';
+        ctx.fillText('F5: Quick Save   |   F9: Quick Load   |   ESC: Save / Load Menu', cfg.WIDTH / 2, cfg.ACTION_LINE_Y + cfg.ACTION_LINE_HEIGHT / 2 + 8);
+        ctx.textAlign = 'left';
 
         // Hover highlight — thick border on hovered button
         if (tdHoverBtn && titleState !== 'options') {
@@ -279,10 +291,22 @@ Game.Main = (function () {
           ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.shadowBlur = 0;
         }
 
+        // SaveLoad overlay — drawn on top of everything when open on title screen
+        if (Game.SaveLoad.isOpen()) {
+          Game.SaveLoad.draw(ctx);
+        }
+
         ctx.restore();
       }
 
       drawTitle();
+
+      // Lightweight loop to keep the SaveLoad overlay redrawn while on title screen
+      (function titleLoop() {
+        if (Game.Renderer.isStarted()) return;
+        if (Game.SaveLoad.isOpen()) drawTitle();
+        requestAnimationFrame(titleLoop);
+      })();
 
       canvas.addEventListener('mousedown', function (e) {
         if (!Game.Config.DEBUG) return;
@@ -333,6 +357,12 @@ Game.Main = (function () {
 
         var gp = stg(e.offsetX, e.offsetY);
         var gx = gp.x, gy = gp.y;
+
+        if (Game.SaveLoad.isOpen()) {
+          Game.SaveLoad.handleClick(gx, gy);
+          drawTitle();
+          return;
+        }
 
         if (titleState === 'options') {
           titleState = 'title';

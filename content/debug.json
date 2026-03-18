@@ -131,6 +131,19 @@
       },
       "inventory": ["business_card", "stress_ball", "mystery_package", "usb_stick"]
     },
+    "scrum_visualization": {
+      "label": "SCRUM visualization",
+      "description": "Kitchen room with black background — no room image rendered.",
+      "room": "kitchen",
+      "player_x": 400,
+      "player_y": 680,
+      "player_dir": "right",
+      "flags": {
+        "alarm_triggered": true,
+        "hide_background": true
+      },
+      "inventory": ["business_card", "stress_ball"]
+    },
     "bobs_office_endgame": {
       "label": "Bob's Office — near win",
       "description": "All pre-requisites done. Just need to co-sign and give to Bob.",

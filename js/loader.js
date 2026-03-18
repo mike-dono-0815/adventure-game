@@ -212,8 +212,8 @@ Game.Loader = (function () {
 
     var imageFiles = [
       // Backgrounds (existing)
-      { key: 'bg_title',         url: 'assets/backgrounds/Start2.png' },
-      { key: 'bg_lobby',       url: 'assets/backgrounds/Reception.png' },
+      { key: 'bg_title',         url: window.GAME_VARIANT === 'b' ? 'assets/backgrounds/alt_Start2.png'    : 'assets/backgrounds/Start2.png' },
+      { key: 'bg_lobby',       url: window.GAME_VARIANT === 'b' ? 'assets/backgrounds/alt_Reception.png' : 'assets/backgrounds/Reception.png' },
       { key: 'bg_bobs_office', url: 'assets/backgrounds/BobsOffice.png' },
       { key: 'bg_hr_floor',    url: 'assets/backgrounds/Office.png' },
       { key: 'bg_kitchen',        url: 'assets/backgrounds/Kitchen.jpg' },
@@ -221,8 +221,8 @@ Game.Loader = (function () {
       { key: 'bg_office_space',  url: 'assets/backgrounds/OfficeSpace.jpg' },
       { key: 'bg_office_space2', url: 'assets/backgrounds/OfficeSpace2.jpg' },
       { key: 'bg_it_department', url: 'assets/backgrounds/ITDepartment.jpg' },
-      { key: 'bg_aisle',         url: 'assets/backgrounds/Aisle.jpg' },
-      { key: 'bg_aisle2',        url: 'assets/backgrounds/Aisle2.jpg' },
+      { key: 'bg_aisle',         url: window.GAME_VARIANT === 'b' ? 'assets/backgrounds/alt_Aisle.png'  : 'assets/backgrounds/Aisle.jpg' },
+      { key: 'bg_aisle2',        url: window.GAME_VARIANT === 'b' ? 'assets/backgrounds/alt_Aisle2.png' : 'assets/backgrounds/Aisle2.jpg' },
       { key: 'bg_lab_empty',        url: 'assets/backgrounds/LabEmpty.jpg' },
       { key: 'bg_lab_full',         url: 'assets/backgrounds/Lab_Full.jpg' },
       { key: 'bg_lab_full_nousb',   url: 'assets/backgrounds/Lab_Full_NoUSB.png' },
@@ -231,7 +231,7 @@ Game.Loader = (function () {
       { key: 'bg_end',              url: 'assets/backgrounds/EndPage.jpg' },
       { key: 'bg_bobs_office_talk', url: 'assets/backgrounds/BobOffice2.jpg' },
       // Item sprite sheets (2x2 grid, 4 items each)
-      { key: 'items_sheet_01', url: 'assets/items/Objects_01.png' },
+      { key: 'items_sheet_01', url: window.GAME_VARIANT === 'b' ? 'assets/items/alt_Object_01.png' : 'assets/items/Objects_01.png' },
       { key: 'items_sheet_02', url: 'assets/items/Objects_02.png' },
       { key: 'items_sheet_03', url: 'assets/items/Objects_03.png' },
       { key: 'items_sheet_04', url: 'assets/items/Objects_04.png' },
@@ -278,6 +278,11 @@ Game.Loader = (function () {
     }
 
     return Promise.all(jsonPromises.concat(imagePromises).concat(dualSheetPromises))
+      .then(function () {
+        if (window.GAME_VARIANT === 'b') {
+          Object.keys(data).forEach(function (k) { data[k] = applyVariantText(data[k]); });
+        }
+      })
       .then(sliceItemSheets)
       .catch(function (err) {
         console.warn('Error during asset processing, retrying item sheets:', err);
@@ -324,6 +329,50 @@ Game.Loader = (function () {
     return b ? b[col] : null;
   }
 
+  var VARIANT_B_REPLACEMENTS = [
+    ['Computer Vision North America. I still can\'t decide if that\'s funny or just bureaucracy. Either way, I need their cost center.', 'Innovation Team. I find myself wondering what exactly they innovate in there. Either way — I need their cost center.'],
+    ['A mounted plaque beside the door. \'Computer Vision North America — CVNA Lab\' - use cost center to enter. North America. I\'m fairly sure I\'m in Germany. Nobody told North America we\'re in Germany. Or possibly they did and North America does not care. Either way — I need the cost center for this team.', 'A mounted plaque beside the door. \'Innovation Team Lab\' — cost center required for entry. Innovation Team. Behind this door, apparently, innovation is happening. What kind of innovation needs a keypad, a cost center code, and no visible windows? The classified kind, presumably. Either way — I need the cost center.'],
+    ['Computer Vision North America (CVNA)', 'Innovation Team'],
+    ['Computer Vision North America', 'Innovation Team'],
+    ['CVNA', 'Innovation Team'],
+    ['Alex. You\'re free. I hope it\'s better out there than it was in here.', 'Alex. It\'s done. The Certificate is signed, filed, and witnessed. Project complete. Barbados isn\'t going to visit itself.'],
+    ['You\'re done here, Alex. Good luck.', 'Project complete, Alex. The Certificate is officially on file. Go — you\'ve earned it.'],
+    ['You are no longer an Amazonian. You are no longer a headcount.', 'The project is complete. The Certificate is officially on file.'],
+    ['You are, once again, just a customer.', 'Alex Deskworth: the only person in history to have actually used one.'],
+    ['You are, once again, just a person.', 'Pack your bags. Barbados awaits.'],
+    ['Free.', 'Done.'],
+    ['Amazonian', 'Obscura Corp employee'],
+    ['Amazon package', 'mystery package'],
+    ['Amazon', 'Obscura Corp'],
+    ['an L10', 'a VP'],
+    ['L10', 'VP'],
+    ['Jeff Bezos', 'Sterling Vance'],
+    ["Jeff's", "Sterling's"],
+    ['SEPARATION AGREEMENT', 'CERTIFICATE OF MUTUAL PRETENDING'],
+    ['Separation Agreement', 'Certificate of Mutual Pretending'],
+    ['separation agreements', 'certificates of mutual pretending'],
+    ['my MSA — my separation agreement', 'my Certificate of Mutual Pretending'],
+    ['separation agreement', 'certificate of mutual pretending'],
+    ['MSA', 'Certificate of Mutual Pretending'],
+  ];
+
+  function applyVariantText(obj) {
+    if (typeof obj === 'string') {
+      var s = obj;
+      VARIANT_B_REPLACEMENTS.forEach(function (pair) {
+        s = s.split(pair[0]).join(pair[1]);
+      });
+      return s;
+    }
+    if (Array.isArray(obj)) return obj.map(applyVariantText);
+    if (obj && typeof obj === 'object') {
+      var result = {};
+      Object.keys(obj).forEach(function (k) { result[k] = applyVariantText(obj[k]); });
+      return result;
+    }
+    return obj;
+  }
+
   function drawLoadingScreen(ctx) {
     var W = Game.Config.WIDTH;
     var H = Game.Config.HEIGHT;
@@ -335,7 +384,7 @@ Game.Loader = (function () {
     ctx.fillStyle = '#e0e0e0';
     ctx.font = '36px ' + Game.Config.FONT_FAMILY;
     ctx.textAlign = 'center';
-    ctx.fillText('The Separation Agreement', W / 2, H / 2 - 60);
+    ctx.fillText(window.GAME_VARIANT === 'b' ? 'The Certificate of Mutual Pretending' : 'The Separation Agreement', W / 2, H / 2 - 60);
 
     ctx.font = '20px ' + Game.Config.FONT_FAMILY;
     ctx.fillText('Loading...', W / 2, H / 2 - 10);

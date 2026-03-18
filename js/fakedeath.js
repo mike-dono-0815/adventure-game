@@ -12,13 +12,17 @@ Game.FakeDeath = (function () {
   var MESSAGES = [
     {
       header: null,
-      body:   'You snatch the headphones.\nThe Amazonian spins around with the fury of someone\nwhose flow state was just destroyed.\n\nEverything goes red.',
+      body:   window.GAME_VARIANT === 'b'
+              ? 'You snatch the headphones.\nThe Obscura Corp employee spins around with the fury of someone\nwhose flow state was just destroyed.\n\nEverything goes red.'
+              : 'You snatch the headphones.\nThe Amazonian spins around with the fury of someone\nwhose flow state was just destroyed.\n\nEverything goes red.',
       bg:     'rgba(140,0,0,0.95)',
       color:  '#e0e0e0'
     },
     {
       header: 'YOU ARE DEAD.',
-      body:   'The Amazonian filed an HR complaint, a security report,\nand a LinkedIn post about you simultaneously.\n\nYou are terminated. Literally.',
+      body:   window.GAME_VARIANT === 'b'
+              ? 'The Obscura Corp employee filed an HR complaint, a security report,\nand a LinkedIn post about you simultaneously.\n\nYou are terminated. Literally.'
+              : 'The Amazonian filed an HR complaint, a security report,\nand a LinkedIn post about you simultaneously.\n\nYou are terminated. Literally.',
       bg:     'rgba(8,0,0,0.97)',
       color:  '#e0e0e0'
     },
@@ -36,7 +40,9 @@ Game.FakeDeath = (function () {
     },
     {
       header: null,
-      body:   "...okay. Fine. You got us.\n\nThe Amazonian looks up, pulls off the headphones,\nand hands them to you without drama.\n\n'It's Amazon's anyway.'\n\nThey pack up their things and leave.\nYou have the headphones.",
+      body:   window.GAME_VARIANT === 'b'
+              ? "...okay. Fine. You got us.\n\nThe Obscura Corp employee looks up, pulls off the headphones,\nand hands them to you without drama.\n\n'It's Obscura Corp's anyway.'\n\nThey pack up their things and leave.\nYou have the headphones."
+              : "...okay. Fine. You got us.\n\nThe Amazonian looks up, pulls off the headphones,\nand hands them to you without drama.\n\n'It's Amazon's anyway.'\n\nThey pack up their things and leave.\nYou have the headphones.",
       bg:     'rgba(0,25,0,0.95)',
       color:  '#88cc88'
     }

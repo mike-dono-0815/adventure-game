@@ -191,7 +191,10 @@ Game.Room = (function () {
       bgKey = 'bg_' + roomData.talk_background;
     }
     var bg = Game.Loader.getImage(bgKey);
-    if (bg) {
+    if (Game.State.check('hide_background')) {
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(0, 0, Game.Config.WIDTH, Game.Config.VIEWPORT_HEIGHT);
+    } else if (bg) {
       ctx.drawImage(bg, 0, 0, Game.Config.WIDTH, Game.Config.VIEWPORT_HEIGHT);
     } else {
       // Procedural background

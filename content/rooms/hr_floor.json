@@ -22,7 +22,7 @@
           { "type": "walk_player", "to_x": 780, "to_y": 680 }
         ]},
         { "type": "set_player_dir", "dir": "left" },
-        { "type": "wordfight", "intro_text": "What are you doing here?\nAre you even a real Amazonian?\nProve it — respond in the Amazon way,\nor I'll escort you out...", "intro_text_retry": "Oh. You again. You want to try this a second time?\nFine. Maybe you were just tired.\nLet's see if you actually know your Leadership Principles.", "retry_flag": "wordfight_lost", "on_loss_reset_trigger": "stakeholder_encounter", "on_loss_set_flag": "wordfight_lost", "on_loss_player_x": 780, "on_loss_player_y": 680 },
+        { "type": "wordfight", "intro_text": "What are you doing here?\nAre you even a real Amazonian?\nProve it — respond in the Amazon way,\nor I'll escort you out...", "intro_text_retry": "Oh. You again. You want to try this a second time?\nFine. Maybe you were just tired.\nLet's see if you actually know your Leadership Principles.", "retry_flag": "wordfight_lost", "on_loss_reset_trigger": "stakeholder_encounter", "on_loss_set_flag": "wordfight_lost" },
         { "type": "remove_npc", "id": "stakeholder" },
         { "type": "set_flag", "flag": "wordfight_won", "value": true },
         { "type": "walk_player", "to_x": 688, "to_y": 680 },

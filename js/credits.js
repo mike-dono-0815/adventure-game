@@ -6,7 +6,7 @@ Game.Credits = (function () {
   var SPEED    = 48;   // px per second
 
   var ENTRIES = [
-    { role: null, name: 'THE SEPARATION AGREEMENT', style: 'title' },
+    { role: null, name: window.GAME_VARIANT === 'b' ? 'APPROVAL PENDING:\nA CORPORATE ADVENTURE' : 'THE SEPARATION AGREEMENT', style: 'title' },
     { role: null, name: null },
     { role: null, name: 'A completely original production', style: 'sub' },
     { role: null, name: null },
@@ -70,7 +70,7 @@ Game.Credits = (function () {
     { role: null, name: null },
 
     { role: 'HR Consultant',                name: 'Not HR. Never HR.' },
-    { role: 'Separation Agreement Drafter', name: 'Michael Donoser' },
+    { role: window.GAME_VARIANT === 'b' ? 'Certificate of Mutual Pretending Drafter' : 'Separation Agreement Drafter', name: 'Michael Donoser' },
     { role: 'Stress Ball Coordinator',      name: 'Michael Donoser' },
     { role: 'IT Support',                   name: 'Unresponsive' },
     { role: null, name: null },
@@ -127,7 +127,7 @@ Game.Credits = (function () {
     if (!e.role && !e.name) return 44;           // blank spacer
     if (e.role)             return 82;           // stacked: role + name
     var s = e.style || 'normal';
-    if (s === 'title')   return 100;
+    if (s === 'title')   return e.name.indexOf('\n') >= 0 ? 160 : 100;
     if (s === 'section') return 72;
     if (s === 'thanks')  return 50;
     if (s === 'reveal')  return 52;
@@ -224,7 +224,12 @@ Game.Credits = (function () {
         ctx.fillStyle   = '#FEBD69';
         ctx.shadowColor = 'rgba(255,153,0,0.8)';
         ctx.shadowBlur  = 28;
-        ctx.fillText(e.name, cx, y + 74);
+        var titleLines = e.name.split('\n');
+        var lineGap    = 84;
+        var titleStartY = titleLines.length > 1 ? y + 32 : y + 74;
+        for (var tl = 0; tl < titleLines.length; tl++) {
+          ctx.fillText(titleLines[tl], cx, titleStartY + tl * lineGap);
+        }
         ctx.shadowBlur  = 0;
 
       } else if (style === 'section') {
