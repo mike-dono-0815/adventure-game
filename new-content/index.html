@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Obscura Corp Wellness Suite</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #131A22;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  overflow: hidden;
+}
+canvas { display: block; cursor: default; }
+
+/* Debug export panel */
+#dbg-panel {
+  display: none;
+  position: fixed;
+  top: 10px; right: 10px;
+  width: 440px; max-height: 55vh;
+  background: #1a1a2e;
+  border: 2px solid #e94560;
+  border-radius: 6px;
+  padding: 10px;
+  z-index: 9999;
+  font-family: monospace;
+  font-size: 11px;
+  color: #e0e0e0;
+  overflow: auto;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+}
+#dbg-panel pre { margin: 0; white-space: pre-wrap; word-break: break-all; color: #b0d0ff; }
+#dbg-panel .dbg-hdr { display:flex; align-items:center; gap:6px; margin-bottom:8px; }
+#dbg-panel strong { color:#ffdd57; flex:1; }
+.dbg-btn { border:none; padding:3px 10px; cursor:pointer; border-radius:3px; font-size:11px; color:#fff; }
+
+/* Keypad sits on top of canvas, centred in the viewport area */
+#keypad {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  background: #1c1c1c;
+  border: 2px solid #555;
+  padding: 22px 24px 18px;
+  text-align: center;
+  z-index: 10;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+#keypad h3 {
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #666;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+#kp-display {
+  background: #0a0a0a;
+  color: #00e87a;
+  font-size: 30px;
+  letter-spacing: 12px;
+  padding: 8px 20px;
+  margin-bottom: 14px;
+  display: inline-block;
+  min-width: 140px;
+  font-family: 'Courier New', monospace;
+  transition: color 0.15s;
+}
+.kp-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 52px);
+  gap: 5px;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+.kp-btn {
+  width: 52px; height: 52px;
+  background: #2a2a2a; color: #ccc;
+  border: 1px solid #444;
+  font-size: 20px; cursor: pointer;
+  font-family: inherit;
+}
+.kp-btn:hover  { background: #383838; color: #fff; }
+.kp-btn:active { background: #444; }
+#kp-cancel {
+  background: none; color: #666;
+  border: 1px solid #3a3a3a;
+  padding: 6px 20px; cursor: pointer;
+  font-family: inherit; font-size: 11px; letter-spacing: 1px;
+}
+#kp-cancel:hover { color: #e8d5a3; border-color: #555; }
+</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<div id="dbg-panel">
+  <div class="dbg-hdr">
+    <strong>Debug — Hotspots</strong>
+    <button class="dbg-btn" style="background:#e94560" id="dbg-copy">Copy JS</button>
+    <button class="dbg-btn" style="background:#444"    id="dbg-close">✕</button>
+  </div>
+  <pre id="dbg-pre"></pre>
+</div>
+
+<div id="keypad">
+  <h3>Exit Keypad</h3>
+  <div id="kp-display">_ _ _</div>
+  <div class="kp-grid">
+    <button class="kp-btn" onclick="kpPress('1')">1</button>
+    <button class="kp-btn" onclick="kpPress('2')">2</button>
+    <button class="kp-btn" onclick="kpPress('3')">3</button>
+    <button class="kp-btn" onclick="kpPress('4')">4</button>
+    <button class="kp-btn" onclick="kpPress('5')">5</button>
+    <button class="kp-btn" onclick="kpPress('6')">6</button>
+    <button class="kp-btn" onclick="kpPress('7')">7</button>
+    <button class="kp-btn" onclick="kpPress('8')">8</button>
+    <button class="kp-btn" onclick="kpPress('9')">9</button>
+    <button class="kp-btn" onclick="kpPress('C')">⌫</button>
+    <button class="kp-btn" onclick="kpPress('0')">0</button>
+    <button class="kp-btn" onclick="kpPress('OK')">✓</button>
+  </div>
+  <button id="kp-cancel" onclick="closeKeypad()">CANCEL</button>
+</div>
+
+<script>
+// ─── Config (matches main game) ───────────────────────────────────────────
+const CFG = {
+  W: 1376, H: 1038,
+  VP_H: 768,
+  AL_Y: 768, AL_H: 46,
+  BAR_Y: 814, BAR_H: 224,
+  VERB_X: 0, VERB_W: 563,
+  INV_X: 563, INV_W: 813,
+  THUMB: 98, PAD: 8, PAD_X: 17,
+  COLS: 6, ROWS: 2,
+  FONT: '"Segoe UI", Arial, sans-serif',
+  VERBS: ['Open','Close','Push','Pull','Give','Take','Talk to','Look at','Use'],
+  TWO_OBJ: { 'Use': 'with', 'Give': 'to' },
+  C: {
+    BG:        '#131A22',
+    VP_BG:     '#232F3E',
+    AL_BG:     '#0F1111',
+    AL_TEXT:   '#ffffff',
+    BAR_BG:    '#232F3E',
+    V_NORMAL:  '#cccccc',
+    V_HOVER:   '#FF9900',
+    V_ACTIVE:  '#FEBD69',
+    INV_BG:    '#131A22',
+    INV_BORD:  '#37475A',
+    NARRATOR:  '#c9a0e8',
+    TEXT_PLAYER: '#7EC8E3',
+    TEXT:      '#ffffff',
+  },
+};
+
+// ─── Hotspots ─────────────────────────────────────────────────────────────
+const HOTSPOTS = [
+  { id: 'chalk',        name: 'Chalk Block',    rect: [139,644,35,34]   },
+  { id: 'weight_rack',  name: 'Weight Rack',    rect: [3,463,190,233]   },
+  { id: 'keypad',       name: 'Keypad',         rect: [273,398,30,66]   },
+  { id: 'door',         name: 'Exit Door',      rect: [156,221,104,368] },
+  { id: 'punching_bag', name: 'Punching Bag',   rect: [641,100,79,273]  },
+  { id: 'treadmills',   name: 'Treadmills',     rect: [337,390,448,173] },
+  { id: 'whiteboard',   name: 'Whiteboard',     rect: [780,299,170,121] },
+  { id: 'lockers',      name: 'Lockers',        rect: [994,237,175,399] },
+  { id: 'water_cooler', name: 'Water Cooler',   rect: [1172,340,120,312]},
+  { id: 'bench',        name: 'Bench',          rect: [1216,587,190,111]},
+];
+
+const ITEM_DEFS = {
+  locker_key:  { name: 'Locker Key #4', src: 'items/item_locker_key.png'  },
+  chalk_block: { name: 'Chalk Block',   src: 'items/item_chalk_block.png' },
+  torn_note:   { name: 'Torn Note',     src: 'items/item_torn_note.png'   },
+};
+
+const BG_SRCS = {
+  base:        'backgrounds/Gym.png',
+  no_chalk:    'backgrounds/Gym_NoChalk.png',
+  locker_open: 'backgrounds/Gym_LockerOpen.png',
+  whiteboard:  'backgrounds/Gym_WhiteboardRevealed.png',
+};
+
+// Walk area (rectangle across the floor, bottom ~25% of viewport)
+const WALK_AREA   = [[360,611],[1032,618],[1233,741],[153,738]];
+const PERSPECTIVE = { min_scale: 0.75, max_scale: 1.0 };
+const PLAYER_H    = 421;
+const PLAYER_SPEED = 400;
+
+// ─── State ────────────────────────────────────────────────────────────────
+const gs = {
+  inventory:    ['locker_key'],
+  selectedItem: null,        // item id held for two-object verb
+  currentVerb:  null,
+  hoverVerb:    null,
+  hoverTarget:  null,        // hotspot id or item id under cursor
+  flags: { chalk_taken: false, locker_opened: false, whiteboard_revealed: false },
+  won: false,
+  // Text box
+  text: null, textColor: CFG.C.NARRATOR, textTimer: 0,
+  // Scroll
+  scrollOffset: 0,
+  // Player
+  pl: { x: -60, y: 700, dir: 'right', walking: false,
+        path: [], animFrame: 0, animTimer: 0, arriveCallback: null },
+};
+
+// ─── Images ───────────────────────────────────────────────────────────────
+const bgImgs     = {};
+const itemImgs   = {};
+const playerImgs = {};  // 'left' | 'right' → Image
+
+function loadImg(src) {
+  return new Promise(r => { const i=new Image(); i.onload=()=>r(i); i.onerror=()=>r(null); i.src=src; });
+}
+
+async function preload() {
+  await Promise.all([
+    ...Object.entries(BG_SRCS).map(([k,s]) => loadImg(s).then(i => { bgImgs[k]=i; })),
+    ...Object.entries(ITEM_DEFS).map(([id,d]) => loadImg(d.src).then(i => { itemImgs[id]=i; })),
+    loadImg('characters/GymUser_Right.png').then(i => i ? removeWhiteBg(i).then(p => { playerImgs.right = p; }) : null),
+    loadImg('characters/GymUser_Left.png').then(i  => i ? removeWhiteBg(i).then(p => { playerImgs.left  = p; }) : null),
+  ]);
+  showText('A key on a hook by the door. Numbered "4". I take it on reflex.', CFG.C.NARRATOR);
+  // Walk the player in from the left
+  playerWalkTo(280, 700);
+  requestAnimationFrame(loop);
+}
+
+// ─── Canvas / scaling ─────────────────────────────────────────────────────
+const canvas = document.getElementById('canvas');
+const ctx    = canvas.getContext('2d');
+let scale = 1;
+
+function resize() {
+  scale = Math.min(window.innerWidth / CFG.W, window.innerHeight / CFG.H);
+  canvas.width  = Math.floor(CFG.W * scale);
+  canvas.height = Math.floor(CFG.H * scale);
+}
+resize();
+window.addEventListener('resize', resize);
+
+function toGame(sx, sy) { return { x: sx/scale, y: sy/scale }; }
+
+// ─── Current background key ───────────────────────────────────────────────
+function bgKey() {
+  if (gs.flags.whiteboard_revealed) return 'whiteboard';
+  if (gs.flags.locker_opened)       return 'locker_open';
+  if (gs.flags.chalk_taken)         return 'no_chalk';
+  return 'base';
+}
+
+// ─── Text helper ──────────────────────────────────────────────────────────
+function showText(text, color) {
+  gs.text = text; gs.textColor = color || CFG.C.TEXT_PLAYER; gs.textTimer = 4.5;
+}
+
+// ─── Inventory helpers ────────────────────────────────────────────────────
+function addItem(id)    { if (!gs.inventory.includes(id)) gs.inventory.push(id); }
+function removeItem(id) {
+  gs.inventory = gs.inventory.filter(i => i !== id);
+  if (gs.selectedItem === id) gs.selectedItem = null;
+}
+function resetVerb() {
+  gs.currentVerb = null; gs.selectedItem = null;
+}
+
+// ─── Action line text ─────────────────────────────────────────────────────
+function actionText() {
+  const verb  = gs.currentVerb || (gs.hoverTarget ? 'Look at' : 'Walk to');
+  const prep  = CFG.TWO_OBJ[gs.currentVerb];
+  let parts   = [verb];
+
+  if (gs.selectedItem) {
+    parts.push(ITEM_DEFS[gs.selectedItem].name);
+    if (prep) {
+      if (gs.hoverTarget && gs.hoverTarget !== gs.selectedItem) {
+        const n = ITEM_DEFS[gs.hoverTarget]
+          ? ITEM_DEFS[gs.hoverTarget].name
+          : (HOTSPOTS.find(h => h.id === gs.hoverTarget)||{}).name || gs.hoverTarget;
+        parts.push(prep + ' ' + n);
+      } else {
+        parts.push(prep + ' ...');
+      }
+    }
+  } else if (gs.hoverTarget) {
+    const name = ITEM_DEFS[gs.hoverTarget]
+      ? ITEM_DEFS[gs.hoverTarget].name
+      : (HOTSPOTS.find(h => h.id === gs.hoverTarget)||{}).name || gs.hoverTarget;
+    parts.push(name);
+  }
+  return parts.join(' ');
+}
+
+// ─── Hotspot lookup ───────────────────────────────────────────────────────
+function hotspotAt(x, y) {
+  if (y >= CFG.VP_H) return null;
+  for (const h of HOTSPOTS) {
+    const [rx,ry,rw,rh] = h.rect;
+    if (x>=rx && x<=rx+rw && y>=ry && y<=ry+rh) return h;
+  }
+  return null;
+}
+
+// ─── Text wrap ────────────────────────────────────────────────────────────
+function wrapText(ctx, text, maxW) {
+  const words = text.split(' ');
+  const lines = [];
+  let line = '';
+  for (const w of words) {
+    const test = line ? line + ' ' + w : w;
+    if (ctx.measureText(test).width > maxW && line) { lines.push(line); line = w; }
+    else line = test;
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+
+// ─── Render ───────────────────────────────────────────────────────────────
+let lastTime = 0;
+function loop(ts) {
+  const dt = lastTime ? Math.min((ts-lastTime)/1000, 0.1) : 0;
+  lastTime = ts;
+  if (gs.textTimer > 0) gs.textTimer -= dt;
+  playerUpdate(dt);
+  requestAnimationFrame(loop);
+  draw();
+}
+
+function draw() {
+  ctx.save();
+  ctx.scale(scale, scale);
+
+  // Background
+  ctx.fillStyle = CFG.C.BG;
+  ctx.fillRect(0, 0, CFG.W, CFG.H);
+
+  // Viewport
+  ctx.save();
+  ctx.beginPath(); ctx.rect(0, 0, CFG.W, CFG.VP_H); ctx.clip();
+  const bg = bgImgs[bgKey()];
+  if (bg) ctx.drawImage(bg, 0, 0, CFG.W, CFG.VP_H);
+  playerDraw(ctx);
+  dbgDraw(ctx);
+
+  // Text box in viewport
+  if (gs.textTimer > 0 && gs.text) {
+    ctx.font = '22px ' + CFG.FONT;
+    const maxW = 900;
+    const lines = wrapText(ctx, gs.text, maxW);
+    const lh = 30, pad = 14;
+    const bh = lines.length * lh + pad * 2;
+    const bx = (CFG.W - maxW) / 2 - pad;
+    const by = 40;
+    ctx.fillStyle = 'rgba(0,0,0,0.72)';
+    ctx.fillRect(bx, by, maxW + pad*2, bh);
+    ctx.fillStyle = gs.textColor;
+    for (let i=0; i<lines.length; i++) {
+      ctx.fillText(lines[i], bx+pad, by+pad+22+i*lh);
+    }
+  }
+
+  // Tooltip (hotspot name near cursor)
+  if (gs.hoverTarget && !gs.selectedItem) {
+    const hs = HOTSPOTS.find(h => h.id === gs.hoverTarget);
+    if (hs) {
+      // We don't have cursor coords in draw(), use centre of hotspot rect
+      const [rx,ry,rw] = hs.rect;
+      const tx = rx + rw/2;
+      const ty = Math.max(ry - 10, 20);
+      ctx.font = '16px ' + CFG.FONT;
+      const tw = ctx.measureText(hs.name).width;
+      ctx.fillStyle = 'rgba(0,0,0,0.7)';
+      ctx.fillRect(tx-tw/2-4, ty-16, tw+8, 22);
+      ctx.fillStyle = '#ffdd57';
+      ctx.textAlign = 'center';
+      ctx.fillText(hs.name, tx, ty);
+      ctx.textAlign = 'left';
+    }
+  }
+
+  ctx.restore(); // end viewport clip
+
+  // Action line
+  ctx.fillStyle = CFG.C.AL_BG;
+  ctx.fillRect(0, CFG.AL_Y, CFG.W, CFG.AL_H);
+  ctx.fillStyle = CFG.C.AL_TEXT;
+  ctx.font = 'bold 26px ' + CFG.FONT;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(actionText(), CFG.W/2, CFG.AL_Y + CFG.AL_H/2);
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+
+  // Verb panel
+  drawVerbs();
+
+  // Inventory
+  drawInventory();
+
+  // Win overlay
+  if (gs.won) drawWin();
+
+  ctx.restore();
+}
+
+function drawVerbs() {
+  const cellW = CFG.VERB_W / 3;
+  const cellH = CFG.BAR_H / 3;
+
+  ctx.fillStyle = CFG.C.BAR_BG;
+  ctx.fillRect(CFG.VERB_X, CFG.BAR_Y, CFG.VERB_W, CFG.BAR_H);
+
+  ctx.font = '600 28px "Cinzel", serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+
+  for (let i=0; i<CFG.VERBS.length; i++) {
+    const col = i%3, row = Math.floor(i/3);
+    const cx = CFG.VERB_X + col*cellW + cellW/2;
+    const cy = CFG.BAR_Y  + row*cellH + cellH/2;
+    const v = CFG.VERBS[i];
+    ctx.fillStyle = v === gs.currentVerb ? CFG.C.V_ACTIVE
+                  : v === gs.hoverVerb   ? CFG.C.V_HOVER
+                  : CFG.C.V_NORMAL;
+    ctx.fillText(v, cx, cy);
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(CFG.VERB_X+col*cellW, CFG.BAR_Y+row*cellH, cellW, cellH);
+  }
+  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+}
+
+function drawInventory() {
+  ctx.fillStyle = CFG.C.INV_BG;
+  ctx.fillRect(CFG.INV_X, CFG.BAR_Y, CFG.INV_W, CFG.BAR_H);
+  ctx.strokeStyle = CFG.C.INV_BORD;
+  ctx.lineWidth = 2;
+  ctx.strokeRect(CFG.INV_X, CFG.BAR_Y, CFG.INV_W, CFG.BAR_H);
+
+  const arrowW = 40;
+  ctx.fillStyle = '#e0e0e0';
+  ctx.font = '28px ' + CFG.FONT;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('◀', CFG.INV_X+arrowW/2,          CFG.BAR_Y+CFG.BAR_H/2);
+  ctx.fillText('▶', CFG.INV_X+CFG.INV_W-arrowW/2, CFG.BAR_Y+CFG.BAR_H/2);
+  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+
+  const gridX = CFG.INV_X + arrowW + 10;
+  const stepX = CFG.THUMB + CFG.PAD_X;
+  const stepY = CFG.THUMB + CFG.PAD;
+
+  for (let row=0; row<CFG.ROWS; row++) {
+    for (let col=0; col<CFG.COLS; col++) {
+      const idx = gs.scrollOffset + row*CFG.COLS + col;
+      const dx  = gridX + col*stepX;
+      const dy  = CFG.BAR_Y + 10 + row*stepY;
+      ctx.fillStyle = 'rgba(255,255,255,0.05)';
+      ctx.fillRect(dx, dy, CFG.THUMB, CFG.THUMB);
+      if (idx < gs.inventory.length) {
+        const id = gs.inventory[idx];
+        const img = itemImgs[id];
+        if (img) ctx.drawImage(img, dx, dy, CFG.THUMB, CFG.THUMB);
+        if (id === gs.selectedItem) {
+          ctx.strokeStyle = CFG.C.V_ACTIVE; ctx.lineWidth = 3;
+          ctx.strokeRect(dx-1, dy-1, CFG.THUMB+2, CFG.THUMB+2);
+        }
+        if (id === gs.hoverTarget) {
+          ctx.strokeStyle = CFG.C.V_HOVER; ctx.lineWidth = 2;
+          ctx.strokeRect(dx-1, dy-1, CFG.THUMB+2, CFG.THUMB+2);
+        }
+      }
+    }
+  }
+}
+
+function drawWin() {
+  ctx.fillStyle = 'rgba(0,0,0,0.88)';
+  ctx.fillRect(0, 0, CFG.W, CFG.VP_H);
+  ctx.fillStyle = '#FEBD69';
+  ctx.font = 'italic bold 120px Georgia, serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.shadowColor = 'rgba(255,153,0,0.7)'; ctx.shadowBlur = 40;
+  ctx.fillText('You Escaped', CFG.W/2, CFG.VP_H/2 - 30);
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '22px ' + CFG.FONT;
+  const lines = [
+    'You leave the Obscura Corp Wellness Suite behind.',
+    'Dave will never know you were here.',
+    '',
+    '225 kg — absolute unit.',
+  ];
+  for (let i=0; i<lines.length; i++) {
+    ctx.fillText(lines[i], CFG.W/2, CFG.VP_H/2 + 80 + i*34);
+  }
+  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+}
+
+// ─── Interaction ──────────────────────────────────────────────────────────
+function executeVerb(verb, hotspotId, itemId) {
+  // itemId = the inventory item being used (for two-object verbs)
+  switch (hotspotId) {
+
+    case 'chalk':
+      if (gs.flags.chalk_taken) { interact('weight_rack', verb, itemId); return; }
+      if (verb === 'Take' || verb === 'Look at' || !verb) {
+        addItem('chalk_block');
+        gs.flags.chalk_taken = true;
+        showText('I take the chalk. It immediately coats my fingers. It\'s everywhere now.');
+      } else {
+        showText('I already want to pick it up.');
+      }
+      break;
+
+    case 'weight_rack':
+      showText('Mismatched dumbbells. Nobody here has ever agreed on a rep range.');
+      break;
+
+    case 'door':
+      showText('The exit. It wants a code. There\'s a keypad next to it.');
+      break;
+
+    case 'keypad':
+      if (itemId || verb === 'Use') {
+        if (!gs.flags.whiteboard_revealed) {
+          showText('A numeric keypad. I need the code. I don\'t have it yet.');
+        } else {
+          showText('Dave\'s squat PB is 225. Let\'s see if Dave used that as his code. Dave would.');
+          openKeypad();
+          return;
+        }
+      } else {
+        showText('A numeric keypad. I need the code.');
+      }
+      break;
+
+    case 'treadmills':
+      showText('Three treadmills. One is out of order. Probably the only one worth using.');
+      break;
+
+    case 'punching_bag':
+      showText('A punching bag with a faded Obscura Corp logo. Someone worked through some feelings here.');
+      break;
+
+    case 'whiteboard':
+      if (itemId === 'chalk_block' || (verb === 'Use' && gs.selectedItem === 'chalk_block')) {
+        if (!gs.flags.whiteboard_revealed) {
+          gs.flags.whiteboard_revealed = true;
+          removeItem('chalk_block');
+          showText('I drag the chalk across the board. The worn text emerges: "DAVE\'S SQUAT PB: 225 kg — absolute unit." Obviously.');
+        } else {
+          showText('I\'ve already done that. 225 kg. Dave. Absolute unit.');
+        }
+      } else {
+        if (!gs.flags.whiteboard_revealed) {
+          showText('Something\'s been written on it but the text has worn away completely. I can\'t read it.');
+        } else {
+          showText('"DAVE\'S SQUAT PB: 225 kg — absolute unit." Right. The exit code is 225.');
+        }
+      }
+      break;
+
+    case 'lockers':
+      if (itemId === 'locker_key' || (verb === 'Use' && gs.selectedItem === 'locker_key')) {
+        if (!gs.flags.locker_opened) {
+          gs.flags.locker_opened = true;
+          removeItem('locker_key');
+          addItem('torn_note');
+          showText('Locker 4 opens. Inside: a gym bag. In the side pocket — a torn sticky note. I take it.');
+        } else {
+          showText('It\'s already open.');
+        }
+      } else if (verb === 'Open' || verb === 'Look at' || !verb) {
+        if (!gs.flags.locker_opened)
+          showText('Six metal lockers. Number 4 has my name on it. Figuratively speaking.');
+        else
+          showText('Locker 4 is open. The torn note came from inside.');
+      } else {
+        showText('That\'s not how lockers work.');
+      }
+      break;
+
+    case 'water_cooler':
+      showText('Spring water from an unnamed mountain. I\'m not thirsty. I\'m trapped.');
+      break;
+
+    case 'bench':
+      showText('Someone\'s gym bag. Someone who actually uses this place voluntarily. I don\'t understand them.');
+      break;
+  }
+}
+
+function executeOnItem(verb, itemId) {
+  switch (itemId) {
+    case 'locker_key':
+      showText('A small key on a "4" fob. It belongs to locker 4.');
+      break;
+    case 'chalk_block':
+      showText('A block of weightlifting chalk. Dusty. Everything I touch is now also dusty.');
+      break;
+    case 'torn_note':
+      showText('"...code is my squat PB. I wrote it on the..." — torn off. Something in this room has the rest.');
+      break;
+  }
+}
+
+// ─── Mouse handling ───────────────────────────────────────────────────────
+function inventoryItemAt(gx, gy) {
+  if (gy < CFG.BAR_Y || gx < CFG.INV_X) return null;
+  const arrowW = 40;
+  const gridX  = CFG.INV_X + arrowW + 10;
+  const stepX  = CFG.THUMB + CFG.PAD_X;
+  const stepY  = CFG.THUMB + CFG.PAD;
+  const col = Math.floor((gx - gridX) / stepX);
+  const row = Math.floor((gy - CFG.BAR_Y - 10) / stepY);
+  if (col < 0 || col >= CFG.COLS || row < 0 || row >= CFG.ROWS) return null;
+  const idx = gs.scrollOffset + row*CFG.COLS + col;
+  return idx < gs.inventory.length ? gs.inventory[idx] : null;
+}
+
+function verbAt(gx, gy) {
+  if (gy < CFG.BAR_Y || gx >= CFG.VERB_W) return null;
+  const cellW = CFG.VERB_W / 3;
+  const cellH = CFG.BAR_H / 3;
+  const col = Math.floor((gx - CFG.VERB_X) / cellW);
+  const row = Math.floor((gy - CFG.BAR_Y)  / cellH);
+  if (col < 0 || col >= 3 || row < 0 || row >= 3) return null;
+  const idx = row*3 + col;
+  return idx < CFG.VERBS.length ? CFG.VERBS[idx] : null;
+}
+
+canvas.addEventListener('mousemove', e => {
+  const {x, y} = toGame(e.offsetX, e.offsetY);
+
+  if (dbgOnMouseMove(x, y)) {
+    canvas.style.cursor = DBG.dragging ? 'move' : 'crosshair';
+    return;
+  }
+
+  gs.hoverVerb   = verbAt(x, y);
+  gs.hoverTarget = null;
+  canvas.style.cursor = 'default';
+
+  const invItem = inventoryItemAt(x, y);
+  if (invItem) {
+    gs.hoverTarget = invItem;
+    canvas.style.cursor = 'pointer';
+    return;
+  }
+  const hs = hotspotAt(x, y);
+  if (hs) {
+    gs.hoverTarget = hs.id;
+    canvas.style.cursor = 'pointer';
+  }
+});
+
+canvas.addEventListener('mousedown', e => {
+  const {x, y} = toGame(e.offsetX, e.offsetY);
+  dbgOnMouseDown(x, y);
+});
+
+canvas.addEventListener('mouseup', e => {
+  dbgOnMouseUp();
+});
+
+canvas.addEventListener('click', e => {
+  if (gs.won) return;
+  if (DBG.didDrag) { DBG.didDrag = false; return; } // suppress click after drag
+  const {x, y} = toGame(e.offsetX, e.offsetY);
+
+  // Verb panel
+  const v = verbAt(x, y);
+  if (v) {
+    gs.currentVerb  = v;
+    gs.selectedItem = null;
+    return;
+  }
+
+  // Inventory
+  const invItem = inventoryItemAt(x, y);
+  if (invItem) {
+    const prep = CFG.TWO_OBJ[gs.currentVerb];
+    if (prep && gs.selectedItem) {
+      // Second object: item on item — not used in gym, just look at
+      executeOnItem(gs.currentVerb, invItem);
+      resetVerb();
+    } else if (prep) {
+      // First object for two-object verb
+      gs.selectedItem = invItem;
+    } else if (gs.currentVerb) {
+      executeOnItem(gs.currentVerb, invItem);
+      resetVerb();
+    } else {
+      // No verb — look at item
+      gs.currentVerb = 'Look at';
+      executeOnItem('Look at', invItem);
+      resetVerb();
+    }
+    return;
+  }
+
+  // Viewport hotspot
+  if (y < CFG.VP_H) {
+    // Dismiss text on click
+    if (gs.textTimer > 0) { gs.textTimer = 0; }
+
+    const hs = hotspotAt(x, y);
+    if (hs) {
+      const prep       = CFG.TWO_OBJ[gs.currentVerb];
+      const verb       = gs.currentVerb || 'Look at';
+      const savedItem  = gs.selectedItem;
+      resetVerb();
+      const wp = walkToPoint(hs);
+      playerWalkTo(wp.x, wp.y, () => {
+        // Face toward hotspot centre after arriving
+        const cx = hs.rect[0] + hs.rect[2] / 2;
+        gs.pl.dir = gs.pl.x < cx ? 'right' : 'left';
+        if (prep && savedItem) {
+          executeVerb(verb, hs.id, savedItem);
+        } else {
+          executeVerb(verb, hs.id, null);
+        }
+      });
+    } else {
+      // Click floor — walk to
+      resetVerb();
+      gs.textTimer = 0;
+      if (y >= WALK_AREA[0][1]) playerWalkTo(x, y);
+    }
+  }
+});
+
+canvas.addEventListener('contextmenu', e => {
+  e.preventDefault();
+  resetVerb();
+});
+
+// ─── Keypad ───────────────────────────────────────────────────────────────
+const kpEl      = document.getElementById('keypad');
+const kpDisplay = document.getElementById('kp-display');
+let   kpInput   = '';
+
+function openKeypad() {
+  kpInput = '';
+  kpDisplay.style.color = '#00e87a';
+  kpDisplay.textContent = '_ _ _';
+  kpEl.style.display = 'block';
+}
+function closeKeypad() {
+  kpEl.style.display = 'none';
+  kpInput = '';
+}
+function kpPress(key) {
+  if (key === 'C') {
+    kpInput = kpInput.slice(0, -1);
+  } else if (key === 'OK') {
+    if (kpInput === '225') {
+      closeKeypad();
+      gs.won = true;
+    } else {
+      kpDisplay.style.color = '#ff3333';
+      showText('ACCESS DENIED. The keypad beeps at me.');
+      kpInput = '';
+      setTimeout(() => { kpDisplay.style.color = '#00e87a'; }, 700);
+    }
+  } else if (kpInput.length < 3) {
+    kpInput += key;
+  }
+  kpDisplay.textContent = (kpInput + '___').slice(0,3).split('').join(' ');
+}
+
+document.addEventListener('keydown', e => {
+  // Ctrl+D — toggle debug mode
+  if (e.key === 'd' && e.ctrlKey) {
+    DBG.enabled = !DBG.enabled;
+    if (!DBG.enabled) document.getElementById('dbg-panel').style.display = 'none';
+    e.preventDefault();
+    return;
+  }
+  if (kpEl.style.display === 'none') return;
+  if (e.key >= '0' && e.key <= '9') kpPress(e.key);
+  if (e.key === 'Backspace')         kpPress('C');
+  if (e.key === 'Enter')             kpPress('OK');
+  if (e.key === 'Escape')            closeKeypad();
+});
+
+// ─── Chroma-key background removal (magenta #FF00FF) ─────────────────────
+// Removes pixels where R>=200, G<=80, B>=200 (tolerant magenta match).
+// Also erodes 1px inward to eliminate magenta fringing on character edges.
+function erodeAlpha(data, w, h) {
+  const alpha = new Uint8Array(w * h);
+  for (let i = 0; i < w * h; i++) alpha[i] = data[i*4+3];
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      if (!alpha[y*w+x]) continue;
+      let erode = false;
+      outer: for (let dy = -1; dy <= 1; dy++) {
+        for (let dx = -1; dx <= 1; dx++) {
+          if (!dx && !dy) continue;
+          const nx=x+dx, ny=y+dy;
+          if (nx<0||nx>=w||ny<0||ny>=h) continue;
+          if (!alpha[ny*w+nx]) { erode=true; break outer; }
+        }
+      }
+      if (erode) data[(y*w+x)*4+3] = 0;
+    }
+  }
+}
+
+function removeWhiteBg(img) {
+  return new Promise(resolve => {
+    const c = document.createElement('canvas');
+    c.width = img.naturalWidth; c.height = img.naturalHeight;
+    const cx = c.getContext('2d');
+    cx.drawImage(img, 0, 0);
+    const id = cx.getImageData(0, 0, c.width, c.height);
+    const d = id.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const r=d[i], g=d[i+1], b=d[i+2];
+      // Chroma key: hot-pink/magenta background (~RGB 233,21,140)
+      // R high, G very low, B mid-range
+      if (r >= 200 && g <= 50 && b >= 100) d[i+3] = 0;
+    }
+    erodeAlpha(d, c.width, c.height);
+    cx.putImageData(id, 0, 0);
+    const result = new Image();
+    result.onload = () => resolve(result);
+    result.src = c.toDataURL('image/png');
+  });
+}
+
+// ─── Pathfinding ─────────────────────────────────────────────────────────
+function ptInPoly(px, py, poly) {
+  let inside = false;
+  for (let i=0, j=poly.length-1; i<poly.length; j=i++) {
+    const [xi,yi]=poly[i], [xj,yj]=poly[j];
+    if (((yi>py)!==(yj>py)) && px < (xj-xi)*(py-yi)/(yj-yi)+xi) inside=!inside;
+  }
+  return inside;
+}
+function closestOnSeg(px,py, ax,ay, bx,by) {
+  const dx=bx-ax, dy=by-ay, len2=dx*dx+dy*dy;
+  if (!len2) return {x:ax,y:ay};
+  const t=Math.max(0,Math.min(1,((px-ax)*dx+(py-ay)*dy)/len2));
+  return {x:ax+t*dx, y:ay+t*dy};
+}
+function clampToPoly(px,py,poly) {
+  if (ptInPoly(px,py,poly)) return {x:px,y:py};
+  let best={x:px,y:py}, bd=Infinity;
+  for (let i=0;i<poly.length;i++) {
+    const j=(i+1)%poly.length;
+    const c=closestOnSeg(px,py,poly[i][0],poly[i][1],poly[j][0],poly[j][1]);
+    const d=Math.hypot(px-c.x,py-c.y);
+    if (d<bd){bd=d;best=c;}
+  }
+  return best;
+}
+function segCross(ax,ay,bx,by,cx,cy,dx,dy) {
+  const cr=(ox,oy,px,py,qx,qy)=>(px-ox)*(qy-oy)-(py-oy)*(qx-ox);
+  const d1=cr(cx,cy,dx,dy,ax,ay),d2=cr(cx,cy,dx,dy,bx,by);
+  const d3=cr(ax,ay,bx,by,cx,cy),d4=cr(ax,ay,bx,by,dx,dy);
+  return ((d1>0&&d2<0)||(d1<0&&d2>0))&&((d3>0&&d4<0)||(d3<0&&d4>0));
+}
+function los(ax,ay,bx,by,poly) {
+  if (!ptInPoly((ax+bx)/2,(ay+by)/2,poly)) return false;
+  for (let i=0;i<poly.length;i++) {
+    const j=(i+1)%poly.length;
+    if (segCross(ax,ay,bx,by,poly[i][0],poly[i][1],poly[j][0],poly[j][1])) return false;
+  }
+  return true;
+}
+function findPath(sx,sy,ex,ey,poly) {
+  if (los(sx,sy,ex,ey,poly)) return [{x:ex,y:ey}];
+  const nodes=[{x:sx,y:sy},{x:ex,y:ey}];
+  for (let i=0;i<poly.length;i++) {
+    const prev=poly[(i-1+poly.length)%poly.length], curr=poly[i], next=poly[(i+1)%poly.length];
+    const ox=curr[0]+(((prev[0]+curr[0]+next[0])/3)-curr[0])*0.1;
+    const oy=curr[1]+(((prev[1]+curr[1]+next[1])/3)-curr[1])*0.1;
+    if (ptInPoly(ox,oy,poly)) nodes.push({x:ox,y:oy});
+  }
+  const n=nodes.length;
+  const adj=Array.from({length:n},()=>[]);
+  for (let a=0;a<n;a++) for (let b=0;b<n;b++) {
+    if (a===b) continue;
+    if (los(nodes[a].x,nodes[a].y,nodes[b].x,nodes[b].y,poly))
+      adj[a].push({to:b,cost:Math.hypot(nodes[b].x-nodes[a].x,nodes[b].y-nodes[a].y)});
+  }
+  const INF=1e18, dist=new Array(n).fill(INF), prev2=new Array(n).fill(-1), vis=new Array(n).fill(false);
+  dist[0]=0;
+  for (let s=0;s<n;s++) {
+    let u=-1;
+    for (let v=0;v<n;v++) if (!vis[v]&&(u===-1||dist[v]<dist[u])) u=v;
+    if (u===-1||dist[u]===INF) break;
+    vis[u]=true;
+    for (const e of adj[u]) { const nd=dist[u]+e.cost; if (nd<dist[e.to]){dist[e.to]=nd;prev2[e.to]=u;} }
+  }
+  if (dist[1]===INF) return [{x:ex,y:ey}];
+  const path=[];
+  for (let at=1;at!==-1;at=prev2[at]) path.push({x:nodes[at].x,y:nodes[at].y});
+  path.reverse(); path.shift();
+  return path;
+}
+
+// ─── Player ───────────────────────────────────────────────────────────────
+const FRAME_COLS = {
+  right: { stand:0, walk:1, talk:2 },
+  left:  { stand:2, walk:1, talk:0 },
+};
+
+// Walk-to point beside a hotspot (mirrors main game room.js getWalkToPoint)
+const WALK_SIDE_OFFSET = 60;
+function walkToPoint(hs) {
+  const [rx, ry, rw, rh] = hs.rect;
+  const cx = rx + rw / 2;
+  const cy = ry + rh;   // bottom edge of hotspot
+  const wx = cx < CFG.W / 2
+    ? cx + rw / 2 + WALK_SIDE_OFFSET   // hotspot on left → stand to its right
+    : cx - rw / 2 - WALK_SIDE_OFFSET;  // hotspot on right → stand to its left
+  return clampToPoly(wx, cy, WALK_AREA);
+}
+
+function playerWalkTo(tx, ty, callback) {
+  const pl = gs.pl;
+  const c  = clampToPoly(tx, ty, WALK_AREA);
+  pl.path           = findPath(pl.x, pl.y, c.x, c.y, WALK_AREA);
+  pl.walking        = true;
+  pl.arriveCallback = callback || null;
+}
+
+function playerUpdate(dt) {
+  const pl = gs.pl;
+  if (!pl.walking) { pl.animFrame=0; return; }
+  if (!pl.path.length) {
+    pl.walking=false; pl.animFrame=0;
+    const cb = pl.arriveCallback; pl.arriveCallback = null;
+    if (cb) cb();
+    return;
+  }
+
+  const tgt  = pl.path[0];
+  const dx   = tgt.x - pl.x, dy = tgt.y - pl.y;
+  const dist = Math.hypot(dx, dy);
+  const spd  = PLAYER_SPEED * dt;
+
+  if (Math.abs(dx) > Math.abs(dy)) pl.dir = dx > 0 ? 'right' : 'left';
+
+  if (dist <= spd) {
+    pl.x = tgt.x; pl.y = tgt.y;
+    pl.path.shift();
+    if (!pl.path.length) {
+      pl.walking=false; pl.animFrame=0;
+      const cb = pl.arriveCallback; pl.arriveCallback = null;
+      if (cb) cb();
+    }
+  } else {
+    pl.x += (dx/dist)*spd;
+    pl.y += (dy/dist)*spd;
+  }
+
+  pl.animTimer = (pl.animTimer||0) + dt;
+  if (pl.animTimer >= 0.15) { pl.animTimer=0; pl.animFrame=(pl.animFrame+1)%2; }
+}
+
+function playerDraw(ctx) {
+  const pl  = gs.pl;
+  const img = playerImgs[pl.dir];
+  if (!img) return;
+
+  // Perspective scale based on y position in walk area
+  const ys = WALK_AREA.map(p=>p[1]);
+  const y1 = Math.min(...ys), y2 = Math.max(...ys);
+  const t  = Math.max(0, Math.min(1, (pl.y - y1) / (y2 - y1)));
+  const s  = PERSPECTIVE.min_scale + t*(PERSPECTIVE.max_scale - PERSPECTIVE.min_scale);
+  const ph = Math.round(PLAYER_H * s);
+  const fw = img.naturalWidth / 3;   // frame width
+  const fh = img.naturalHeight;
+  const pw = Math.round(ph * (fw / fh));
+
+  const talking = gs.textTimer > 0 && gs.textColor === CFG.C.TEXT_PLAYER;
+  const state = talking ? 'talk'
+              : pl.walking ? (pl.animFrame===0 ? 'stand' : 'walk')
+              : 'stand';
+  const col   = FRAME_COLS[pl.dir][state];
+
+  ctx.drawImage(img, col*fw, 0, fw, fh,
+    Math.round(pl.x - pw/2), Math.round(pl.y - ph),
+    pw, ph);
+}
+
+// ─── Debug Editor ────────────────────────────────────────────────────────
+const DBG = {
+  enabled:  false,
+  HANDLE_R: 6,
+  dragging: null,   // { handle, startGX, startGY }
+  hovered:  null,
+  didDrag:  false,
+};
+
+function dbgGetHandles() {
+  const handles = [];
+  // Hotspot rect corner handles (yellow)
+  for (const h of HOTSPOTS) {
+    const r = h.rect;
+    for (const [corner, cx, cy] of [
+      ['tl', r[0],        r[1]       ],
+      ['tr', r[0]+r[2],   r[1]       ],
+      ['bl', r[0],        r[1]+r[3]  ],
+      ['br', r[0]+r[2],   r[1]+r[3]  ],
+    ]) {
+      handles.push({ type: 'hotspot', hotspotId: h.id, corner, x: cx, y: cy, rect: r });
+    }
+  }
+  // Walk area vertex handles (cyan)
+  for (let i = 0; i < WALK_AREA.length; i++) {
+    handles.push({ type: 'walk', walkIdx: i, x: WALK_AREA[i][0], y: WALK_AREA[i][1] });
+  }
+  return handles;
+}
+
+function dbgFindHandle(gx, gy) {
+  let best = null, bestD = DBG.HANDLE_R + 4;
+  for (const h of dbgGetHandles()) {
+    const d = Math.hypot(gx - h.x, gy - h.y);
+    if (d < bestD) { bestD = d; best = h; }
+  }
+  return best;
+}
+
+function dbgSame(a, b) {
+  if (!a || !b || a.type !== b.type) return false;
+  if (a.type === 'hotspot') return a.hotspotId === b.hotspotId && a.corner === b.corner;
+  return a.walkIdx === b.walkIdx;
+}
+
+function dbgApplyMove(handle, gx, gy) {
+  gx = Math.round(gx); gy = Math.round(gy);
+  if (handle.type === 'walk') {
+    WALK_AREA[handle.walkIdx][0] = gx;
+    WALK_AREA[handle.walkIdx][1] = gy;
+    handle.x = gx; handle.y = gy;
+    return;
+  }
+  const r = handle.rect;
+  let x1=r[0], y1=r[1], x2=r[0]+r[2], y2=r[1]+r[3];
+  if      (handle.corner==='tl') { x1=gx; y1=gy; }
+  else if (handle.corner==='tr') { x2=gx; y1=gy; }
+  else if (handle.corner==='bl') { x1=gx; y2=gy; }
+  else                           { x2=gx; y2=gy; }
+  r[0]=Math.min(x1,x2); r[1]=Math.min(y1,y2);
+  r[2]=Math.abs(x2-x1); r[3]=Math.abs(y2-y1);
+  // Refresh handle position from updated rect
+  if      (handle.corner==='tl') { handle.x=r[0];        handle.y=r[1];        }
+  else if (handle.corner==='tr') { handle.x=r[0]+r[2];   handle.y=r[1];        }
+  else if (handle.corner==='bl') { handle.x=r[0];        handle.y=r[1]+r[3];   }
+  else                           { handle.x=r[0]+r[2];   handle.y=r[1]+r[3];   }
+}
+
+function dbgOnMouseDown(gx, gy) {
+  if (!DBG.enabled) return false;
+  const h = dbgFindHandle(gx, gy);
+  if (!h) return false;
+  DBG.dragging = h; DBG.didDrag = false;
+  return true;
+}
+
+function dbgOnMouseMove(gx, gy) {
+  if (!DBG.enabled) return false;
+  if (DBG.dragging) {
+    dbgApplyMove(DBG.dragging, gx, gy);
+    DBG.didDrag = true;
+    return true;
+  }
+  DBG.hovered = dbgFindHandle(gx, gy);
+  return !!DBG.hovered;
+}
+
+function dbgOnMouseUp() {
+  if (!DBG.enabled || !DBG.dragging) return false;
+  const wasDragging = DBG.didDrag;
+  DBG.dragging = null;
+  if (wasDragging) { dbgShowExport(); return true; }
+  return false;
+}
+
+function dbgShowExport() {
+  const hsLines = HOTSPOTS.map(h => {
+    const [x,y,w,hh] = h.rect;
+    const pad = ' '.repeat(Math.max(0, 14 - h.id.length));
+    return `  { id: '${h.id}',${pad} name: '${h.name}',${' '.repeat(Math.max(0,14-h.name.length))} rect: [${x},${y},${w},${hh}] },`;
+  });
+  const waLine = 'const WALK_AREA = [' +
+    WALK_AREA.map(p => '[' + p[0] + ',' + p[1] + ']').join(',') + '];';
+  const js = 'const HOTSPOTS = [\n' + hsLines.join('\n') + '\n];\n\n' + waLine;
+  document.getElementById('dbg-pre').textContent = js;
+  document.getElementById('dbg-panel').style.display = 'block';
+}
+
+function dbgDraw(ctx) {
+  if (!DBG.enabled) return;
+  // Walk area overlay (cyan)
+  ctx.save();
+  ctx.fillStyle   = 'rgba(0,180,255,0.10)';
+  ctx.strokeStyle = 'rgba(0,180,255,0.80)';
+  ctx.lineWidth   = 2;
+  ctx.beginPath();
+  ctx.moveTo(WALK_AREA[0][0], WALK_AREA[0][1]);
+  for (let i = 1; i < WALK_AREA.length; i++) ctx.lineTo(WALK_AREA[i][0], WALK_AREA[i][1]);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.font = '11px ' + CFG.FONT;
+  ctx.fillStyle = 'rgba(0,180,255,0.9)';
+  ctx.fillText('WALK AREA', WALK_AREA[0][0] + 4, WALK_AREA[0][1] + 14);
+  ctx.restore();
+  // Hotspot overlays (green)
+  for (const hs of HOTSPOTS) {
+    const [x,y,w,h] = hs.rect;
+    ctx.fillStyle = 'rgba(0,255,0,0.15)';
+    ctx.fillRect(x, y, w, h);
+    ctx.strokeStyle = 'rgba(0,255,0,0.7)';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(x, y, w, h);
+    ctx.font = '11px ' + CFG.FONT;
+    ctx.fillStyle = '#ffdd57';
+    ctx.fillText(hs.id, x+3, y+12);
+  }
+  // All handles
+  for (const h of dbgGetHandles()) {
+    const isWalk = h.type === 'walk';
+    const hot    = dbgSame(h, DBG.hovered) || dbgSame(h, DBG.dragging);
+    ctx.fillStyle   = hot ? '#ffffff' : (isWalk ? '#00cfff' : '#ffdd57');
+    ctx.strokeStyle = 'rgba(0,0,0,0.7)';
+    ctx.lineWidth   = 1;
+    ctx.fillRect  (h.x-DBG.HANDLE_R, h.y-DBG.HANDLE_R, DBG.HANDLE_R*2, DBG.HANDLE_R*2);
+    ctx.strokeRect(h.x-DBG.HANDLE_R, h.y-DBG.HANDLE_R, DBG.HANDLE_R*2, DBG.HANDLE_R*2);
+    // Live coords while dragging
+    if (DBG.dragging && dbgSame(h, DBG.dragging)) {
+      const label = h.x + ', ' + h.y;
+      ctx.font = '11px ' + CFG.FONT;
+      const tw = ctx.measureText(label).width;
+      ctx.fillStyle = 'rgba(0,0,0,0.8)';
+      ctx.fillRect(h.x+10, h.y-18, tw+6, 16);
+      ctx.fillStyle = '#fff';
+      ctx.fillText(label, h.x+13, h.y-6);
+    }
+  }
+}
+
+// Wire up debug panel buttons
+document.getElementById('dbg-copy').addEventListener('click', () => {
+  const text = document.getElementById('dbg-pre').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('dbg-copy');
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = 'Copy JS'; }, 1500);
+  });
+});
+document.getElementById('dbg-close').addEventListener('click', () => {
+  document.getElementById('dbg-panel').style.display = 'none';
+});
+
+// ─── Boot ─────────────────────────────────────────────────────────────────
+preload();
+</script>
+</body>
+</html>

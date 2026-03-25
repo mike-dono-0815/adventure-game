@@ -53,9 +53,22 @@ Game.Loader = (function () {
       octx.drawImage(img, 0, 0);
       var imageData = octx.getImageData(0, 0, offscreen.width, offscreen.height);
       var data = imageData.data;
+
+      // Detect background type by sampling the top-left corner pixel
+      // Hot-pink/magenta background: R high, G very low, B mid-range (~233,21,140)
+      var isMagenta = (data[0] >= 200 && data[1] <= 50 && data[2] >= 100);
+
       for (var i = 0; i < data.length; i += 4) {
-        if (data[i] >= threshold && data[i+1] >= threshold && data[i+2] >= threshold) {
-          data[i+3] = 0;
+        if (isMagenta) {
+          // Chroma-key: remove hot-pink/magenta pixels
+          if (data[i] >= 200 && data[i+1] <= 50 && data[i+2] >= 100) {
+            data[i+3] = 0;
+          }
+        } else {
+          // White removal: remove near-white pixels
+          if (data[i] >= threshold && data[i+1] >= threshold && data[i+2] >= threshold) {
+            data[i+3] = 0;
+          }
         }
       }
       erodeAlpha(data, offscreen.width, offscreen.height);
