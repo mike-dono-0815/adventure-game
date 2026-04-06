@@ -74,21 +74,28 @@ const HOTSPOTS = [
   { id: 'cell_door',       name: 'Cell Door',        rect: [367,27,273,625] },
   { id: 'bench',           name: 'Wooden Bench',     rect: [706,435,403,195] },
   { id: 'loose_stone',     name: 'Loose Stone',      rect: [787,191,91,77] },
+  { id: 'rusted_lockbox',  name: 'Rusted Lockbox',   rect: [895,190,100,80] },
   { id: 'bucket',          name: 'Wooden Bucket',    rect: [1231,526,108,128] },
   { id: 'tin_cup',         name: 'Tin Cup',          rect: [1142,555,70,80] },
   { id: 'wall_hook',       name: 'Wall Hook',        rect: [1141,264,80,200] },
   { id: 'torch_sconce',    name: 'Torch Sconce',     rect: [1047,131,67,174] },
+  { id: 'dark_corner',     name: 'Dark Corner',      rect: [1195,385,181,270] },
 ];
 
 const ITEM_DEFS = {
-  rusty_nail:  { name: 'Rusty Nail',   src: 'items/item_rusty_nail.png'  },
-  bread:       { name: 'Bread Loaf',   src: 'items/item_bread.png'       },
-  bone:        { name: 'Bone',         src: 'items/item_bone.png'        },
-  metal_file:  { name: 'Metal File',   src: 'items/item_metal_file.png'  },
-  rope:        { name: 'Rope',         src: 'items/item_rope.png'        },
-  tin_cup:     { name: 'Tin Cup',      src: 'items/item_tin_cup.png'     },
-  torch:       { name: 'Torch',        src: 'items/item_torch.png'       },
-  guards_key:  { name: "Guard's Key",  src: 'items/item_guards_key.png'  },
+  rusty_nail:       { name: 'Rusty Nail',       src: 'items/item_rusty_nail.png'       },
+  bread:            { name: 'Bread Loaf',       src: 'items/item_bread.png'            },
+  bone:             { name: 'Bone',             src: 'items/item_bone.png'             },
+  metal_file:       { name: 'Metal File',       src: 'items/item_metal_file.png'       },
+  rope:             { name: 'Rope',             src: 'items/item_rope.png'             },
+  tin_cup:          { name: 'Tin Cup',          src: 'items/item_tin_cup.png'          },
+  torch:            { name: 'Torch',            src: 'items/item_torch.png'            },
+  guards_key:       { name: "Guard's Key",      src: 'items/item_guards_key.png'       },
+  cipher_parchment: { name: 'Cipher Parchment', src: 'items/item_cipher_parchment.png' },
+  acid_vial:        { name: 'Acid Vial',        src: 'items/item_acid_vial.png'        },
+  sleeping_powder:  { name: 'Sleeping Powder',  src: 'items/item_sleeping_powder.png'  },
+  weighted_rope:    { name: 'Weighted Rope',    src: 'items/item_weighted_rope.png'    },
+  drugged_bread:    { name: 'Drugged Bread',    src: 'items/item_drugged_bread.png'    },
 };
 
 const BG_SRCS = {
@@ -120,16 +127,25 @@ const gs = {
   hoverVerb:    null,
   hoverTarget:  null,
   flags: {
-    nail_taken:        false,
-    bread_taken:       false,
-    bone_taken:        false,
-    file_taken:        false,
-    rope_taken:        false,
-    cup_taken:         false,
-    torch_taken:       false,
-    stone_open:        false,
-    bar_filed:         false,
-    guard_key_taken:   false,
+    nail_taken:             false,
+    bread_taken:            false,
+    bone_taken:             false,
+    file_taken:             false,
+    rope_taken:             false,
+    cup_taken:              false,
+    torch_taken:            false,
+    stone_open:             false,
+    cipher_parchment_taken: false,
+    inscription_seen:       false,
+    acid_taken:             false,
+    lockbox_open:           false,
+    sleeping_powder_taken:  false,
+    weighted_rope_crafted:  false,
+    drugged_bread_crafted:  false,
+    bars_corroded:          false,
+    bar_filed:              false,
+    guard_drugged:          false,
+    guard_key_taken:        false,
   },
   won: false,
   text: null, textColor: CFG.C.NARRATOR, textTimer: 0,
@@ -183,8 +199,8 @@ function toGame(sx, sy) { return { x: sx / scale, y: sy / scale }; }
 
 // ─── Background key ────────────────────────────────────────────────────────
 function bgKey() {
-  if (gs.flags.bar_filed)  return 'bar_filed';
-  if (gs.flags.stone_open) return 'stone_open';
+  if (gs.flags.bar_filed)    return 'bar_filed';
+  if (gs.flags.stone_open)   return 'stone_open';
   return 'base';
 }
 
@@ -368,7 +384,20 @@ function drawInventory() {
       if (idx < gs.inventory.length) {
         const id = gs.inventory[idx];
         const img = itemImgs[id];
-        if (img) ctx.drawImage(img, dx, dy, CFG.THUMB, CFG.THUMB);
+        if (img) {
+          ctx.drawImage(img, dx, dy, CFG.THUMB, CFG.THUMB);
+        } else {
+          ctx.fillStyle = '#1e2a1e';
+          ctx.fillRect(dx+2, dy+2, CFG.THUMB-4, CFG.THUMB-4);
+          ctx.fillStyle = '#7aaa7a';
+          ctx.font = '10px ' + CFG.FONT;
+          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          const words = (ITEM_DEFS[id]?.name || id).split(' ');
+          const mid = dy + CFG.THUMB/2 - (words.length-1)*7;
+          for (let wi = 0; wi < words.length; wi++)
+            ctx.fillText(words[wi], dx + CFG.THUMB/2, mid + wi*14);
+          ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+        }
         if (id === gs.selectedItem) {
           ctx.strokeStyle = CFG.C.V_ACTIVE; ctx.lineWidth = 3;
           ctx.strokeRect(dx-1, dy-1, CFG.THUMB+2, CFG.THUMB+2);
@@ -393,14 +422,43 @@ function drawWin() {
   ctx.shadowBlur = 0;
   ctx.fillStyle = '#ffffff'; ctx.font = '22px ' + CFG.FONT;
   const lines = [
-    'The guard wakes three hours later to find an empty cell.',
-    'He will claim he was drugged. Nobody believes him.',
+    'The guard wakes six hours later to find an empty cell.',
+    'He will claim he was drugged. He is correct.',
+    'Nobody believes him.',
     '',
     'The knight rides again.',
   ];
   for (let i = 0; i < lines.length; i++)
     ctx.fillText(lines[i], CFG.W/2, CFG.VP_H/2 + 80 + i*34);
   ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+}
+
+// ─── Inventory crafting ────────────────────────────────────────────────────
+function executeCraft(item1, item2) {
+  const pair = [item1, item2].sort().join('+');
+  switch (pair) {
+    case 'bone+rope':
+      if (!gs.flags.weighted_rope_crafted) {
+        removeItem('rope'); removeItem('bone');
+        addItem('weighted_rope');
+        gs.flags.weighted_rope_crafted = true;
+        showText('I tie the bone securely to one end of the rope with several tight knots. The bone is curved — almost hook-shaped. A crude but purposeful fishing line. Long enough to reach through a narrow gap and snag something.', CFG.C.TEXT_PLAYER);
+      } else {
+        showText('Already done. The weighted rope hangs ready.', CFG.C.NARRATOR);
+      }
+      return true;
+    case 'bread+sleeping_powder':
+      if (!gs.flags.drugged_bread_crafted) {
+        removeItem('bread'); removeItem('sleeping_powder');
+        addItem('drugged_bread');
+        gs.flags.drugged_bread_crafted = true;
+        showText('I press the sleeping powder deep into the dense loaf, working it into the crumb. The powder vanishes. The bread looks completely ordinary. It is not. Whoever eats this will not be awake to regret it.', CFG.C.TEXT_PLAYER);
+      } else {
+        showText('Already prepared. The bread looks innocent.', CFG.C.NARRATOR);
+      }
+      return true;
+  }
+  return false;
 }
 
 // ─── Puzzle interactions ───────────────────────────────────────────────────
@@ -412,14 +470,14 @@ function executeVerb(verb, hotspotId, itemId) {
         if (!gs.flags.nail_taken) {
           addItem('rusty_nail');
           gs.flags.nail_taken = true;
-          showText('I root through the damp straw. My fingers close around something cold and metallic. A rusty nail. Not much — but it\'s mine now.');
+          showText('I root through the damp straw. My fingers close around something cold and metallic. A rusty nail. Rusted through but still rigid. Not much — but it\'s mine now.', CFG.C.TEXT_PLAYER);
         } else {
-          showText('Just damp straw. I\'ve already found what was hidden here.');
+          showText('Just damp straw. I\'ve already found what was hidden here.', CFG.C.NARRATOR);
         }
       } else {
         showText(gs.flags.nail_taken
           ? 'A damp pile of old straw. Smells of the previous tenant.'
-          : 'A pile of damp hay pushed against the wall. Musty. Something might be buried in it.');
+          : 'A pile of damp hay pushed against the wall. Musty. Something might be buried in it.', CFG.C.NARRATOR);
       }
       break;
 
@@ -428,14 +486,14 @@ function executeVerb(verb, hotspotId, itemId) {
         if (!gs.flags.bread_taken) {
           addItem('bread');
           gs.flags.bread_taken = true;
-          showText('A bread loaf of impressive density. Hard as a cobblestone. I take it.');
+          showText('A bread loaf of impressive density. Hard as a cobblestone. I take it. Something might be done with this.', CFG.C.TEXT_PLAYER);
         } else {
-          showText('Just an empty bench now.');
+          showText('The bench is empty now.', CFG.C.NARRATOR);
         }
       } else {
         showText(gs.flags.bread_taken
           ? 'A sturdy wooden bench, fixed to the wall. Empty.'
-          : 'A wooden bench bolted to the wall. Someone left a bread loaf on it. Stale, by the look of it.');
+          : 'A wooden bench bolted to the wall. Someone left a bread loaf on it. Stale, by the look of it.', CFG.C.NARRATOR);
       }
       break;
 
@@ -444,14 +502,14 @@ function executeVerb(verb, hotspotId, itemId) {
         if (!gs.flags.bone_taken) {
           addItem('bone');
           gs.flags.bone_taken = true;
-          showText('I reach into the bucket. A large bone, gnawed clean. An old meal. I take it.');
+          showText('I reach into the bucket. A large bone, gnawed clean. An old meal. The curve at one end is almost hook-shaped. I take it — could be useful combined with something else.', CFG.C.TEXT_PLAYER);
         } else {
-          showText('An empty bucket. Nothing left in it.');
+          showText('An empty bucket. Nothing left in it.', CFG.C.NARRATOR);
         }
       } else {
         showText(gs.flags.bone_taken
-          ? 'A wooden bucket. Empty and smelling of whatever used to live in here.'
-          : 'A wooden bucket against the wall. Something is sitting at the bottom of it.');
+          ? 'A wooden bucket. Empty.'
+          : 'A wooden bucket against the wall. Something is sitting at the bottom.', CFG.C.NARRATOR);
       }
       break;
 
@@ -460,14 +518,14 @@ function executeVerb(verb, hotspotId, itemId) {
         if (!gs.flags.cup_taken) {
           addItem('tin_cup');
           gs.flags.cup_taken = true;
-          showText('A battered tin cup. I pick it up. It clanks satisfyingly. Every tool is a tool.');
+          showText('A battered tin cup. I pick it up. It clanks satisfyingly. Every tool is a tool.', CFG.C.TEXT_PLAYER);
         } else {
-          showText('I already have the tin cup.');
+          showText('I already have the tin cup.', CFG.C.NARRATOR);
         }
       } else {
         showText(gs.flags.cup_taken
           ? 'The spot where the tin cup was. Just floor now.'
-          : 'A dented tin cup on the floor. Battered but intact.');
+          : 'A dented tin cup on the floor. Battered but intact.', CFG.C.NARRATOR);
       }
       break;
 
@@ -475,27 +533,63 @@ function executeVerb(verb, hotspotId, itemId) {
       if (itemId === 'rusty_nail') {
         if (!gs.flags.stone_open) {
           gs.flags.stone_open = true;
-          showText('I wedge the nail into the mortar and lever the stone out. It grinds free. Behind it: a dark cavity. Someone was here before me. Someone who planned ahead.');
-          if (!gs.flags.file_taken) {
-            addItem('metal_file');
-            gs.flags.file_taken = true;
-            showText('Inside, wrapped in a scrap of cloth: a metal file. My predecessor didn\'t make it. I will.');
+          if (!gs.flags.cipher_parchment_taken) {
+            addItem('cipher_parchment');
+            gs.flags.cipher_parchment_taken = true;
+            showText('I wedge the nail into the mortar and lever the stone out. It grinds free, trailing dust. Behind it: a dark cavity. Inside, wrapped in oilcloth: a parchment covered in a dense cipher grid — rows and columns of symbols, each uniquely marked. Three symbols are circled in the margin. Someone left this for a reason.', CFG.C.TEXT_PLAYER);
           }
         } else {
-          showText('The stone is already moved. I\'ve taken what was inside.');
+          showText('The stone is already moved. The cavity is empty.', CFG.C.NARRATOR);
         }
       } else if (!gs.flags.stone_open) {
         if (verb === 'Push' || verb === 'Pull') {
-          showText('The stone shifts slightly. It\'s loose — but I need something to lever it free. The mortar is crumbling but the stone is wedged tight.');
+          showText('The stone shifts slightly. It\'s loose — but I need something to lever it free.', CFG.C.NARRATOR);
         } else {
-          showText('This stone looks different from the others. Newer mortar, or perhaps older and more worn. It might move if I push it... or pry it with something.');
+          showText('This stone looks different from the others. Newer mortar, crumbling at the edges. It might yield to something sharp used as a lever.', CFG.C.NARRATOR);
         }
-      } else if (!gs.flags.file_taken) {
-        addItem('metal_file');
-        gs.flags.file_taken = true;
-        showText('Inside the cavity: a metal file. Someone left this here. Someone who didn\'t finish what I\'m about to finish.');
       } else {
-        showText('An empty stone cavity. The previous occupant\'s hiding spot, now cleaned out.');
+        showText('An empty stone cavity. I\'ve already taken what was inside.', CFG.C.NARRATOR);
+      }
+      break;
+
+    case 'dark_corner':
+      if (!gs.flags.torch_taken) {
+        showText('A shadowed corner of the cell. Too dark to make anything out. I\'d need a light source.', CFG.C.NARRATOR);
+      } else if (!gs.flags.inscription_seen) {
+        gs.flags.inscription_seen = true;
+        if (!gs.flags.acid_taken) {
+          addItem('acid_vial');
+          gs.flags.acid_taken = true;
+          showText('I hold the torch into the corner. The shadows scatter. Scratched deep into the stone — three symbols: a circle-cross, a broken spiral, and five tally marks. And tucked behind a loose shelf stone: a small glass vial filled with something dark and fuming. Acid. Someone was very thoroughly prepared.', CFG.C.TEXT_PLAYER);
+        }
+      } else if (!gs.flags.acid_taken) {
+        addItem('acid_vial');
+        gs.flags.acid_taken = true;
+        showText('I retrieve the vial from the hidden shelf.', CFG.C.TEXT_PLAYER);
+      } else {
+        showText('The three symbols are still there: circle-cross, broken spiral, five tallies. Cross-reference with the cipher parchment and those correspond to a combination.', CFG.C.NARRATOR);
+      }
+      break;
+
+    case 'rusted_lockbox':
+      if (itemId === 'cipher_parchment') {
+        if (gs.flags.lockbox_open) {
+          showText('The lockbox is already open. Nothing left inside.', CFG.C.NARRATOR);
+        } else if (!gs.flags.inscription_seen) {
+          showText('I have the cipher grid, but I\'m missing the symbols to decode. The parchment is only half the puzzle — I need to find the three symbols somewhere in this cell first.', CFG.C.TEXT_PLAYER);
+        } else {
+          gs.flags.lockbox_open = true;
+          gs.flags.file_taken = true;
+          gs.flags.sleeping_powder_taken = true;
+          addItem('metal_file');
+          addItem('sleeping_powder');
+          removeItem('cipher_parchment');
+          showText('I cross-reference the cipher parchment against the three symbols from the corner. Circle-cross is column two row three: position seven. Broken spiral is position three. Five tallies: position five. I press the combination pins — seven, three, five — into the lockbox mechanism. A heavy clunk. The lid springs. Inside: a flat metal file, and a small pouch of white powder with a single word written on it: SLEEP.', CFG.C.TEXT_PLAYER);
+        }
+      } else if (gs.flags.lockbox_open) {
+        showText('The lockbox hangs open, empty.', CFG.C.NARRATOR);
+      } else {
+        showText('A small iron lockbox fixed to the wall, half-obscured by stone dust. The lock is a combination mechanism — rows of symbol-marked pins. It needs the exact sequence to open. Someone went to trouble to secure whatever is inside.', CFG.C.NARRATOR);
       }
       break;
 
@@ -504,14 +598,14 @@ function executeVerb(verb, hotspotId, itemId) {
         if (!gs.flags.rope_taken) {
           addItem('rope');
           gs.flags.rope_taken = true;
-          showText('A coil of rope on an iron hook. I take it. A rope is never useless.');
+          showText('A coil of rough hemp rope. I take it. A rope tied to the right thing becomes an entirely different tool.', CFG.C.TEXT_PLAYER);
         } else {
-          showText('An empty wall hook. I already took the rope.');
+          showText('An empty wall hook. I already took the rope.', CFG.C.NARRATOR);
         }
       } else {
         showText(gs.flags.rope_taken
           ? 'An iron hook fixed to the wall. Empty now.'
-          : 'An iron hook on the wall with a coil of rough hemp rope hanging from it.');
+          : 'An iron hook on the wall with a coil of rough hemp rope hanging from it.', CFG.C.NARRATOR);
       }
       break;
 
@@ -520,61 +614,91 @@ function executeVerb(verb, hotspotId, itemId) {
         if (!gs.flags.torch_taken) {
           addItem('torch');
           gs.flags.torch_taken = true;
-          showText('I pull the torch from its sconce. The room darkens. I now have fire. Worth it.');
+          showText('I pull the torch from its sconce. The room darkens. But now I can take fire anywhere in this cell. Worth it — I have a feeling some corners need illuminating.', CFG.C.TEXT_PLAYER);
         } else {
-          showText('An empty torch sconce. The room is gloomier for it.');
+          showText('An empty torch sconce. The room is gloomier for it.', CFG.C.NARRATOR);
         }
       } else {
         showText(gs.flags.torch_taken
           ? 'An empty iron sconce on the wall. The room is darker without it.'
-          : 'A wall-mounted torch sconce. The flame casts warm orange light across the stones.');
+          : 'A wall-mounted torch sconce. The flame casts warm orange light across the stones. I could take it.', CFG.C.NARRATOR);
       }
       break;
 
     case 'iron_bars':
-      if (itemId === 'metal_file') {
-        if (!gs.flags.bar_filed) {
+      if (itemId === 'acid_vial') {
+        if (!gs.flags.bars_corroded) {
+          gs.flags.bars_corroded = true;
+          removeItem('acid_vial');
+          showText('I tip the acid vial against the central bar — the one that already looks the weakest. The liquid hisses and smokes on contact. The bar blackens and pits, deeply corroded along a six-inch section. Not through yet, but barely holding together. Something with leverage could finish this.', CFG.C.TEXT_PLAYER);
+        } else {
+          showText('The central bar is already corroded. It\'s barely holding together as it is.', CFG.C.NARRATOR);
+        }
+      } else if (itemId === 'metal_file') {
+        if (!gs.flags.bars_corroded) {
+          showText('I work the file against the central bar. The metal resists — solid, unyielding. I\'d be here for days. I need to weaken it first. The acid would help if I can find some.', CFG.C.TEXT_PLAYER);
+        } else if (!gs.flags.bar_filed) {
           gs.flags.bar_filed = true;
           removeItem('metal_file');
-          showText('I work the file back and forth on the central bar. Sawing. Sawing. My arm aches. Time passes. The bar weakens, bends... and I have a gap. Just wide enough.');
+          showText('I jam the file into the acid-eaten section and lever hard. The corroded metal groans. Cracks. Bends aside with a sound like a gunshot. I freeze. The guard snorts and resettles. The gap is there — just wide enough to reach through with something slender and purposeful.', CFG.C.TEXT_PLAYER);
         } else {
-          showText('The bar is already bent. The gap is there.');
+          showText('The bar is already bent aside. The gap is open.', CFG.C.NARRATOR);
         }
       } else if (itemId === 'rope') {
-        showText('I loop the rope around a bar and pull. Nothing. These bars have been here for a century. Except... that one looks slightly less certain of itself.');
+        showText('I loop the rope around a bar and pull. Nothing gives. These bars have been here a century. Though... the central one looks slightly less certain of itself.', CFG.C.NARRATOR);
       } else if (itemId === 'rusty_nail') {
-        showText('I scratch at the bar with the nail. At this rate I\'ll be free sometime next decade. I need a proper file.');
+        showText('I scratch the nail against the bar. At this rate I\'ll escape sometime next decade. I need to weaken it — chemically, not mechanically.', CFG.C.NARRATOR);
       } else if (itemId === 'tin_cup') {
-        showText('CLANG CLANG CLANG. The guard doesn\'t even shift. He sleeps like a man with absolutely nothing on his conscience.');
+        showText('CLANG CLANG CLANG. The guard doesn\'t even shift. He sleeps like a man with absolutely nothing on his conscience.', CFG.C.NARRATOR);
+      } else if (itemId === 'drugged_bread') {
+        if (!gs.flags.bar_filed) {
+          showText('No gap in the bars yet. I can\'t get anything through.', CFG.C.TEXT_PLAYER);
+        } else if (!gs.flags.guard_drugged) {
+          gs.flags.guard_drugged = true;
+          removeItem('drugged_bread');
+          showText('I ease the bread through the gap. It lands softly near the guard\'s outstretched hand. He stirs, finds it without opening his eyes. Chews mechanically, the way deeply tired people do. I wait. His breathing slows further. His head droops lower than before. The sleeping powder works fast on a man already halfway under.', CFG.C.TEXT_PLAYER);
+        } else {
+          showText('He\'s already deep under. More bread won\'t help him sleep harder.', CFG.C.NARRATOR);
+        }
       } else if (gs.flags.bar_filed) {
-        showText('One bar is bent aside. There\'s a gap — just wide enough to reach through.');
+        showText('One bar is bent aside. There\'s a gap — just wide enough to reach through with something long and carefully aimed.', CFG.C.NARRATOR);
+      } else if (gs.flags.bars_corroded) {
+        showText('The central bar is deeply pitted with acid corrosion. It looks close to giving way. The right tool, applied with leverage, could snap it.', CFG.C.NARRATOR);
       } else {
-        showText('Iron bars. Old but solid. One of them looks slightly less solid than the others... I just need the right approach.');
+        showText('Iron bars. Old but solid. One of them looks slightly less certain of itself than the others. There must be a way to exploit that weakness.', CFG.C.NARRATOR);
       }
       break;
 
     case 'sleeping_guard':
-      if (itemId === 'bone') {
+      if (itemId === 'weighted_rope') {
         if (!gs.flags.bar_filed) {
-          showText('I can\'t reach through the bars. I need a gap first.');
+          showText('I can\'t get anything through these bars. I need a gap first.', CFG.C.TEXT_PLAYER);
+        } else if (!gs.flags.guard_drugged) {
+          showText('I try to manoeuvre the weighted rope toward the key ring — but the guard keeps shifting, restless. Normal sleep. If he were truly under, I could do this. I need him sleeping deeper.', CFG.C.TEXT_PLAYER);
         } else if (!gs.flags.guard_key_taken) {
           gs.flags.guard_key_taken = true;
-          removeItem('bone');
+          removeItem('weighted_rope');
           addItem('guards_key');
-          showText('I thread the bone through the gap and hook the key ring. Slowly. The guard snorts. I freeze. He settles. The keys scrape across the stone floor into my hands. I have them.');
+          showText('I feed the weighted rope through the gap, slow as breath. The bone hook finds the key ring. The guard is stone-still — barely alive by the sound of him. I draw the rope back, millimetre by millimetre. The keys scrape across the flagstones without a sound that matters. Through the gap. Cold iron in my hands. I have them.', CFG.C.TEXT_PLAYER);
         } else {
-          showText('He sleeps on, magnificently unaware his keys are in my pocket.');
+          showText('His keys are already in my pocket. Let the man sleep.', CFG.C.NARRATOR);
         }
-      } else if (itemId === 'bread') {
-        showText('I toss the bread through the bars. It bounces off his helmet. He mutters. Does not wake. Extraordinary.');
+      } else if (itemId === 'bone') {
+        showText('The bone is curved at one end — useful — but loose in my hand. I\'d need to attach it to something longer to have any real reach. Rope, perhaps.', CFG.C.TEXT_PLAYER);
+      } else if (itemId === 'rope') {
+        showText('The rope alone is too limp to hook anything precisely. I\'d need a rigid end — a weight, a hook. Something tied to the rope.', CFG.C.TEXT_PLAYER);
+      } else if (itemId === 'bread' || itemId === 'drugged_bread') {
+        showText('I toss the bread through the bars. It bounces off his helmet. He mutters. Does not wake. Extraordinary.', CFG.C.NARRATOR);
       } else if (itemId === 'tin_cup') {
-        showText('I throw the cup at the guard. It clangs off his breastplate. He grunts. Adjusts. Keeps sleeping. The man is immovable.');
+        showText('I throw the cup at the guard. It clangs off his breastplate. He grunts. Adjusts. Keeps sleeping.', CFG.C.NARRATOR);
       } else if (itemId === 'torch') {
-        showText('I wave the torch through the bars. The heat doesn\'t reach him. Probably for the best — setting the guard on fire seems like an escalation.');
+        showText('I wave the torch through the bars. The heat doesn\'t reach him. Good — setting the guard on fire was never the plan.', CFG.C.NARRATOR);
       } else if (gs.flags.guard_key_taken) {
-        showText('He sleeps on. His professional humiliation awaits him upon waking.');
+        showText('He sleeps on. Magnificently unaware. I almost respect it.', CFG.C.NARRATOR);
+      } else if (gs.flags.guard_drugged) {
+        showText('The guard is deeply under. Barely moving. Now I need to reach the key ring — something long and hooked, fed through the gap in the bars.', CFG.C.NARRATOR);
       } else {
-        showText('A large guard, snoring with great conviction. A key ring hangs from his belt — tantalizingly close. If I could reach through the bars...');
+        showText('A large guard, snoring with some conviction. A key ring hangs from his belt — tantalizingly visible. If I could reach through the bars... and if he were sleeping just a little more deeply...', CFG.C.NARRATOR);
       }
       break;
 
@@ -583,11 +707,11 @@ function executeVerb(verb, hotspotId, itemId) {
         gs.won = true;
         showText('The key turns. The padlock clunks open with the sound of inevitable freedom. The door swings wide with a grinding creak. The guard doesn\'t stir. I step out and don\'t look back.', CFG.C.NARRATOR);
       } else if (itemId === 'rusty_nail') {
-        showText('Too thick and too rusty to pick this lock. I need the right key. The guard has the right key.');
+        showText('Too thick and too rusty to pick this lock. I need the right key.', CFG.C.NARRATOR);
       } else if (gs.flags.guard_key_taken) {
-        showText('I have his keys. Now I use them.');
+        showText('I have his keys. Now I use them.', CFG.C.TEXT_PLAYER);
       } else {
-        showText('A heavy iron door. Large padlock. The guard has the key. The guard is right there. I just need to get between those two facts.');
+        showText('A heavy iron door. Large padlock. The guard has the key. I just need to get between those two facts.', CFG.C.NARRATOR);
       }
       break;
   }
@@ -596,28 +720,43 @@ function executeVerb(verb, hotspotId, itemId) {
 function executeOnItem(verb, itemId) {
   switch (itemId) {
     case 'rusty_nail':
-      showText('A long iron nail, orange with rust. Good for prying things. Not much else.');
+      showText('A long iron nail, orange with rust. Rigid enough to use as a lever. Good for prying things loose.', CFG.C.NARRATOR);
       break;
     case 'bread':
-      showText('A bread loaf of remarkable solidity. Dense enough to use as a weapon, or perhaps a door stop. I\'ll find a use for it.');
+      showText('A bread loaf of remarkable solidity. Dense and stale. On its own, useless. But dense materials are good at absorbing things. Powders, for instance.', CFG.C.NARRATOR);
       break;
     case 'bone':
-      showText('A large bone with a useful curve at one end. Good for hooking things. Reaching things. Acquiring things that belong to sleeping guards.');
+      showText('A large bone with a curved end — almost hook-shaped. On its own it lacks reach. Tied to something longer, it becomes a different kind of tool entirely.', CFG.C.NARRATOR);
       break;
     case 'metal_file':
-      showText('A flat metal file, ridged on both faces. Someone hid this here for someone else. I\'m grateful to both of them.');
+      showText('A flat metal file, ridged on both faces. For cutting through metal. But some metals resist even this — unless weakened first.', CFG.C.NARRATOR);
       break;
     case 'rope':
-      showText('Rough hemp rope, a decent length. A rope is the most honest tool there is — it does exactly what you ask of it.');
+      showText('Rough hemp rope, a decent length. On its own, useful for pulling. Tied to the right thing, useful for reaching. The right thing being something hook-shaped, for instance.', CFG.C.NARRATOR);
       break;
     case 'tin_cup':
-      showText('A dented tin cup. The previous guest\'s. I feel a faint solidarity with whoever they were.');
+      showText('A dented tin cup. The previous guest\'s. I feel a faint solidarity with whoever they were.', CFG.C.NARRATOR);
       break;
     case 'torch':
-      showText('A burning torch. Warm, smoky, and genuinely useful. I\'m already attached to it.');
+      showText('A burning torch. Light and fire. Some corners of this cell are darker than they should be. I should look around more carefully.', CFG.C.NARRATOR);
       break;
     case 'guards_key':
-      showText('A heavy key ring. Three keys. One of them opens that door. Probably the large one. Definitely the large one.');
+      showText('A heavy key ring. Three keys. One of them opens that door. Probably the large one. Definitely the large one.', CFG.C.NARRATOR);
+      break;
+    case 'cipher_parchment':
+      showText('A parchment dense with a cipher grid — rows and columns of unique symbols. It\'s the key to a code. The code itself must be scratched somewhere in this cell. Three symbols are circled in the margin. Find the symbols, find the sequence.', CFG.C.NARRATOR);
+      break;
+    case 'acid_vial':
+      showText('A small glass vial, tightly stoppered. Inside, a dark fuming liquid. Powerful enough to corrode iron. Needs to be applied precisely — but the right bar, treated carefully, won\'t hold together much longer after this.', CFG.C.NARRATOR);
+      break;
+    case 'sleeping_powder':
+      showText('A small cloth pouch of fine white powder. Odourless. Tasteless. Extremely effective. Introduced into food, it induces deep and dreamless sleep within minutes. Dense food works best — the powder has time to bind.', CFG.C.NARRATOR);
+      break;
+    case 'weighted_rope':
+      showText('A length of rope with a bone tied firmly at one end — curved like a hook, heavy enough to swing. Purpose-built for reaching through a narrow gap and snagging something. Something like a key ring on a sleeping man\'s belt.', CFG.C.NARRATOR);
+      break;
+    case 'drugged_bread':
+      showText('The bread loaf, loaded with sleeping powder. It looks completely innocent. It very much is not. Best delivered through a gap to someone who won\'t look too carefully at what they\'re eating.', CFG.C.NARRATOR);
       break;
   }
 }
@@ -686,7 +825,8 @@ canvas.addEventListener('click', e => {
   if (invItem) {
     const prep = CFG.TWO_OBJ[gs.currentVerb];
     if (prep && gs.selectedItem) {
-      executeOnItem(gs.currentVerb, invItem); resetVerb();
+      if (!executeCraft(gs.selectedItem, invItem)) executeOnItem(gs.currentVerb, invItem);
+      resetVerb();
     } else if (prep) {
       gs.selectedItem = invItem;
     } else if (gs.currentVerb) {
